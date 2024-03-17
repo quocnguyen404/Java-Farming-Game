@@ -119,7 +119,7 @@ public class GameFrame extends JFrame implements Runnable
     {
         try 
         {
-            BufferedImage loadedImage = ImageIO.read(GameFrame.class.getResource(path));
+            BufferedImage loadedImage = ImageIO.read(new File(path));
             BufferedImage formattedImage = new BufferedImage(loadedImage.getWidth(), loadedImage.getHeight(), BufferedImage.TYPE_INT_RGB);
             formattedImage.getGraphics().drawImage(loadedImage, 0, 0, null);
             return formattedImage;

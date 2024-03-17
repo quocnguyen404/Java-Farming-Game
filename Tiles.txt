@@ -1,0 +1,10 @@
+//name-x-y-collisiontype
+//0
+sand1-0-4
+//1
+sand2-1-4
+//2
+flatstone-6-3
+//3
+dirt1-0-0
+//4

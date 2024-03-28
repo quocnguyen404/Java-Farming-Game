@@ -1,3 +1,4 @@
+package engine;
 import java.awt.image.BufferedImage;
 
 public class SpriteSheet 
@@ -58,6 +59,11 @@ public class SpriteSheet
         }
 
         return loadedSprites[spriteID];
+    }
+
+    public Sprite[] getLoadedSprites() 
+    {
+        return loadedSprites;
     }
 
     public int[] getPixels()

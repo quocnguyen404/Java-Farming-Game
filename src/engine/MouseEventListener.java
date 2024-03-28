@@ -1,6 +1,9 @@
+package engine;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+
+import game.GameFrame;
 
 public class MouseEventListener implements MouseListener, MouseMotionListener
 {
@@ -35,6 +38,11 @@ public class MouseEventListener implements MouseListener, MouseMotionListener
         if (e.getButton() == MouseEvent.BUTTON1)
         {
             game.leftMousePressed(e.getX(), e.getY());
+        }
+
+        if (e.getButton() == MouseEvent.BUTTON3)
+        {
+            game.rightMousePressed(e.getX(), e.getY());
         }
 
     }

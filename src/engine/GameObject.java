@@ -1,3 +1,7 @@
+package engine;
+
+import game.GameFrame;
+
 public interface GameObject 
 {
     //call every time possible
@@ -5,4 +9,5 @@ public interface GameObject
     
     //call at 60 fps rate
     public void update(GameFrame game);
+
 }

@@ -1,10 +1,12 @@
+package engine;
 import java.awt.image.BufferedImage;
 
 public class Sprite 
 {
     private int width, height;
     private int[] pixels;
-    
+
+    public Sprite() {}
     public Sprite(SpriteSheet sheet, int startX, int startY, int width, int height)
     {
         this.width = width;

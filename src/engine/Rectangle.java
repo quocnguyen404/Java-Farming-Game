@@ -1,3 +1,6 @@
+package engine;
+import game.GameConstanst;
+
 public class Rectangle
 {
     private int[] pixels;
@@ -16,6 +19,21 @@ public class Rectangle
         this(0, 0, 0, 0);
     }
 
+    //AABB
+    public boolean intersects(Rectangle otherRect)
+    {
+        return this.x < otherRect.x + otherRect.w &&
+               this.x + this.w > otherRect.x &&
+               this.y < otherRect.y + otherRect.h &&
+               this.y + this.h > otherRect.y;
+    }
+
+    public void setPosition(int x, int y)
+    {
+        this.x = x;
+        this.y = y;
+    }
+    
     public void generateGraphics(int color)
     {
         pixels = new int[w*h];
@@ -31,7 +49,7 @@ public class Rectangle
 
         //set all to transparent
         for (int i = 0; i < pixels.length; i++)
-            pixels[i] = GameFrame.alpha;
+            pixels[i] = GameConstanst.ALPHA;
 
         //upper border
         for (int y = 0; y < borderWidth; y++)
@@ -59,5 +77,11 @@ public class Rectangle
         if (pixels != null) return pixels;
         else System.out.println("Attemped to retrive pixels from a Rectangle withou generated graphics");
         return null;
+    }
+
+    @Override
+    public String toString() 
+    {
+        return String.format("{%d, %d, %d, %d}", x, y, w, h);    
     }
 }

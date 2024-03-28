@@ -1,22 +1,44 @@
+package engine;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
-public class Map 
-{
-    private Tiles tileSet;
-    private Tiles.TileID fillTiledID = Tiles.TileID.NONE;
-    private ArrayList<MappedTile> mappedTiles;
-    private HashMap<Integer,String> comment = new HashMap<Integer,String>();
-    private File mapFile;
+import engine.Tiles.TileID;
+import game.GameConstanst;
+import game.Helper;
+import game.data.ConfigDataHelper;
 
-    public Map(File mapFile, Tiles tileSet)
+public class Map implements HandleMouseClick
+{
+    public enum EditMode
     {
-        this.mapFile = mapFile;
+        NONE,
+        PLACING,
+        REMOVING,
+        SELECTING,
+    }
+
+    //#region Field
+    private ArrayList<MappedTile> mappedTiles;
+    private HashMap<Integer,String> comment;
+    private TileID fillTiledID = TileID.NONE;
+    private File mapFile;
+    private Tiles tileSet;
+    //#endregion
+
+    //#endregion Edit
+    private EditMode editMode = EditMode.NONE;
+    private TileID editTileID = TileID.NONE;
+    //#endregion
+    
+    public Map()
+    {
+        mapFile = new File(GameConstanst.MAP_PATH);
         mappedTiles = new ArrayList<MappedTile>();
-        this.tileSet = tileSet;
+        tileSet = ConfigDataHelper.getInstance().getTiles();
+        comment = new HashMap<Integer, String>();
         
         try 
         {
@@ -62,8 +84,8 @@ public class Map
 
     public void render(RenderHandler renderer, int xZoom, int yZoom)
     {
-        int tileWidth = Tiles.TILE_WIDTH * xZoom;
-        int tileHeight = Tiles.TILE_HEIGHT * yZoom;
+        int tileWidth = GameConstanst.TILE_WIDTH * xZoom;
+        int tileHeight = GameConstanst.TILE_HEIGHT * yZoom;
     
         if (fillTiledID != Tiles.TileID.NONE)
         {
@@ -80,7 +102,7 @@ public class Map
         }
     }
 
-    public void setTile(int tileX, int tileY, Tiles.TileID id)
+    public void setTile(int tileX, int tileY, TileID id)
     {
         boolean found = false;
         for (int i = 0; i < mappedTiles.size(); i++)
@@ -96,6 +118,19 @@ public class Map
 
         if (!found)
             mappedTiles.add(new MappedTile(id, tileX, tileY));
+    }
+
+    public void removeTile(int tileX, int tileY)
+    {
+        for (int i = 0; i < mappedTiles.size(); i++)
+        {
+            MappedTile mappedTile = mappedTiles.get(i);
+            if (mappedTile.x == tileX && mappedTile.y == tileY)
+            {
+                mappedTiles.remove(mappedTile);
+                break;
+            }
+        }
     }
     
     public void saveMap()
@@ -131,13 +166,59 @@ public class Map
             e.printStackTrace();
         }
     }
+    
+    public void setEditMode(EditMode mode)
+    {
+        editMode = mode;
+    }
+
+    public void setEditTileID(TileID tileID)
+    {
+        editTileID = tileID;
+    }
+
+    @Override
+    public boolean handleMouseClick(Rectangle mouseRectangle, Rectangle camera, int xZoom, int yZoom) 
+    {
+        if (editMode == EditMode.NONE)
+            return false;
+        
+        //happen when enable to edit map, but have pick button yet
+        if (editTileID == TileID.NONE)
+            editMode = EditMode.REMOVING;
+        
+        int x = Helper.handleMousePosition(mouseRectangle.x, camera.x, GameConstanst.TILE_WIDTH*xZoom);
+        int y = Helper.handleMousePosition(mouseRectangle.y, camera.y, GameConstanst.TILE_HEIGHT*yZoom);
+
+        switch (editMode) {
+            case PLACING:
+            {
+                setTile(x, y, editTileID);
+                break;
+            }
+            case REMOVING:
+            {
+                removeTile(x, y);
+                break;
+            }
+            case SELECTING:
+            {
+                break;
+            }
+
+            default:
+                break;
+        }
+
+        return true;
+    }
 
     /**
      * MappedTile
      */
     public class MappedTile 
     {
-        public Tiles.TileID id;
+        public TileID id;
         public int x, y;
         public MappedTile(Tiles.TileID id, int x, int y)
         {

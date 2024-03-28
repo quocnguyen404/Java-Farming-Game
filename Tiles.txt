@@ -8,3 +8,4 @@ flatstone-6-3
 //3
 dirt1-0-0
 //4
+wall1-1-3

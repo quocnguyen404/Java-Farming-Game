@@ -1,14 +1,16 @@
-package engine;
+package game;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
-import engine.Tiles.TileID;
-import game.GameConstanst;
-import game.Helper;
+import engine.HandleMouseClick;
+import engine.Rectangle;
+import engine.RenderHandler;
 import game.data.ConfigDataHelper;
+import game.data.Tiles;
+import game.data.Tiles.TileID;
 
 public class Map implements HandleMouseClick
 {
@@ -105,6 +107,13 @@ public class Map implements HandleMouseClick
     public void setTile(int tileX, int tileY, TileID id)
     {
         boolean found = false;
+
+        if (id == fillTiledID)
+        {
+            removeTile(tileX, tileY);
+            return;
+        }
+
         for (int i = 0; i < mappedTiles.size(); i++)
         {
             MappedTile mappedTile = mappedTiles.get(i);
@@ -170,25 +179,28 @@ public class Map implements HandleMouseClick
     public void setEditMode(EditMode mode)
     {
         editMode = mode;
+        System.out.println("On edit map mode to: " + mode);
     }
 
     public void setEditTileID(TileID tileID)
     {
+        editMode = EditMode.PLACING;
         editTileID = tileID;
+        System.out.println("On change edit tile ID to: " + tileID);
     }
 
     @Override
-    public boolean handleMouseClick(Rectangle mouseRectangle, Rectangle camera, int xZoom, int yZoom) 
+    public boolean leftMouseClick(Rectangle mouseRectangle, Rectangle camera, int xZoom, int yZoom) 
     {
-        if (editMode == EditMode.NONE)
+        if (editMode == EditMode.NONE || editTileID == TileID.NONE)
             return false;
         
         //happen when enable to edit map, but have pick button yet
-        if (editTileID == TileID.NONE)
-            editMode = EditMode.REMOVING;
+        // if (editTileID == TileID.NONE)
+        //     editMode = EditMode.REMOVING;
         
-        int x = Helper.handleMousePosition(mouseRectangle.x, camera.x, GameConstanst.TILE_WIDTH*xZoom);
-        int y = Helper.handleMousePosition(mouseRectangle.y, camera.y, GameConstanst.TILE_HEIGHT*yZoom);
+        int x = Helper.handleMousePosition(mouseRectangle.x, camera.x, GameConstanst.TILE_WIDTH*GameFrame.X_ZOOM);
+        int y = Helper.handleMousePosition(mouseRectangle.y, camera.y, GameConstanst.TILE_HEIGHT*GameFrame.Y_ZOOM);
 
         switch (editMode) {
             case PLACING:
@@ -213,6 +225,12 @@ public class Map implements HandleMouseClick
         return true;
     }
 
+    @Override
+    public boolean rightMouseClick(Rectangle mouseRectangle, Rectangle camera, int xZoom, int yZoom) 
+    {
+        return false;
+    }
+
     /**
      * MappedTile
      */
@@ -227,4 +245,6 @@ public class Map implements HandleMouseClick
             this.y = y;
         }
     }
+
+
 }

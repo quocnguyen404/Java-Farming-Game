@@ -12,11 +12,6 @@ public class RenderHandler
     private Rectangle camera;
     private int[] pixels;
     
-    public Rectangle getCamera() 
-    {
-        return camera;
-    }
-    
     public RenderHandler(int width, int height)
     {
         //Create a BufferImage that will represent out view
@@ -30,6 +25,11 @@ public class RenderHandler
         //Create an array for pixels
         pixels = ((DataBufferInt) view.getRaster().getDataBuffer()).getData();
     }    
+
+    public Rectangle getCamera() 
+    {
+        return camera;
+    }
 
     //render array of pixels to the screen
     public void render(Graphics graphics)

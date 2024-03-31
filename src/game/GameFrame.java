@@ -100,15 +100,13 @@ public class GameFrame extends JFrame implements Runnable
         Rectangle mouseRect = new Rectangle(x, y, 1, 1);
 
         for (Component component : components) 
-            clicked = component.handleMouseClick(mouseRect, mouseRect, x, y);
+            clicked = component.leftMouseClick(mouseRect, renderer.getCamera(), x, y);
 
-        //is clicked on ui
+            //is clicked on ui
         if (clicked)
             return;
 
-        // x = Helper.handleMousePosition(x, renderer.getCamera().x, GameConstanst.TILE_WIDTH*X_ZOOM);
-        // y = Helper.handleMousePosition(y, renderer.getCamera().y, GameConstanst.TILE_WIDTH*Y_ZOOM);
-        // map.setTile(x, y, Tiles.TileID.DIRT1);
+        map.leftMouseClick(mouseRect, renderer.getCamera(), x, y);
     }
 
     //right mouse pressed

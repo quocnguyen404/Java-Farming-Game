@@ -1,9 +1,12 @@
-package engine;
+package game.data;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import engine.RenderHandler;
+import engine.Sprite;
+import engine.SpriteSheet;
 import game.GameConstanst;
 import game.Helper;
 
@@ -18,14 +21,13 @@ public class Tiles
         WALL1, //4
         NONE,
     }
-    private SpriteSheet spriteSheet;
     private ArrayList<Tile> tilesList;
 
     public Tiles()
     {
         File tilesFile = new File(GameConstanst.TILES_PATH);
         tilesList = new ArrayList<Tile>();
-        spriteSheet = new SpriteSheet(Helper.loadImage(GameConstanst.GAME_SHEET_PATH));
+        SpriteSheet spriteSheet = new SpriteSheet(Helper.loadImage(GameConstanst.GAME_SHEET_PATH));
         spriteSheet.loadSprite(GameConstanst.TILE_WIDTH, GameConstanst.TILE_HEIGHT);
         
         try 
@@ -47,7 +49,6 @@ public class Tiles
                     id++;
                 }
             }
-
             scanner.close();
         }
         catch (FileNotFoundException e)

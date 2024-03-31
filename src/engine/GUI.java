@@ -12,18 +12,12 @@ public class GUI implements HandleMouseClick, GameObject
 
     public GUI()
     {
-        this (null, 0, 0, true, true);
+        this (null, 0, 0, true, false);
     }
 
-    public GUI(GUIButton[] buttons, int x, int y, boolean fixed, boolean visible)
-    {
-        this(null, buttons, x, y, fixed, visible);
-    }
-
-    public GUI(Sprite bgSprite, GUIButton[] buttons, int x, int y, boolean fixed, boolean visible)
+    public GUI(Sprite bgSprite, int x, int y, boolean fixed, boolean visible)
     {
         this.bgSprite = bgSprite;
-        this.buttons = buttons;
         this.fixed = fixed;
         this.visible = visible;
         rect.setPosition(x, y);
@@ -32,6 +26,16 @@ public class GUI implements HandleMouseClick, GameObject
         {
             rect.w = bgSprite.getWidth();
             rect.h = bgSprite.getHeight();
+        }
+    }
+    
+    public void setButtons(GUIButton[] buttons)
+    {
+        this.buttons = buttons;
+
+        for (GUIButton btn : buttons) 
+        {
+            btn.rect.setPosition(btn.rect.x + rect.x, btn.rect.y + rect.y);
         }
     }
 
@@ -45,8 +49,14 @@ public class GUI implements HandleMouseClick, GameObject
         return visible;
     }
 
+    public Rectangle getRect()
+    {
+        return rect;
+    }
+
+
     @Override
-    public boolean handleMouseClick(Rectangle mouseRectangle, Rectangle camera, int xZoom, int yZoom) 
+    public boolean leftMouseClick(Rectangle mouseRectangle, Rectangle camera, int xZoom, int yZoom) 
     {
         if (!fixed) 
             mouseRectangle = new Rectangle(mouseRectangle.x + camera.x , mouseRectangle.y + camera.y, 1, 1);
@@ -56,9 +66,15 @@ public class GUI implements HandleMouseClick, GameObject
             // mouseRectangle.x += rect.x;
             // mouseRectangle.y += rect.y;
             for (GUIButton guiButton : buttons)
-                if (guiButton.handleMouseClick(mouseRectangle, camera, xZoom, yZoom))
+                if (guiButton.leftMouseClick(mouseRectangle, camera, xZoom, yZoom))
                     return true;
         }
+        return false;
+    }
+
+    @Override
+    public boolean rightMouseClick(Rectangle mouseRectangle, Rectangle camera, int xZoom, int yZoom) 
+    {
         return false;
     }
 
@@ -74,7 +90,7 @@ public class GUI implements HandleMouseClick, GameObject
         if (buttons != null)
         {
             for (int i = 0; i < buttons.length; i++)
-                buttons[i].render(renderer, xZoom, yZoom, rect);
+                buttons[i].render(renderer, xZoom, yZoom);
         }
 
     }
@@ -83,4 +99,6 @@ public class GUI implements HandleMouseClick, GameObject
     public void update(GameFrame game) 
     {
     }
+
+
 }

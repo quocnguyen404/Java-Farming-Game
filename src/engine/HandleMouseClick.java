@@ -3,5 +3,6 @@ public interface HandleMouseClick
 {
     //Call whenever mouse click on canvas
     //Return true when clicked on something
-    public boolean handleMouseClick(Rectangle mouseRectangle, Rectangle camera, int xZoom, int yZoom);    
+    public boolean leftMouseClick(Rectangle mouseRectangle, Rectangle camera, int xZoom, int yZoom);    
+    public boolean rightMouseClick(Rectangle mouseRectangle, Rectangle camera, int xZoom, int yZoom);
 }

@@ -6,12 +6,19 @@ import engine.HandleMouseClick;
 import engine.Rectangle;
 import engine.RenderHandler;
 import game.GameFrame;
+import game.ui.ButtonAct;
 
 public abstract class Component implements HandleMouseClick, GameObject
 {
     protected GUI buttons;
+    protected ButtonAct turnOnButton;
 
     abstract protected void generateUI();
+
+    protected void setButtonsVisibility()
+    {
+        buttons.setVisibility(!buttons.getVisibility());
+    }
 
     @Override
     public void render(RenderHandler renderer, int xZoom, int yZoom) 
@@ -21,12 +28,23 @@ public abstract class Component implements HandleMouseClick, GameObject
     }
 
     @Override
-    public boolean handleMouseClick(Rectangle mouseRectangle, Rectangle camera, int xZoom, int yZoom) 
+    public boolean leftMouseClick(Rectangle mouseRectangle, Rectangle camera, int xZoom, int yZoom)
     {
-        if (buttons != null)
-            return buttons.handleMouseClick(mouseRectangle, camera, xZoom, yZoom);
-        else 
-            return false;
+        boolean clicked = false;
+
+        if (turnOnButton != null)
+            clicked =  turnOnButton.leftMouseClick(mouseRectangle, camera, xZoom, yZoom);
+
+        if (buttons != null && buttons.getVisibility() && !clicked)
+            clicked = buttons.leftMouseClick(mouseRectangle, camera, xZoom, yZoom);
+
+        return clicked;
+    }
+
+    @Override
+    public boolean rightMouseClick(Rectangle mouseRectangle, Rectangle camera, int xZoom, int yZoom) 
+    {
+        return false;
     }
 
     @Override

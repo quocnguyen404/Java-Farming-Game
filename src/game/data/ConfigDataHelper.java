@@ -1,7 +1,5 @@
 package game.data;
 
-import engine.Tiles;
-
 //singleton
 public final class ConfigDataHelper 
 {

@@ -7,7 +7,9 @@ public final class GameConstanst
     public static final String TITLE = "Best game ever";
     public static final int ALPHA = 0xFFFF00DC;
     public static final String GAME_SHEET_PATH = "spritesheet.png";
+    public static final String TOOLS_SHEET_PATH = "Tools.png";
     public static final String TILES_PATH = "Tiles.txt";
+    public static final String TOOLS_PATH = "Tools.txt";
     public static final String MAP_PATH = "Map.txt";
     public static final int WIN_WIDTH = 700;
     public static final int WIN_HEIGHT = 500;

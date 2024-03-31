@@ -13,13 +13,13 @@ public abstract class GUIButton implements HandleMouseClick
         this.fixed = fixed;
     }
 
-    public void render(RenderHandler renderer, int xZoom, int yZoom, Rectangle interfaceRect)
+    public void render(RenderHandler renderer, int xZoom, int yZoom)
     {
-        renderer.renderSprite(sprite, rect.x + interfaceRect.x, rect.y + interfaceRect.y, xZoom, yZoom, fixed);
+        renderer.renderSprite(sprite, rect.x, rect.y, xZoom, yZoom, fixed);
     }
 
     @Override
-    public boolean handleMouseClick(Rectangle mouseRectangle, Rectangle camera, int xZoom, int yZoom) 
+    public boolean leftMouseClick(Rectangle mouseRectangle, Rectangle camera, int xZoom, int yZoom) 
     {
         if (rect.intersects(mouseRectangle))
         {
@@ -29,5 +29,11 @@ public abstract class GUIButton implements HandleMouseClick
         return false;
     }
 
+    @Override
+    public boolean rightMouseClick(Rectangle mouseRectangle, Rectangle camera, int xZoom, int yZoom) 
+    {
+        return false;
+    }
+    
     abstract public void activate();
 }

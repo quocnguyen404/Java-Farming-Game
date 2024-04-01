@@ -192,7 +192,7 @@ public class Map implements HandleMouseClick
     @Override
     public boolean leftMouseClick(Rectangle mouseRectangle, Rectangle camera, int xZoom, int yZoom) 
     {
-        if (editMode == EditMode.NONE || editTileID == TileID.NONE)
+        if (editMode == EditMode.NONE && editTileID == TileID.NONE)
             return false;
         
         //happen when enable to edit map, but have pick button yet

@@ -14,6 +14,7 @@ import game.data.ConfigDataHelper;
 import game.data.Tiles;
 import game.data.Tiles.Tile;
 import game.data.Tiles.TileID;
+import game.data.Tools.ToolID;
 import game.ui.Button;
 import game.ui.ButtonAct;
 
@@ -24,10 +25,10 @@ public class BuildingSystem extends Component
 
     public BuildingSystem(Consumer<EditMode> editEvent, Consumer<TileID> editTileIDEvent)
     {
-        turnOnButton = new ButtonAct(null,
+        turnOnButton = new ButtonAct(ConfigDataHelper.getInstance().getTools().getTool(ToolID.HAMMER).sprite,
                                     new Rectangle(10, 5, 16*GameFrame.X_ZOOM, 16*GameFrame.Y_ZOOM), 
                                     () -> { setButtonsVisibility(); },
-                                    true);
+                                    false);
 
         this.onChangeEditMode = editEvent;
         this.onChangeEditTileID = editTileIDEvent;
@@ -63,12 +64,12 @@ public class BuildingSystem extends Component
             guiButtons[i] = new Button<TileID>(tileList.get(i).sprite, btnRect, tileList.get(i).tileID, onChangeEditTileID, false);
         }
 
-        Rectangle removingbtn = new Rectangle(0, 
-                                               i*(16*GameFrame.X_ZOOM + 3),
-                                               GameConstanst.TILE_WIDTH*GameFrame.X_ZOOM,
-                                               GameConstanst.TILE_HEIGHT*GameFrame.Y_ZOOM);
 
-        guiButtons[i] = new Button<EditMode>(null, removingbtn, EditMode.REMOVING, onChangeEditMode, true);
+        guiButtons[i] = new Button<EditMode>(ConfigDataHelper.getInstance().getTools().getTool(ToolID.SHOVEL).sprite,
+                                             new Rectangle(0, i*(16*GameFrame.X_ZOOM + 3), GameConstanst.TILE_WIDTH*GameFrame.X_ZOOM, GameConstanst.TILE_HEIGHT*GameFrame.Y_ZOOM), 
+                                             EditMode.REMOVING, 
+                                             onChangeEditMode, 
+                                             false);
 
         buttons.setButtons(guiButtons);
     }

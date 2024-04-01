@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import engine.RenderHandler;
 import engine.Sprite;
 import engine.SpriteSheet;
 import game.GameConstanst;
@@ -54,14 +55,21 @@ public class Tools
     }
 
 
-    public void renderTool()
+    public void renderTool(ToolID toolID, RenderHandler renderer, int xPosition, int yPosition, int xZoom, int yZoom)
     {
-        
+        if (toolsList.size() > toolID.ordinal())
+            renderer.renderSprite(toolsList.get(toolID.ordinal()).sprite, xPosition, yPosition, xZoom, yZoom, true);
     }
+
 
     public int getSize()
     {
         return toolsList.size();
+    }
+
+    public Tool getTool(ToolID toolID)
+    {
+        return toolsList.get(toolID.ordinal());
     }
 
     public ArrayList<Tool> getToolList()

@@ -6,6 +6,7 @@ public final class ConfigDataHelper
     private static ConfigDataHelper instance;
     private GameData gameData;
     private Tiles tiles;
+    private Tools tools;
 
     public static ConfigDataHelper getInstance()
     {
@@ -21,11 +22,17 @@ public final class ConfigDataHelper
         // gameData = new GameData();
         //initialize tile set
         tiles = new Tiles();
+        tools = new Tools();
     }
 
     public Tiles getTiles()
     {
         return tiles;
+    }
+
+    public Tools getTools()
+    {
+        return tools;
     }
 
     public PlayerData getPlayerData()

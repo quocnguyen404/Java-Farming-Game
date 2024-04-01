@@ -19,9 +19,7 @@ public abstract class SDKButton extends GUIButton
     public void render(RenderHandler renderer, int xZoom, int yZoom)
     {
         if (genRect)
-        {
             renderer.renderRectangle(rect, 1, 1, fixed);
-        }
         else
             renderer.renderSprite(sprite, rect.x, rect.y, xZoom, yZoom, fixed);
     }

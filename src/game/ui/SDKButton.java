@@ -6,7 +6,7 @@ import engine.Sprite;
 
 public abstract class SDKButton extends GUIButton
 {
-    protected boolean genRect;
+    protected boolean genRect = false;
     public SDKButton(Sprite sprite, Rectangle rect, boolean genRect)
     {
         super(sprite, rect, true);
@@ -20,7 +20,6 @@ public abstract class SDKButton extends GUIButton
     {
         if (genRect)
             renderer.renderRectangle(rect, 1, 1, fixed);
-        else
-            renderer.renderSprite(sprite, rect.x, rect.y, xZoom, yZoom, fixed);
+        renderer.renderSprite(sprite, rect.x, rect.y, xZoom, yZoom, fixed);
     }
 }

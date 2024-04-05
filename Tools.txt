@@ -2,6 +2,6 @@
 //0
 shovel-0-0
 //1
-hammer-0-1
+hammer-1-0
 //2
-sickle-0-2
+sickle-2-0

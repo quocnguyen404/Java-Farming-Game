@@ -1,14 +1,10 @@
 package game;
 import java.io.File;
-import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Scanner;
 
 import engine.HandleMouseClick;
 import engine.Rectangle;
 import engine.RenderHandler;
-import game.data.ConfigDataHelper;
 import game.data.Tiles;
 import game.data.Tiles.TileID;
 
@@ -22,8 +18,10 @@ public class Map implements HandleMouseClick
         SELECTING,
     }
 
+
     //#region Field
-    private ArrayList<MappedTile> mappedTiles;
+    // private ArrayList<MappedTile> mappedTiles;
+    private Region[] regions;
     private HashMap<Integer,String> comment;
     private TileID fillTiledID = TileID.NONE;
     private File mapFile;
@@ -37,71 +35,79 @@ public class Map implements HandleMouseClick
     
     public Map()
     {
-        mapFile = new File(GameConstanst.MAP_PATH);
-        mappedTiles = new ArrayList<MappedTile>();
-        tileSet = ConfigDataHelper.getInstance().getTiles();
-        comment = new HashMap<Integer, String>();
-        
-        try 
-        {
-            Scanner scanner = new Scanner(mapFile);
-            int lineIndex = 0;
-            while(scanner.hasNextLine())
-            {
-                //Read
-                String line = scanner.nextLine();
-                if (!line.startsWith("//"))
-                {
-                    if (line.contains(":"))
-                    {
-                        String[] splitString = line.split(":");
-                        if (splitString[0].equalsIgnoreCase("Fill"))
-                        {
-                            fillTiledID = Tiles.TileID.values()[Integer.parseInt(splitString[1])];
-                            continue;
-                        }
-                    }
-                    
-                    String [] splitString = line.split(",");
-                    if (splitString.length >= 3)
-                    {
-                        MappedTile mappedTile = new MappedTile(Tiles.TileID.values()[Integer.parseInt(splitString[0])],
-                                                               Integer.parseInt(splitString[1]),
-                                                               Integer.parseInt(splitString[2]));
-                        
-                        mappedTiles.add(mappedTile);
-                    }
-                }
-                else comment.put(lineIndex, line);
+        regions = new Region[1];
+        int xPos = (GameConstant.WIN_HEIGHT/(2*GameConstant.TILE_WIDTH*GameFrame.X_ZOOM));
+        int yPos = (GameConstant.WIN_HEIGHT/(2*GameConstant.TILE_HEIGHT*GameFrame.Y_ZOOM));
+        regions[0] = new Region(xPos, yPos);
 
-                lineIndex++;
-            }
-            scanner.close();
-        } 
-        catch (Exception e) 
-        {
-            e.printStackTrace();
-        }
+        // mapFile = new File(GameConstant.MAP_PATH);
+        // // mappedTiles = new ArrayList<MappedTile>();
+        // tileSet = ConfigDataHelper.getInstance().getTiles();
+        // comment = new HashMap<Integer, String>();
+        
+        // try 
+        // {
+        //     Scanner scanner = new Scanner(mapFile);
+        //     int lineIndex = 0;
+        //     while(scanner.hasNextLine())
+        //     {
+        //         //Read
+        //         String line = scanner.nextLine();
+        //         Region region;
+        //         if (!line.startsWith("//"))
+        //         {
+        //             if (line.contains(":"))
+        //             {
+        //                 String[] splitString = line.split(":");
+        //                 if (splitString[0].equalsIgnoreCase("Region"))
+        //                 {
+        //                     fillTiledID = Tiles.TileID.values()[Integer.parseInt(splitString[1])];
+        //                     continue;
+        //                 }
+        //             }
+                    
+        //             String [] splitString = line.split(",");
+        //             if (splitString.length >= 3)
+        //             {
+        //                 MappedTile mappedTile = new MappedTile(Tiles.TileID.values()[Integer.parseInt(splitString[0])],
+        //                                                        Integer.parseInt(splitString[1]),
+        //                                                        Integer.parseInt(splitString[2]));
+                        
+        //                 // mappedTiles.add(mappedTile);
+        //             }
+        //         }
+        //         else comment.put(lineIndex, line);
+
+        //         lineIndex++;
+        //     }
+        //     scanner.close();
+        // } 
+        // catch (Exception e) 
+        // {
+        //     e.printStackTrace();
+        // }
     }
 
     public void render(RenderHandler renderer, int xZoom, int yZoom)
     {
-        int tileWidth = GameConstanst.TILE_WIDTH * xZoom;
-        int tileHeight = GameConstanst.TILE_HEIGHT * yZoom;
+        
+        for (Region region : regions) {
+            region.render(renderer, xZoom, yZoom);
+        }
     
-        if (fillTiledID != Tiles.TileID.NONE)
-        {
-            Rectangle camera = renderer.getCamera();
-            for (int y = camera.y - tileHeight - (camera.y % tileHeight); y < camera.h + camera.y; y+= tileHeight)
-                for (int x = camera.x - tileWidth - (camera.x % tileWidth); x < camera.w + camera.x; x+= tileWidth)
-                    tileSet.renderTile(fillTiledID, renderer, x, y, xZoom, yZoom);
-        }
+        // if (fillTiledID != Tiles.TileID.NONE)
+        // {
+        //     Rectangle camera = renderer.getCamera();
+        //     for (int y = camera.y - tileHeight - (camera.y % tileHeight); y < camera.h + camera.y; y+= tileHeight)
+        //         for (int x = camera.x - tileWidth - (camera.x % tileWidth); x < camera.w + camera.x; x+= tileWidth)
+        //             tileSet.renderTile(fillTiledID, renderer, x, y, xZoom, yZoom);
+        // }
 
-        for (int tileIndex = 0; tileIndex < mappedTiles.size(); tileIndex++)
-        {
-            MappedTile mappedTile = mappedTiles.get(tileIndex);
-            tileSet.renderTile(mappedTile.id, renderer, mappedTile.x * tileWidth, mappedTile.y * tileHeight, xZoom, yZoom);
-        }
+        // for (int tileIndex = 0; tileIndex < mappedTiles.size(); tileIndex++)
+        // {
+        //     MappedTile mappedTile = mappedTiles.get(tileIndex);
+        //     tileSet.renderTile(mappedTile.id, renderer, mappedTile.x * tileWidth, mappedTile.y * tileHeight, xZoom, yZoom);
+        // }
     }
 
     public void setTile(int tileX, int tileY, TileID id)
@@ -114,66 +120,66 @@ public class Map implements HandleMouseClick
             return;
         }
 
-        for (int i = 0; i < mappedTiles.size(); i++)
-        {
-            MappedTile mappedTile = mappedTiles.get(i);
-            if (mappedTile.x == tileX && mappedTile.y == tileY)
-            {
-                mappedTile.id = id;
-                found = true;
-                break;
-            }
-        }
+        // for (int i = 0; i < mappedTiles.size(); i++)
+        // {
+        //     MappedTile mappedTile = mappedTiles.get(i);
+        //     if (mappedTile.x == tileX && mappedTile.y == tileY)
+        //     {
+        //         mappedTile.id = id;
+        //         found = true;
+        //         break;
+        //     }
+        // }
 
-        if (!found)
-            mappedTiles.add(new MappedTile(id, tileX, tileY));
+        // if (!found)
+        //     mappedTiles.add(new MappedTile(id, tileX, tileY));
     }
 
     public void removeTile(int tileX, int tileY)
     {
-        for (int i = 0; i < mappedTiles.size(); i++)
-        {
-            MappedTile mappedTile = mappedTiles.get(i);
-            if (mappedTile.x == tileX && mappedTile.y == tileY)
-            {
-                mappedTiles.remove(mappedTile);
-                break;
-            }
-        }
+        // for (int i = 0; i < mappedTiles.size(); i++)
+        // {
+        //     MappedTile mappedTile = mappedTiles.get(i);
+        //     if (mappedTile.x == tileX && mappedTile.y == tileY)
+        //     {
+        //         mappedTiles.remove(mappedTile);
+        //         break;
+        //     }
+        // }
     }
     
     public void saveMap()
     {
-        try
-        {
-            if (mapFile.exists())
-                mapFile.delete();
-            int currentLine = 0;
-            PrintWriter printWriter = new PrintWriter(mapFile);
-            if (comment.containsKey(currentLine))
-                    printWriter.println(comment.get(currentLine));
-            printWriter.println("Fill:"+fillTiledID.ordinal());
-            currentLine++;
-            //print all map
-            for (int i = 0; i < mappedTiles.size(); i++)
-            {
-                if (comment.containsKey(currentLine))
-                    printWriter.println(comment.get(currentLine));
+        // try
+        // {
+        //     if (mapFile.exists())
+        //         mapFile.delete();
+        //     int currentLine = 0;
+        //     PrintWriter printWriter = new PrintWriter(mapFile);
+        //     if (comment.containsKey(currentLine))
+        //             printWriter.println(comment.get(currentLine));
+        //     printWriter.println("Fill:"+fillTiledID.ordinal());
+        //     currentLine++;
+        //     //print all map
+        //     for (int i = 0; i < mappedTiles.size(); i++)
+        //     {
+        //         if (comment.containsKey(currentLine))
+        //             printWriter.println(comment.get(currentLine));
 
-                MappedTile mappedTile = mappedTiles.get(i);
-                printWriter.printf("%d,%d,%d%n", mappedTile.id.ordinal(), mappedTile.x, mappedTile.y);
-                currentLine++;
-            }
+        //         MappedTile mappedTile = mappedTiles.get(i);
+        //         printWriter.printf("%d,%d,%d%n", mappedTile.id.ordinal(), mappedTile.x, mappedTile.y);
+        //         currentLine++;
+        //     }
 
-            printWriter.close();
+        //     printWriter.close();
 
-            mapFile.createNewFile();
-            System.out.println("Save map success: " + mapFile.getName());
-        }
-        catch (java.io.IOException e)
-        {
-            e.printStackTrace();
-        }
+        //     mapFile.createNewFile();
+        //     System.out.println("Save map success: " + mapFile.getName());
+        // }
+        // catch (java.io.IOException e)
+        // {
+        //     e.printStackTrace();
+        // }
     }
     
     public void setEditMode(EditMode mode)
@@ -199,8 +205,8 @@ public class Map implements HandleMouseClick
         // if (editTileID == TileID.NONE)
         //     editMode = EditMode.REMOVING;
         
-        int x = Helper.handleMousePosition(mouseRectangle.x, camera.x, GameConstanst.TILE_WIDTH*GameFrame.X_ZOOM);
-        int y = Helper.handleMousePosition(mouseRectangle.y, camera.y, GameConstanst.TILE_HEIGHT*GameFrame.Y_ZOOM);
+        int x = Helper.handleMousePosition(mouseRectangle.x, camera.x, GameConstant.TILE_WIDTH*GameFrame.X_ZOOM);
+        int y = Helper.handleMousePosition(mouseRectangle.y, camera.y, GameConstant.TILE_HEIGHT*GameFrame.Y_ZOOM);
 
         switch (editMode) {
             case PLACING:
@@ -231,20 +237,20 @@ public class Map implements HandleMouseClick
         return false;
     }
 
+    
+
     /**
      * MappedTile
      */
     public class MappedTile 
     {
-        public TileID id;
         public int x, y;
-        public MappedTile(Tiles.TileID id, int x, int y)
+        public TileID id;
+        public MappedTile(TileID id, int x, int y)
         {
             this.id = id;
             this.x = x;
             this.y = y;
         }
     }
-
-
 }

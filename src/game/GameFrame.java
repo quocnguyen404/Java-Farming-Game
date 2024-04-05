@@ -14,25 +14,26 @@ import game.component.Component;
 public class GameFrame extends JFrame implements Runnable
 {
     //game zoom
-    public static int X_ZOOM = 2;
-    public static int Y_ZOOM = 2;
+    public static int X_ZOOM = 3;
+    public static int Y_ZOOM = 3;
 
     private Canvas canvas;
     private RenderHandler renderer;
 
     private Map map;
-
     //GameObject array
-    private GameObject[] gameObjects;
+    // private GameObject[] gameObjects;
     //Component array
     private Component[] components;
     //Player
-    private Player player;
+    // private Player player;
 
     //KeyboardListener
     private KeyboardListener keyboardListener = new KeyboardListener(this);
     //MouseEventListener
     private MouseEventListener mouseEventListener = new MouseEventListener(this);
+    //Background color
+    private Rectangle background;
 
     //constructor
     public GameFrame()
@@ -40,9 +41,9 @@ public class GameFrame extends JFrame implements Runnable
         //create canvas
         canvas = new Canvas();
         //frame set up
-        setTitle(GameConstanst.TITLE);
+        setTitle(GameConstant.TITLE);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(0, 0, GameConstanst.WIN_WIDTH, GameConstanst.WIN_HEIGHT);
+        setBounds(0, 0, GameConstant.WIN_WIDTH, GameConstant.WIN_HEIGHT);
         //set frame in the middle screen
         setLocationRelativeTo(null);
 
@@ -54,14 +55,17 @@ public class GameFrame extends JFrame implements Runnable
         canvas.createBufferStrategy(3);
         //initialize renderer
         renderer = new RenderHandler(getWidth(), getHeight());
-        
+
+        //init background
+        background = new Rectangle(0, 0, getWidth(), getHeight());
+        background.generateGraphics(GameConstant.BACKGROUND_COLOR);
         //initialize map
         map = new Map();
         
-        //load game object for update and render
-        gameObjects = new GameObject[1];
-        player = new Player();
-        gameObjects[0] = player;
+        // //load game object for update and render
+        // gameObjects = new GameObject[1];
+        // player = new Player();
+        // gameObjects[0] = player;
 
 
         //initialize building system
@@ -81,8 +85,8 @@ public class GameFrame extends JFrame implements Runnable
     //update function run 60 time per second
     public void update()
     {
-        for (GameObject obj : gameObjects)
-            obj.update(this);    
+        // for (GameObject obj : gameObjects)
+        //     obj.update(this);    
     }
 
     public void handleCTRL(boolean[] keys)
@@ -112,10 +116,14 @@ public class GameFrame extends JFrame implements Runnable
     //right mouse pressed
     public void rightMousePressed(int x, int y)
     {
-        // x = Helper.handleMousePosition(x, renderer.getCamera().x, GameConstanst.TILE_WIDTH*X_ZOOM);
-        // y = Helper.handleMousePosition(y, renderer.getCamera().y, GameConstanst.TILE_WIDTH*Y_ZOOM);
-        // map.removeTile(x, y);
+
     }
+
+    public void mouseDragged(int x, int y)
+    {
+
+    }
+
 
     //render everything
     public void render()
@@ -124,10 +132,12 @@ public class GameFrame extends JFrame implements Runnable
         Graphics graphics = bufferStrategy.getDrawGraphics();
         super.paint(graphics);
 
+        renderer.renderRectangle(background, 1, 1, true);
+
         map.render(renderer, X_ZOOM, Y_ZOOM);
 
-        for (GameObject obj : gameObjects)
-            obj.render(renderer, X_ZOOM, Y_ZOOM);
+        // for (GameObject obj : gameObjects)
+        //     obj.render(renderer, X_ZOOM, Y_ZOOM);
 
         for (Component component : components) 
             component.render(renderer, X_ZOOM, Y_ZOOM);    

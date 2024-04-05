@@ -7,7 +7,7 @@ import engine.GUI;
 import engine.GUIButton;
 import engine.Rectangle;
 import engine.RenderHandler;
-import game.GameConstanst;
+import game.GameConstant;
 import game.GameFrame;
 import game.Map.EditMode;
 import game.data.ConfigDataHelper;
@@ -25,13 +25,14 @@ public class BuildingSystem extends Component
 
     public BuildingSystem(Consumer<EditMode> editEvent, Consumer<TileID> editTileIDEvent)
     {
+        this.onChangeEditMode = editEvent;
+        this.onChangeEditTileID = editTileIDEvent;
+
         turnOnButton = new ButtonAct(ConfigDataHelper.getInstance().getTools().getTool(ToolID.HAMMER).sprite,
                                     new Rectangle(10, 5, 16*GameFrame.X_ZOOM, 16*GameFrame.Y_ZOOM), 
                                     () -> { setButtonsVisibility(); },
-                                    false);
+                                    true);
 
-        this.onChangeEditMode = editEvent;
-        this.onChangeEditTileID = editTileIDEvent;
         generateUI();
     }
 
@@ -58,18 +59,18 @@ public class BuildingSystem extends Component
         {
             Rectangle btnRect = new Rectangle(0, 
                                               i*(16*GameFrame.X_ZOOM + 3), 
-                                              GameConstanst.TILE_WIDTH*GameFrame.X_ZOOM, 
-                                              GameConstanst.TILE_HEIGHT*GameFrame.Y_ZOOM);
+                                              GameConstant.TILE_WIDTH*GameFrame.X_ZOOM, 
+                                              GameConstant.TILE_HEIGHT*GameFrame.Y_ZOOM);
 
             guiButtons[i] = new Button<TileID>(tileList.get(i).sprite, btnRect, tileList.get(i).tileID, onChangeEditTileID, false);
         }
 
 
         guiButtons[i] = new Button<EditMode>(ConfigDataHelper.getInstance().getTools().getTool(ToolID.SHOVEL).sprite,
-                                             new Rectangle(0, i*(16*GameFrame.X_ZOOM + 3), GameConstanst.TILE_WIDTH*GameFrame.X_ZOOM, GameConstanst.TILE_HEIGHT*GameFrame.Y_ZOOM), 
+                                             new Rectangle(0, i*(16*GameFrame.X_ZOOM + 3), GameConstant.TILE_WIDTH*GameFrame.X_ZOOM, GameConstant.TILE_HEIGHT*GameFrame.Y_ZOOM), 
                                              EditMode.REMOVING, 
                                              onChangeEditMode, 
-                                             false);
+                                             true);
 
         buttons.setButtons(guiButtons);
     }

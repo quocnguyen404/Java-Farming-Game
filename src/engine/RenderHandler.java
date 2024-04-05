@@ -3,7 +3,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 
-import game.GameConstanst;
+import game.GameConstant;
 
 
 public class RenderHandler 
@@ -105,7 +105,7 @@ public class RenderHandler
                 pixelIndex = x + y * view.getWidth();
         }
 
-        if (pixelIndex < pixels.length && pixel != GameConstanst.ALPHA)
+        if (pixelIndex < pixels.length && pixel != GameConstant.ALPHA)
             pixels[pixelIndex] = pixel; 
     }
 }

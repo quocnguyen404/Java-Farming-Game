@@ -1,5 +1,6 @@
 package game.data;
 
+
 //singleton
 public final class ConfigDataHelper 
 {

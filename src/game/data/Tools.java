@@ -8,7 +8,7 @@ import java.util.Scanner;
 import engine.RenderHandler;
 import engine.Sprite;
 import engine.SpriteSheet;
-import game.GameConstanst;
+import game.GameConstant;
 import game.Helper;
 
 public class Tools 
@@ -24,10 +24,10 @@ public class Tools
 
     public Tools()
     {
-        File toolsFile = new File(GameConstanst.TOOLS_PATH);
+        File toolsFile = new File(GameConstant.TOOLS_PATH);
         toolsList = new ArrayList<>();
-        SpriteSheet sheet = new SpriteSheet(Helper.loadImage(GameConstanst.TOOLS_SHEET_PATH));
-        sheet.loadSprite(GameConstanst.TILE_WIDTH, GameConstanst.TILE_HEIGHT);
+        SpriteSheet sheet = new SpriteSheet(Helper.loadImage(GameConstant.TOOLS_SHEET_PATH));
+        sheet.loadSprite(GameConstant.TILE_WIDTH, GameConstant.TILE_HEIGHT);
 
         try 
         {

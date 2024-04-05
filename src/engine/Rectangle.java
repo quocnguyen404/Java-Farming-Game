@@ -1,5 +1,5 @@
 package engine;
-import game.GameConstanst;
+import game.GameConstant;
 
 public class Rectangle
 {
@@ -49,7 +49,7 @@ public class Rectangle
 
         //set all to transparent
         for (int i = 0; i < pixels.length; i++)
-            pixels[i] = GameConstanst.ALPHA;
+            pixels[i] = GameConstant.ALPHA;
 
         //upper border
         for (int y = 0; y < borderWidth; y++)

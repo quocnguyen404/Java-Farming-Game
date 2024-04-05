@@ -7,28 +7,32 @@ import java.util.Scanner;
 import engine.RenderHandler;
 import engine.Sprite;
 import engine.SpriteSheet;
-import game.GameConstanst;
+import game.GameConstant;
 import game.Helper;
 
 public class Tiles 
 {
     public enum TileID
     {
-        SAND1, // 0
-        SAND2, //1
-        FLATSTONE, //2
-        DIRT1, //3
-        WALL1, //4
+        GREEN1, //0
+        GREEN2, //1
+        WHITE, //2
+        HOLE, //3
+        CIR_GREEN1, //4
+        CIR_GREEN2, //5
+        CIR_GREEN3, //6
+        //
+        REGION, //
         NONE,
     }
     private ArrayList<Tile> tilesList;
 
     public Tiles()
     {
-        File tilesFile = new File(GameConstanst.TILES_PATH);
-        tilesList = new ArrayList<Tile>();
-        SpriteSheet spriteSheet = new SpriteSheet(Helper.loadImage(GameConstanst.GAME_SHEET_PATH));
-        spriteSheet.loadSprite(GameConstanst.TILE_WIDTH, GameConstanst.TILE_HEIGHT);
+        File tilesFile = new File(GameConstant.TILES_PATH);
+        tilesList = new ArrayList<Tile>(TileID.values().length);
+        SpriteSheet spriteSheet = new SpriteSheet(Helper.loadImage(GameConstant.GAME_SHEET_PATH));
+        spriteSheet.loadSprite(GameConstant.TILE_WIDTH, GameConstant.TILE_HEIGHT);
         
         try 
         {
@@ -55,6 +59,15 @@ public class Tiles
         {
             e.printStackTrace();
         }
+
+        //special sprite
+        //rect_white //7
+        Sprite sprite = new Sprite(spriteSheet, 0,
+        4*GameConstant.TILE_HEIGHT,
+        GameConstant.REGION_WIDTH_SIZE*GameConstant.TILE_WIDTH+4,
+        GameConstant.REGION_HEIGHT_SIZE*GameConstant.TILE_HEIGHT+4);
+        Tile rectWhite = new Tile("rectWhite", sprite, TileID.REGION);
+        tilesList.add(rectWhite);
     }   
 
     public void renderTile(TileID tileID, RenderHandler renderer, int xPosition, int yPosition, int xZoom, int yZoom)
@@ -67,6 +80,11 @@ public class Tiles
     public int getSize()
     {
         return tilesList.size();
+    }
+
+    public Tile getTile(TileID tileID)
+    {
+        return tilesList.get(tileID.ordinal());
     }
 
     public ArrayList<Tile> getTileList()

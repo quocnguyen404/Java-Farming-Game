@@ -8,6 +8,7 @@ import game.GameFrame;
 public class MouseEventListener implements MouseListener, MouseMotionListener
 {
     private GameFrame game;
+    private boolean mouseDragged = false;
 
     public MouseEventListener(GameFrame game)
     {
@@ -17,6 +18,8 @@ public class MouseEventListener implements MouseListener, MouseMotionListener
     @Override
     public void mouseDragged(MouseEvent e) 
     {
+        mouseDragged = true;
+        game.mouseDragged(e.getX(), e.getY());
     }
 
     @Override
@@ -50,6 +53,10 @@ public class MouseEventListener implements MouseListener, MouseMotionListener
     @Override
     public void mouseReleased(MouseEvent e) 
     {
+
+        
+
+        mouseDragged = false;
     }
 
     @Override

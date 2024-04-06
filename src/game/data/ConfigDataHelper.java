@@ -1,13 +1,22 @@
 package game.data;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.Scanner;
+
+import engine.Sprite;
+import game.GameConstant;
+import game.data.Sprites.SpriteID;
 
 //singleton
 public final class ConfigDataHelper 
 {
     private static ConfigDataHelper instance;
-    private GameData gameData;
-    private Tiles tiles;
-    private Tools tools;
+    
+    private int gold = 10;
+    private HashMap<String, PlantData> plantData;
+    private Sprites sprites;
 
     public static ConfigDataHelper getInstance()
     {
@@ -19,30 +28,49 @@ public final class ConfigDataHelper
     //private ConfigDataHelper
     private ConfigDataHelper()
     {
-        //initialize game data
-        // gameData = new GameData();
-        //initialize tile set
-        tiles = new Tiles();
-        tools = new Tools();
+        sprites = new Sprites();
+        loadPlantData();
     }
 
-    public Tiles getTiles()
+    public PlantData getPlantData(String name)
     {
-        return tiles;
+        return plantData.get(name);
     }
 
-    public Tools getTools()
+    public Sprite getSprite(SpriteID id)
     {
-        return tools;
+        return sprites.getSprite(id);
     }
 
-    public PlayerData getPlayerData()
+    private void loadPlantData()
     {
-        return gameData.playerData;
-    }
+        plantData = new HashMap<String, PlantData>();
+        
+        try 
+        {
+            File data = new File(GameConstant.PLANTDATA_PATH);
+            Scanner scanner = new Scanner(data);
+            
+            while(scanner.hasNextLine())
+            {
+                String line = scanner.nextLine();
 
-    public PlantData getPlantData(String plantName)
-    {
-        return gameData.plantData.get(plantName);
+                if (!line.startsWith("//"))
+                {
+                    String[] split = line.split("-");
+                    PlantData plant = new PlantData(split[0],
+                                                    Integer.parseInt(split[1]), 
+                                                    Integer.parseInt(split[2]), 
+                                                    Integer.parseInt(split[3]));
+                    plantData.put(split[0], plant);
+                }
+
+            }
+
+            scanner.close();
+        } catch (FileNotFoundException e) 
+        {
+            e.printStackTrace();
+        }
     }
 }

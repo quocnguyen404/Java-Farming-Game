@@ -4,6 +4,8 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 
 import game.GameConstant;
+import game.data.ConfigDataHelper;
+import game.data.Sprites.SpriteID;
 
 
 public class RenderHandler 
@@ -49,6 +51,12 @@ public class RenderHandler
         }
 
         renderArray(spritePixels, sprite.getWidth(), sprite.getHeight(), xPos, yPos, xZoom, yZoom, fixed);
+    }
+
+    public void renderSprite(SpriteID id, int xPos, int yPos, int xZoom, int yZoom, boolean fixed)
+    {
+        Sprite sprite = ConfigDataHelper.getInstance().getSprite(id);
+        renderSprite(sprite, xPos, yPos, xZoom, yZoom, fixed);
     }
 
     // render image to array of pixles

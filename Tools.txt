@@ -1,7 +1,0 @@
-//name-x-y
-//0
-shovel-0-0
-//1
-hammer-1-0
-//2
-sickle-2-0

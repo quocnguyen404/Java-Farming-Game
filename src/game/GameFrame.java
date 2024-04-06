@@ -8,7 +8,6 @@ import java.lang.Runnable;
 import javax.swing.JFrame;
 
 import engine.*;
-import game.component.BuildingSystem;
 import game.component.Component;
 
 public class GameFrame extends JFrame implements Runnable
@@ -69,11 +68,8 @@ public class GameFrame extends JFrame implements Runnable
 
 
         //initialize building system
-        BuildingSystem buildingSystem = new BuildingSystem((mode) -> { map.setEditMode(mode); }, 
-                                                           (tileID) -> { map.setEditTileID(tileID);});
 
-        components = new Component[1];
-        components[0] = buildingSystem;
+        components = new Component[0];
 
         //set up canvas
         canvas.addKeyListener(keyboardListener);
@@ -93,7 +89,6 @@ public class GameFrame extends JFrame implements Runnable
     {
         if (keys[KeyEvent.VK_S])
         {
-            map.saveMap();
         }
     }
 
@@ -120,6 +115,11 @@ public class GameFrame extends JFrame implements Runnable
     }
 
     public void mouseDragged(int x, int y)
+    {
+
+    }
+
+    public void mouseDraggedExit(int x, int y)
     {
 
     }

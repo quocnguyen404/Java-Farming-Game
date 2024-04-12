@@ -1,6 +1,6 @@
 package engine;
 
-public abstract class GUIButton implements HandleMouseClick
+public abstract class GUIButton implements HandleMouseEvent
 {   
     protected Sprite sprite;
     protected Rectangle rect;
@@ -35,5 +35,17 @@ public abstract class GUIButton implements HandleMouseClick
         return false;
     }
     
+    @Override
+    public boolean mouseDragged(Rectangle mouseRectangle, Rectangle camRectangle, int xZoom, int yZoom) 
+    {
+        return false;
+    }
+
+    @Override
+    public boolean mouseDraggedExit(Rectangle mousRectangle, Rectangle camRectangle, int xZoom, int yZoom) 
+    {
+        return false;
+    }
+
     abstract public void activate();
 }

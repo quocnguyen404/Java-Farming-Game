@@ -10,7 +10,7 @@ import game.GameConstant;
 import game.data.Sprites.SpriteID;
 
 //singleton
-public final class ConfigDataHelper 
+public final class ConfigDataHelper
 {
     private static ConfigDataHelper instance;
     
@@ -30,16 +30,6 @@ public final class ConfigDataHelper
     {
         sprites = new Sprites();
         loadPlantData();
-    }
-
-    public PlantData getPlantData(String name)
-    {
-        return plantData.get(name);
-    }
-
-    public Sprite getSprite(SpriteID id)
-    {
-        return sprites.getSprite(id);
     }
 
     private void loadPlantData()
@@ -64,7 +54,6 @@ public final class ConfigDataHelper
                                                     Integer.parseInt(split[3]));
                     plantData.put(split[0], plant);
                 }
-
             }
 
             scanner.close();
@@ -72,5 +61,15 @@ public final class ConfigDataHelper
         {
             e.printStackTrace();
         }
+    }
+
+    public PlantData getPlantData(String name)
+    {
+        return plantData.get(name);
+    }
+
+    public Sprite getSprite(SpriteID id)
+    {
+        return sprites.getSprite(id);
     }
 }

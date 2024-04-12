@@ -2,7 +2,7 @@ package engine;
 
 import game.GameFrame;
 
-public class GUI implements HandleMouseClick, GameObject 
+public class GUI implements HandleMouseEvent, GameObject 
 {
     private Sprite bgSprite;
     private GUIButton[] buttons;
@@ -53,25 +53,7 @@ public class GUI implements HandleMouseClick, GameObject
     {
         return rect;
     }
-
-
-    @Override
-    public boolean leftMouseClick(Rectangle mouseRectangle, Rectangle camera, int xZoom, int yZoom) 
-    {
-        if (!fixed) 
-            mouseRectangle = new Rectangle(mouseRectangle.x + camera.x , mouseRectangle.y + camera.y, 1, 1);
-
-        if (rect.w == 0 || rect.h == 0 || mouseRectangle.intersects(rect))
-        {
-            // mouseRectangle.x += rect.x;
-            // mouseRectangle.y += rect.y;
-            for (GUIButton guiButton : buttons)
-                if (guiButton.leftMouseClick(mouseRectangle, camera, xZoom, yZoom))
-                    return true;
-        }
-        return false;
-    }
-
+   
     @Override
     public boolean rightMouseClick(Rectangle mouseRectangle, Rectangle camera, int xZoom, int yZoom) 
     {
@@ -98,6 +80,36 @@ public class GUI implements HandleMouseClick, GameObject
     @Override
     public void update(GameFrame game) 
     {
+    }
+
+    @Override
+    public boolean leftMouseClick(Rectangle mouseRectangle, Rectangle camera, int xZoom, int yZoom) 
+    {
+        if (!fixed) 
+            mouseRectangle = new Rectangle(mouseRectangle.x + camera.x , mouseRectangle.y + camera.y, 1, 1);
+
+        if (rect.w == 0 || rect.h == 0 || mouseRectangle.intersects(rect))
+        {
+            // mouseRectangle.x += rect.x;
+            // mouseRectangle.y += rect.y;
+            for (GUIButton guiButton : buttons)
+                if (guiButton.leftMouseClick(mouseRectangle, camera, xZoom, yZoom))
+                    return true;
+        }
+        return false;
+    }
+
+
+    @Override
+    public boolean mouseDragged(Rectangle mouseRectangle, Rectangle camRectangle, int xZoom, int yZoom) 
+    {
+        return false;
+    }
+
+    @Override
+    public boolean mouseDraggedExit(Rectangle mousRectangle, Rectangle camRectangle, int xZoom, int yZoom) 
+    {
+        return false;
     }
 
 

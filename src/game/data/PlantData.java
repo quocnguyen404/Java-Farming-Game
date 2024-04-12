@@ -1,11 +1,14 @@
 package game.data;
 
+import engine.AnimatedSprite;
+
 public class PlantData 
 {
     private String name;
     private int growTime;
     private int sellPrice;
     private int buyPrice;
+    // private AnimatedSprite anim;
 
     public PlantData()
     {

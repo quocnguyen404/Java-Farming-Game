@@ -19,7 +19,6 @@ public class GameFrame extends JFrame implements Runnable
     private Canvas canvas;
     private RenderHandler renderer;
 
-    private Map map;
     //GameObject array
     // private GameObject[] gameObjects;
     //Component array
@@ -58,8 +57,6 @@ public class GameFrame extends JFrame implements Runnable
         //init background
         background = new Rectangle(0, 0, getWidth(), getHeight());
         background.generateGraphics(GameConstant.BACKGROUND_COLOR);
-        //initialize map
-        map = new Map();
         
         // //load game object for update and render
         // gameObjects = new GameObject[1];
@@ -92,11 +89,13 @@ public class GameFrame extends JFrame implements Runnable
         }
     }
 
+    private Rectangle mouseRect = new Rectangle(0, 0, 1, 1);
     //left mouse pressed
     public void leftMousePressed(int x, int y)
     {
         boolean clicked = false;
-        Rectangle mouseRect = new Rectangle(x, y, 1, 1);
+        // Rectangle mouseRect = new Rectangle(x, y, 1, 1);
+        mouseRect.setPosition(x, y);
 
         for (Component component : components) 
             clicked = component.leftMouseClick(mouseRect, renderer.getCamera(), x, y);
@@ -105,11 +104,15 @@ public class GameFrame extends JFrame implements Runnable
         if (clicked)
             return;
 
-        map.leftMouseClick(mouseRect, renderer.getCamera(), x, y);
     }
 
     //right mouse pressed
     public void rightMousePressed(int x, int y)
+    {
+        
+    }
+
+    public void mouseMoved(int x, int y)
     {
 
     }
@@ -133,8 +136,6 @@ public class GameFrame extends JFrame implements Runnable
         super.paint(graphics);
 
         renderer.renderRectangle(background, 1, 1, true);
-
-        map.render(renderer, X_ZOOM, Y_ZOOM);
 
         // for (GameObject obj : gameObjects)
         //     obj.render(renderer, X_ZOOM, Y_ZOOM);

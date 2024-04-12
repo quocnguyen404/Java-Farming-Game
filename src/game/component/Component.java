@@ -2,13 +2,13 @@ package game.component;
 
 import engine.GUI;
 import engine.GameObject;
-import engine.HandleMouseClick;
+import engine.HandleMouseEvent;
 import engine.Rectangle;
 import engine.RenderHandler;
 import game.GameFrame;
 import game.ui.ButtonAct;
 
-public abstract class Component implements HandleMouseClick, GameObject
+public abstract class Component implements HandleMouseEvent, GameObject
 {
     protected GUI buttons;
     protected ButtonAct turnOnButton;
@@ -46,6 +46,19 @@ public abstract class Component implements HandleMouseClick, GameObject
     {
         return false;
     }
+
+    @Override
+    public boolean mouseDragged(Rectangle mouseRectangle, Rectangle camRectangle, int xZoom, int yZoom) 
+    {
+        return false;
+    }
+
+    @Override
+    public boolean mouseDraggedExit(Rectangle mousRectangle, Rectangle camRectangle, int xZoom, int yZoom) 
+    {
+        return false;
+    }
+
 
     @Override
     public void update(GameFrame game) 

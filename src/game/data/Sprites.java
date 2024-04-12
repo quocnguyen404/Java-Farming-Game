@@ -13,14 +13,21 @@ public class Sprites
 {
     public enum SpriteID
     {
-        GREEN1,
-        GREEN2,
-        WHITE,
-        HOLE,
-        CIR_GREEN1,
-        CIR_GREEN2,
-        CIR_GREEN3,
-        REGION,
+        GREEN1("Green1"),
+        GREEN2("Green2"),
+        WHITE("White"),
+        HOLE("Hole"),
+        CIR_GREEN1("CirGreen1"),
+        CIR_GREEN2("CirGreen2"),
+        CIR_GREEN3("CirGreen3"),
+        PLANT("Plant"),
+        REGION("Region");
+
+        public final String name;
+        private SpriteID(String name)
+        {
+            this.name = name;
+        }
     }
 
     private SpriteSheet gameSheet;

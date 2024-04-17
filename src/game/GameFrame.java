@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 
 import engine.*;
 import game.component.Component;
+import game.component.FarmingSystem;
 
 public class GameFrame extends JFrame implements Runnable
 {
@@ -64,9 +65,10 @@ public class GameFrame extends JFrame implements Runnable
         // gameObjects[0] = player;
 
 
-        //initialize building system
+        //initialize farming system
 
-        components = new Component[0];
+        components = new Component[1];
+        components[0] = new FarmingSystem();
 
         //set up canvas
         canvas.addKeyListener(keyboardListener);

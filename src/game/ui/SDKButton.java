@@ -2,14 +2,14 @@ package game.ui;
 import engine.GUIButton;
 import engine.Rectangle;
 import engine.RenderHandler;
-import engine.Sprite;
+import game.data.Sprites.SpriteID;
 
 public abstract class SDKButton extends GUIButton
 {
     protected boolean genRect = false;
-    public SDKButton(Sprite sprite, Rectangle rect, boolean genRect)
+    public SDKButton(SpriteID spriteID, Rectangle rect, boolean genRect)
     {
-        super(sprite, rect, true);
+        super(spriteID, rect, true);
         this.genRect = genRect;
         if (genRect)
             rect.generateGraphics(0xFFDB3D);
@@ -20,6 +20,6 @@ public abstract class SDKButton extends GUIButton
     {
         if (genRect)
             renderer.renderRectangle(rect, 1, 1, fixed);
-        renderer.renderSprite(sprite, rect.x, rect.y, xZoom, yZoom, fixed);
+        renderer.renderSprite(spriteID, rect.x, rect.y, xZoom, yZoom, fixed);
     }
 }

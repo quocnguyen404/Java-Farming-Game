@@ -1,10 +1,12 @@
 package engine;
 
 import game.GameFrame;
+import game.Helper;
+import game.data.Sprites.SpriteID;
 
 public class GUI implements HandleMouseEvent, GameObject 
 {
-    private Sprite bgSprite;
+    private SpriteID bgSpriteID = null;
     private GUIButton[] buttons;
     private Rectangle rect = new Rectangle();
     private boolean fixed;
@@ -15,17 +17,17 @@ public class GUI implements HandleMouseEvent, GameObject
         this (null, 0, 0, true, false);
     }
 
-    public GUI(Sprite bgSprite, int x, int y, boolean fixed, boolean visible)
+    public GUI(SpriteID bgSpriteID, int x, int y, boolean fixed, boolean visible)
     {
-        this.bgSprite = bgSprite;
+        this.bgSpriteID = bgSpriteID;
         this.fixed = fixed;
         this.visible = visible;
         rect.setPosition(x, y);
 
-        if (bgSprite != null)
+        if (bgSpriteID != null)
         {
-            rect.w = bgSprite.getWidth();
-            rect.h = bgSprite.getHeight();
+            rect.w = Helper.getSpriteWidth(bgSpriteID);
+            rect.h = Helper.getSpriteHeight(bgSpriteID);
         }
     }
     
@@ -66,8 +68,8 @@ public class GUI implements HandleMouseEvent, GameObject
         if (!visible)
             return;
             
-        if (bgSprite != null)
-            renderer.renderSprite(bgSprite, rect.x, rect.y, xZoom, yZoom, fixed);
+        if (bgSpriteID != null)
+            renderer.renderSprite(bgSpriteID, rect.x, rect.y, xZoom, yZoom, fixed);
      
         if (buttons != null)
         {

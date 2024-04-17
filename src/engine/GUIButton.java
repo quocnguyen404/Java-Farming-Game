@@ -1,21 +1,24 @@
 package engine;
 
+import game.data.Sprites.SpriteID;
+
 public abstract class GUIButton implements HandleMouseEvent
 {   
-    protected Sprite sprite;
+    // protected Sprite sprite;
+    protected SpriteID spriteID;
     protected Rectangle rect;
     protected boolean fixed;
 
-    public GUIButton(Sprite sprite, Rectangle rect, boolean fixed)
+    public GUIButton(SpriteID spriteID, Rectangle rect, boolean fixed)
     {
-        this.sprite = sprite;
+        this.spriteID = spriteID;
         this.rect = rect;
         this.fixed = fixed;
     }
 
     public void render(RenderHandler renderer, int xZoom, int yZoom)
     {
-        renderer.renderSprite(sprite, rect.x, rect.y, xZoom, yZoom, fixed);
+        renderer.renderSprite(spriteID, rect.x, rect.y, xZoom, yZoom, fixed);
     }
 
     @Override

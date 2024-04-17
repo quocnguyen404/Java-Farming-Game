@@ -1,14 +1,14 @@
 package game.ui;
 
 import engine.Rectangle;
-import engine.Sprite;
+import game.data.Sprites.SpriteID;
 
 public class ButtonAct extends SDKButton
 {
     private Runnable onActivate;
-    public ButtonAct(Sprite sprite, Rectangle rect, Runnable onActivate, boolean genRect)
+    public ButtonAct(SpriteID spriteID, Rectangle rect, Runnable onActivate, boolean genRect)
     {
-        super(sprite, rect, genRect);
+        super(spriteID, rect, genRect);
         this.onActivate = onActivate;
     }
 

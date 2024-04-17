@@ -3,16 +3,16 @@ package game.ui;
 import java.util.function.Consumer;
 
 import engine.Rectangle;
-import engine.Sprite;
+import game.data.Sprites.SpriteID;
 
 public class Button<T> extends SDKButton
 {
     private Consumer<T> onActivate;
     private T data;
 
-    public Button(Sprite sprite, Rectangle rect, T data, Consumer<T> onActivate, boolean genRect) 
+    public Button(SpriteID spriteID, Rectangle rect, T data, Consumer<T> onActivate, boolean genRect) 
     {
-        super(sprite, rect, genRect);
+        super(spriteID, rect, genRect);
         this.data = data;
         this.onActivate = onActivate;
     }

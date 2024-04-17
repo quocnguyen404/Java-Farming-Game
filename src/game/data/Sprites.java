@@ -2,6 +2,8 @@ package game.data;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 import engine.Sprite;
@@ -13,34 +15,29 @@ public class Sprites
 {
     public enum SpriteID
     {
-        GREEN1("Green1"),
-        GREEN2("Green2"),
-        WHITE("White"),
-        HOLE("Hole"),
-        CIR_GREEN1("CirGreen1"),
-        CIR_GREEN2("CirGreen2"),
-        CIR_GREEN3("CirGreen3"),
-        PLANT("Plant"),
-        REGION("Region");
-
-        public final String name;
-        private SpriteID(String name)
-        {
-            this.name = name;
-        }
+        GREEN1_SQUARE,
+        GREEN2_SQUARE,
+        WHITE_SQUARE,
+        PLANT_HOLE,
+        GREEN1_CIRCLE,
+        GREEN2_CIRCLE,
+        GREEN3_CIRCLE,
+        ONION,
+        POTATO,
+        REGION,
     }
 
     private SpriteSheet gameSheet;
     private File spriteFile;
-    private GameSprite[] sprites;
+    private Map<SpriteID, Sprite> spriteMap;
+    // private GameSprite[] spriteMap;
 
     public Sprites()
     {
+        spriteMap = new HashMap<SpriteID, Sprite>();
+        
         gameSheet = new SpriteSheet(Helper.loadImage(GameConstant.GAME_SHEET_PATH));
         gameSheet.loadSprite(GameConstant.TILE_WIDTH, GameConstant.TILE_HEIGHT);
-        sprites = new GameSprite[SpriteID.values().length];
-        int id = 0;
-        //load normal sprite from spritesheet
         try 
         {
             spriteFile = new File(GameConstant.SPRITES_PATH);
@@ -53,12 +50,12 @@ public class Sprites
                 if (!line.startsWith("//"))
                 {
                     String [] splitString = line.split("-");
-                    String spriteName = splitString[0];
+                    // String spriteName = splitString[0];
                     int spriteX = Integer.parseInt(splitString[1]);
                     int spriteY = Integer.parseInt(splitString[2]);
-                    GameSprite gameSprite = new GameSprite(gameSheet.getSprite(spriteX, spriteY), SpriteID.values()[id], spriteName);
-                    sprites[id] = gameSprite;
-                    id++;
+                    SpriteID id = SpriteID.values()[Integer.parseInt(splitString[3])];
+                    Sprite sprite = new Sprite(gameSheet, spriteX, spriteY, GameConstant.TILE_WIDTH, GameConstant.TILE_HEIGHT);
+                    spriteMap.put(id, sprite);
                 }
             }
 
@@ -74,29 +71,24 @@ public class Sprites
         4*GameConstant.TILE_HEIGHT,
         GameConstant.REGION_WIDTH_SIZE*GameConstant.TILE_WIDTH+4,
         GameConstant.REGION_HEIGHT_SIZE*GameConstant.TILE_HEIGHT+4);
-        GameSprite regionSprite = new GameSprite(sprite, SpriteID.values()[id], "Region");
-        sprites[id] = regionSprite;
-        id++;
+
+        spriteMap.put(SpriteID.REGION, sprite);
+    }
+
+    private Sprite[] loadCustomSprites(int startX, int startY, int endX, int endY, int width, int height)
+    {
+        int size = ((endX - startX)/width)*((endY-startY)/height);
+        Sprite[] cusSprites = new Sprite[size];
+        for (int i = 0; i < size; i++)
+            cusSprites[i] = new Sprite(gameSheet, startX, startY, width, height);
+        
+        return cusSprites;
     }
 
     public Sprite getSprite(SpriteID id)
     {
-        return sprites[id.ordinal()].sprite;
+        return spriteMap.get(id);
     }
 
     public SpriteSheet getGameSpriteSheet() { return gameSheet; }
-    
-    public class GameSprite
-    {
-        public Sprite sprite;
-        public SpriteID id;
-        public String name;
-    
-        public GameSprite(Sprite sprite, SpriteID id, String name)
-        {
-            this.sprite = sprite;
-            this.id = id;
-            this.name = name;
-        }
-    }
 }

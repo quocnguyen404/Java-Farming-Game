@@ -9,7 +9,6 @@ import game.GameConstant;
 import game.GameFrame;
 import game.data.ConfigDataHelper;
 import game.data.PlantData;
-import game.ui.ButtonAct;
 
 public class FarmingSystem extends Component
 {

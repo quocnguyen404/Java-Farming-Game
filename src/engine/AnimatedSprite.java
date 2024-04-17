@@ -3,7 +3,7 @@ import java.awt.image.BufferedImage;
 
 import game.GameFrame;
 
-public class AnimatedSprite extends Sprite implements GameObject 
+public class AnimatedSprite extends Sprite
 {
     private Sprite[] sprites;
     private int currentSprite = 0;
@@ -52,12 +52,10 @@ public class AnimatedSprite extends Sprite implements GameObject
     }
 
     // Render is dealt specifically with the Layer class
-    @Override
     public void render(RenderHandler renderer, int xZoom, int yZoom) 
     {
     }
 
-    @Override
     public void update(GameFrame game) 
     {
         counter++;

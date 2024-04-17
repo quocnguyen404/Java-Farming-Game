@@ -6,11 +6,24 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import game.data.ConfigDataHelper;
+import game.data.Sprites.SpriteID;
+
 public final class Helper 
 {
     public static int handleMousePosition(int mousePos, int camPos, int offset)
     {
         return (int)Math.floor(((double)mousePos + camPos)/offset);
+    }
+
+    public static int getSpriteWidth(SpriteID spriteID)
+    {
+        return ConfigDataHelper.getInstance().getSprite(spriteID).getWidth();
+    }
+
+    public static int getSpriteHeight(SpriteID spriteID)
+    {
+        return ConfigDataHelper.getInstance().getSprite(spriteID).getHeight();
     }
 
     //loadImage

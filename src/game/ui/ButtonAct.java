@@ -17,4 +17,10 @@ public class ButtonAct extends SDKButton
     {
         onActivate.run();
     }
+
+    @Override
+    public void dragActivate()
+    {
+        onActivate.run();
+    }
 }

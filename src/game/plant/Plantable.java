@@ -8,7 +8,7 @@ import game.GameFrame;
 
 public abstract class Plantable implements HandleMouseEvent, GameObject
 {
-    public abstract boolean planted();    
+    public abstract boolean planted();
     public abstract boolean remove();
 
     @Override

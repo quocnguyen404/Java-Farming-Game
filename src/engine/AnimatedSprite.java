@@ -1,9 +1,8 @@
 package engine;
-import java.awt.image.BufferedImage;
 
 import game.GameFrame;
 
-public class AnimatedSprite extends Sprite
+public class AnimatedSprite
 {
     private Sprite[] sprites;
     private int currentSprite = 0;
@@ -13,30 +12,12 @@ public class AnimatedSprite extends Sprite
     private int startSprite = 0;
     private int endSprite;
 
-    public AnimatedSprite(SpriteSheet sheet, Rectangle[] position, int speed)
+    // public AnimatedSprite(SpriteID)
+    public AnimatedSprite(Sprite[] sprites, int speed)
     {
-        sprites = new Sprite[position.length];
+        this.sprites = sprites;
         this.speed = speed;
-        endSprite = position.length - 1;
-        for (int i = 0; i < position.length; i++)
-            sprites[i] = new Sprite(sheet, position[i].x, position[i].y, position[i].w, position[i].h);
-    }
-
-    public AnimatedSprite(SpriteSheet sheet, int speed)
-    {
-        sprites = sheet.getLoadedSprites();
-        this.speed = speed;
-        this.endSprite = sprites.length - 1;
-    }
-
-    //@param speed represnets how many frames pass until the sprite changes
-    public AnimatedSprite(BufferedImage[] image, int speed) 
-    {
-        sprites = new Sprite[image.length];
-        this.speed = speed;
-        endSprite = image.length - 1;
-        for (int i = 0; i < image.length; i++)
-            sprites[i] = new Sprite(image[i]);
+        setAnimationRange(0, sprites.length);
     }
 
     public void reset()
@@ -52,8 +33,9 @@ public class AnimatedSprite extends Sprite
     }
 
     // Render is dealt specifically with the Layer class
-    public void render(RenderHandler renderer, int xZoom, int yZoom) 
+    public void render(RenderHandler renderer, int xPos, int yPos, int xZoom, int yZoom, boolean fixed) 
     {
+        renderer.renderSprite(sprites[currentSprite], xPos, yPos, xZoom, yZoom, fixed);
     }
 
     public void update(GameFrame game) 
@@ -75,22 +57,22 @@ public class AnimatedSprite extends Sprite
             currentSprite = startSprite;
     }
 
-    @Override
-    public int getWidth() 
-    {
-        return sprites[currentSprite].getWidth();
-    }
+    // @Override
+    // public int getWidth() 
+    // {
+    //     return sprites[currentSprite].getWidth();
+    // }
 
-    @Override
-    public int getHeight()
-    {
-        return sprites[currentSprite].getHeight();
-    }
+    // @Override
+    // public int getHeight()
+    // {
+    //     return sprites[currentSprite].getHeight();
+    // }
 
-    //this override the get pixels of Sprite class so it renderer.renderSprite can work
-    @Override
-    public int[] getPixels() 
-    { 
-        return sprites[currentSprite].getPixels();
-    }
+    // //this override the get pixels of Sprite class so it renderer.renderSprite can work
+    // @Override
+    // public int[] getPixels() 
+    // { 
+    //     return sprites[currentSprite].getPixels();
+    // }
 }

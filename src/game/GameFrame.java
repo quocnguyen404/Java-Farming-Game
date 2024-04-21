@@ -4,12 +4,15 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.lang.Runnable;
+import java.util.function.Consumer;
 
 import javax.swing.JFrame;
 
 import engine.*;
 import game.component.Component;
 import game.component.FarmingSystem;
+import game.data.PlantData;
+import game.data.Sprites.SpriteID;
 
 public class GameFrame extends JFrame implements Runnable
 {
@@ -24,8 +27,11 @@ public class GameFrame extends JFrame implements Runnable
     // private GameObject[] gameObjects;
     //Component array
     private Component[] components;
-    //Player
-    // private Player player;
+    private MouseIndicator mouseIndicator;
+
+    //animated test
+    // private AnimatedSprite testAnim;
+    // private AnimatedSprite testAnim1;
 
     //KeyboardListener
     private KeyboardListener keyboardListener = new KeyboardListener(this);
@@ -64,11 +70,23 @@ public class GameFrame extends JFrame implements Runnable
         // player = new Player();
         // gameObjects[0] = player;
 
-
-        //initialize farming system
+        //animated test
+        // Sprite[] onion = ConfigDataHelper.getInstance().getAnimtedSprite(AnimationID.ONION);
+        // Sprite[] potato = ConfigDataHelper.getInstance().getAnimtedSprite(AnimationID.POTATO);
+        // testAnim = new AnimatedSprite(onion, 60);
+        // testAnim1 = new AnimatedSprite(potato, 60);
+        
+        mouseIndicator = new MouseIndicator(null, X_ZOOM, Y_ZOOM);
 
         components = new Component[1];
-        components[0] = new FarmingSystem();
+        //farming system
+        Rectangle rect = new Rectangle(getWidth() - GameConstant.TILE_WIDTH*X_ZOOM - GameConstant.TILE_WIDTH, 0, 0, 0);
+        Consumer<PlantData> onPickPlant = (p) -> 
+        {
+            mouseIndicator.setSprite(SpriteID.valueOf(p.getName()));
+            mouseIndicator.setData(p);
+        };
+        components[0] = new FarmingSystem(rect, GameConstant.TILE_HEIGHT*Y_ZOOM, onPickPlant);
 
         //set up canvas
         canvas.addKeyListener(keyboardListener);
@@ -82,6 +100,41 @@ public class GameFrame extends JFrame implements Runnable
     {
         // for (GameObject obj : gameObjects)
         //     obj.update(this);    
+        mouseIndicator.update(this);
+
+        // testAnim.update(this);
+        // testAnim1.update(this);
+    }
+
+    public void render()
+    {
+        BufferStrategy bufferStrategy = canvas.getBufferStrategy();
+        Graphics graphics = bufferStrategy.getDrawGraphics();
+        super.paint(graphics);
+
+        renderer.renderRectangle(background, 1, 1, true);
+
+        // for (GameObject obj : gameObjects)
+        //     obj.render(renderer, X_ZOOM, Y_ZOOM);
+
+        for (Component component : components) 
+            component.render(renderer, X_ZOOM, Y_ZOOM);
+        
+        //test sprite
+        // int count = 0;
+        // for (SpriteID spriteID : SpriteID.values()) 
+        // {
+        //     if (spriteID != SpriteID.REGION)
+        //         renderer.renderSprite(spriteID, GameConstant.TILE_WIDTH*count*X_ZOOM, GameConstant.TILE_HEIGHT, X_ZOOM, Y_ZOOM, false);
+        //     count++;
+        // }
+
+        mouseIndicator.render(renderer, X_ZOOM, Y_ZOOM);
+        renderer.render(graphics);
+
+        graphics.dispose();
+        bufferStrategy.show();
+        renderer.clear();
     }
 
     public void handleCTRL(boolean[] keys)
@@ -98,6 +151,7 @@ public class GameFrame extends JFrame implements Runnable
         boolean clicked = false;
         // Rectangle mouseRect = new Rectangle(x, y, 1, 1);
         mouseRect.setPosition(x, y);
+        System.out.println("Mouse click pos x:" + x + " y:" + y);
 
         for (Component component : components) 
             clicked = component.leftMouseClick(mouseRect, renderer.getCamera(), x, y);
@@ -121,36 +175,18 @@ public class GameFrame extends JFrame implements Runnable
 
     public void mouseDragged(int x, int y)
     {
-
+        // mouseIndicator.setPosition(x, y);
+        mouseIndicator.setPosition(x, y);
     }
 
     public void mouseDraggedExit(int x, int y)
     {
-
+        mouseIndicator.releaseMouse();
     }
 
 
     //render everything
-    public void render()
-    {
-        BufferStrategy bufferStrategy = canvas.getBufferStrategy();
-        Graphics graphics = bufferStrategy.getDrawGraphics();
-        super.paint(graphics);
-
-        renderer.renderRectangle(background, 1, 1, true);
-
-        // for (GameObject obj : gameObjects)
-        //     obj.render(renderer, X_ZOOM, Y_ZOOM);
-
-        for (Component component : components) 
-            component.render(renderer, X_ZOOM, Y_ZOOM);    
-        
-        renderer.render(graphics);
-
-        graphics.dispose();
-        bufferStrategy.show();
-        renderer.clear();
-    }
+   
 
     public KeyboardListener getKeyboardListener()
     {

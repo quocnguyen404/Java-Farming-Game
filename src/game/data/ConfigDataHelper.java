@@ -7,6 +7,7 @@ import java.util.Scanner;
 
 import engine.Sprite;
 import game.GameConstant;
+import game.data.Sprites.AnimationID;
 import game.data.Sprites.SpriteID;
 
 //singleton
@@ -63,9 +64,24 @@ public final class ConfigDataHelper
         }
     }
 
+    public int getPlantNumber()
+    {
+        return plantData.size();
+    }
+
+    public Object[] getPlantNames()
+    {
+        return plantData.keySet().toArray();
+    }
+
     public PlantData getPlantData(String name)
     {
         return plantData.get(name);
+    }
+
+    public Sprite[] getAnimtedSprite(AnimationID id)
+    {
+        return sprites.getAnimatedSprite(id);
     }
 
     public Sprite getSprite(SpriteID id)

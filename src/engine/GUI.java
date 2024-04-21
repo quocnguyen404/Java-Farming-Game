@@ -36,9 +36,7 @@ public class GUI implements HandleMouseEvent, GameObject
         this.buttons = buttons;
 
         for (GUIButton btn : buttons) 
-        {
             btn.rect.setPosition(btn.rect.x + rect.x, btn.rect.y + rect.y);
-        }
     }
 
     public void setVisibility(boolean value)
@@ -56,11 +54,7 @@ public class GUI implements HandleMouseEvent, GameObject
         return rect;
     }
    
-    @Override
-    public boolean rightMouseClick(Rectangle mouseRectangle, Rectangle camera, int xZoom, int yZoom) 
-    {
-        return false;
-    }
+
 
     @Override
     public void render(RenderHandler renderer, int xZoom, int yZoom) 
@@ -73,6 +67,7 @@ public class GUI implements HandleMouseEvent, GameObject
      
         if (buttons != null)
         {
+            //change local transform to global transform
             for (int i = 0; i < buttons.length; i++)
                 buttons[i].render(renderer, xZoom, yZoom);
         }
@@ -85,26 +80,46 @@ public class GUI implements HandleMouseEvent, GameObject
     }
 
     @Override
-    public boolean leftMouseClick(Rectangle mouseRectangle, Rectangle camera, int xZoom, int yZoom) 
+    public boolean leftMouseClick(Rectangle mouseRectangle, Rectangle camRectangle, int xZoom, int yZoom) 
     {
+        if (buttons == null) return false;
+
         if (!fixed) 
-            mouseRectangle = new Rectangle(mouseRectangle.x + camera.x , mouseRectangle.y + camera.y, 1, 1);
+            mouseRectangle = new Rectangle(mouseRectangle.x + camRectangle.x , mouseRectangle.y + camRectangle.y, 1, 1);
 
         if (rect.w == 0 || rect.h == 0 || mouseRectangle.intersects(rect))
         {
             // mouseRectangle.x += rect.x;
             // mouseRectangle.y += rect.y;
             for (GUIButton guiButton : buttons)
-                if (guiButton.leftMouseClick(mouseRectangle, camera, xZoom, yZoom))
+                if (guiButton.leftMouseClick(mouseRectangle, camRectangle, xZoom, yZoom))
                     return true;
         }
         return false;
     }
 
+    @Override
+    public boolean rightMouseClick(Rectangle mouseRectangle, Rectangle camera, int xZoom, int yZoom) 
+    {
+        return false;
+    }
 
     @Override
     public boolean mouseDragged(Rectangle mouseRectangle, Rectangle camRectangle, int xZoom, int yZoom) 
     {
+        if (buttons == null) return false;
+        if (!fixed) 
+            mouseRectangle = new Rectangle(mouseRectangle.x + camRectangle.x , mouseRectangle.y + camRectangle.y, 1, 1);
+        
+        if (rect.w == 0 || rect.h == 0 || mouseRectangle.intersects(rect))
+        {
+            for (GUIButton guiButton : buttons) 
+            {
+                if(guiButton.mouseDragged(mouseRectangle, camRectangle, xZoom, yZoom))
+                    return true;   
+            }
+        }
+
         return false;
     }
 

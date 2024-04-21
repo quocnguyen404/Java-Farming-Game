@@ -24,5 +24,13 @@ public class Button<T> extends SDKButton
         onActivate.accept(data);
         System.out.println("On activate: " + data);
     }
+
+
+    @Override
+    public void dragActivate() 
+    {
+        onActivate.accept(data);
+        System.out.println("On drag activate: " + data);
+    }
     
 }

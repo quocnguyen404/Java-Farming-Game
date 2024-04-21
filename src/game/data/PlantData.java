@@ -42,4 +42,10 @@ public class PlantData
     {
         return buyPrice;
     }
+
+    @Override
+    public String toString() 
+    {
+        return String.format("Plant[name=%s]", name);
+    }
 }

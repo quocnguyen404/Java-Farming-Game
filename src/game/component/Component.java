@@ -10,21 +10,21 @@ import game.ui.ButtonAct;
 
 public abstract class Component implements HandleMouseEvent, GameObject
 {
-    protected GUI buttons;
+    protected GUI gui;
     protected ButtonAct turnOnButton;
 
     abstract protected void generateUI();
 
     protected void setButtonsVisibility()
     {
-        buttons.setVisibility(!buttons.getVisibility());
+        gui.setVisibility(!gui.getVisibility());
     }
 
     @Override
     public void render(RenderHandler renderer, int xZoom, int yZoom) 
     {
-        if (buttons != null)
-            buttons.render(renderer, xZoom, yZoom);    
+        if (gui != null)
+            gui.render(renderer, xZoom, yZoom);    
     }
 
     @Override
@@ -35,14 +35,14 @@ public abstract class Component implements HandleMouseEvent, GameObject
         if (turnOnButton != null)
             clicked =  turnOnButton.leftMouseClick(mouseRectangle, camera, xZoom, yZoom);
 
-        if (buttons != null && buttons.getVisibility() && !clicked)
-            clicked = buttons.leftMouseClick(mouseRectangle, camera, xZoom, yZoom);
+        if (gui != null && gui.getVisibility() && !clicked)
+            clicked = gui.leftMouseClick(mouseRectangle, camera, xZoom, yZoom);
 
         return clicked;
     }
 
     @Override
-    public boolean rightMouseClick(Rectangle mouseRectangle, Rectangle camera, int xZoom, int yZoom) 
+    public boolean rightMouseClick(Rectangle mouseRectangle, Rectangle camera, int xZoom, int yZoom)
     {
         return false;
     }
@@ -50,6 +50,8 @@ public abstract class Component implements HandleMouseEvent, GameObject
     @Override
     public boolean mouseDragged(Rectangle mouseRectangle, Rectangle camRectangle, int xZoom, int yZoom) 
     {
+        // if (gui != null && gui.getVisibility())
+        //     gui.mouseDragged(mouseRectangle, camRectangle, xZoom, yZoom);
         return false;
     }
 

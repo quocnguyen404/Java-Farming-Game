@@ -17,6 +17,7 @@ public final class GameConstant
     public static final int REGION_WIDTH_SIZE = 5;
     public static final int REGION_HEIGHT_SIZE = 4;
     public static final int BACKGROUND_COLOR = 0xCCE2D2;
+    public static final int PLANT_NUMBER = 2;
 
     private GameConstant()
     {

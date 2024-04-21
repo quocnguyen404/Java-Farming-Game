@@ -8,6 +8,7 @@ public abstract class GUIButton implements HandleMouseEvent
     protected SpriteID spriteID;
     protected Rectangle rect;
     protected boolean fixed;
+    protected boolean isDrag = false;
 
     public GUIButton(SpriteID spriteID, Rectangle rect, boolean fixed)
     {
@@ -41,14 +42,22 @@ public abstract class GUIButton implements HandleMouseEvent
     @Override
     public boolean mouseDragged(Rectangle mouseRectangle, Rectangle camRectangle, int xZoom, int yZoom) 
     {
+        if (rect.intersects(mouseRectangle)/*  && !isDrag*/)
+        {
+            isDrag = true;
+            dragActivate();
+            return true;
+        }
         return false;
     }
 
     @Override
     public boolean mouseDraggedExit(Rectangle mousRectangle, Rectangle camRectangle, int xZoom, int yZoom) 
     {
+        isDrag = false;
         return false;
     }
 
     abstract public void activate();
+    abstract public void dragActivate();
 }

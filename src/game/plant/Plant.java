@@ -1,9 +1,7 @@
 package game.plant;
 
-import engine.RenderHandler;
 import game.GameFrame;
 import game.data.PlantData;
-import game.data.Sprites.SpriteID;
 
 public class Plant extends Plantable
 {

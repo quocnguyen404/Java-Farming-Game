@@ -1,7 +1,11 @@
 package game.data;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -15,8 +19,8 @@ public final class ConfigDataHelper
 {
     private static ConfigDataHelper instance;
     
-    private int gold = 10;
-    private HashMap<String, PlantData> plantData;
+    private PlayerData playerData;
+    private HashMap<String, PlantableData> plantData;
     private Sprites sprites;
 
     public static ConfigDataHelper getInstance()
@@ -30,12 +34,13 @@ public final class ConfigDataHelper
     private ConfigDataHelper()
     {
         sprites = new Sprites();
-        loadPlantData();
+        loadPlantableData();
+        loadPlayerData();
     }
 
-    private void loadPlantData()
+    private void loadPlantableData()
     {
-        plantData = new HashMap<String, PlantData>();
+        plantData = new HashMap<String, PlantableData>();
         
         try 
         {
@@ -49,32 +54,90 @@ public final class ConfigDataHelper
                 if (!line.startsWith("//"))
                 {
                     String[] split = line.split("-");
-                    PlantData plant = new PlantData(split[0],
-                                                    Integer.parseInt(split[1]), 
-                                                    Integer.parseInt(split[2]), 
-                                                    Integer.parseInt(split[3]));
+                    PlantableData plant;
+                    if (split.length > 2)
+                    {
+                        plant = new PlantData(split[0],
+                                              Integer.parseInt(split[1]), 
+                                              Integer.parseInt(split[2]), 
+                                              Integer.parseInt(split[3]));
+                    }
+                    else
+                        plant = new PlantableData(split[0], Integer.parseInt(split[1]));
+
                     plantData.put(split[0], plant);
                 }
             }
 
             scanner.close();
-        } catch (FileNotFoundException e) 
+        } catch (FileNotFoundException e)
         {
             e.printStackTrace();
         }
     }
+    
+    private final String PLAYERDATA_PATH = "Player.data";
+    private void loadPlayerData()
+    {
+        try 
+        {
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File(PLAYERDATA_PATH)));
+            playerData = (PlayerData) ois.readObject();
+            ois.close();
+        } 
+        catch (Exception e) 
+        {
+            System.out.println("Doesn't exist player data");
+            System.out.println("Load default player data");
+            playerData = new PlayerData();
+            playerData.gold = 1;
+            playerData.unlockPlantable.add("ONION");
+            playerData.unlockPlantable.add("POTATO");
+        }
+    }
 
-    public int getPlantNumber()
+    public void savePlayerData()
+    {
+        try
+        {
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File(PLAYERDATA_PATH)));
+            oos.writeObject(playerData);
+            oos.close();
+        } 
+        catch (Exception e) 
+        {
+            System.out.println("Saving exception");
+        }
+    }
+
+    public boolean buyPlantable(PlantableData plantable)
+    {
+        if (plantable.getBuyPrice() <= playerData.gold)
+        {
+            playerData.gold -= plantable.getBuyPrice();
+            System.out.println("Buying " + plantable.getName() + ": " + plantable.getBuyPrice() + " gold");
+            return true;
+        }
+        System.out.println("Not enough money");
+        return false;
+    }
+
+    public void cancelBuy(PlantableData plantableData)
+    {
+        playerData.gold += plantableData.getBuyPrice();
+    }
+
+    public int getPlantableNumber()
     {
         return plantData.size();
     }
 
-    public Object[] getPlantNames()
+    public Object[] getPlantableNames()
     {
         return plantData.keySet().toArray();
     }
 
-    public PlantData getPlantData(String name)
+    public PlantableData getPlantData(String name)
     {
         return plantData.get(name);
     }

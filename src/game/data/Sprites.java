@@ -22,8 +22,8 @@ public class Sprites
         GREEN1_CIRCLE, //4
         GREEN2_CIRCLE, //5
         GREEN3_CIRCLE, //6
-        ONION,         //7
-        POTATO,        //8
+        POTATO,        //7
+        ONION,         //8
         REGION,        //9
     }
 
@@ -86,7 +86,7 @@ public class Sprites
         int x = 1, y = 8;
         for (AnimationID id : AnimationID.values()) 
         {
-            Sprite[] animated = loadCustomSprites(1*GameConstant.TILE_WIDTH,
+            Sprite[] animated = loadCustomSprites(x*GameConstant.TILE_WIDTH,
                                                   y*GameConstant.TILE_HEIGHT,
                                              3,
                                                   GameConstant.TILE_WIDTH, 

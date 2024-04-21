@@ -8,7 +8,7 @@ import javax.imageio.ImageIO;
 
 import engine.Sprite;
 import game.data.ConfigDataHelper;
-import game.data.PlantData;
+import game.data.PlantableData;
 import game.data.Sprites.AnimationID;
 import game.data.Sprites.SpriteID;
 
@@ -19,14 +19,14 @@ public final class Helper
         return (int)Math.floor(((double)mousePos + camPos)/offset);
     }
 
-    public static PlantData getPlantData(String name)
+    public static PlantableData getPlantableData(String name)
     {
         return ConfigDataHelper.getInstance().getPlantData(name);
     }
 
-    public static Object[] getPlantNames()
+    public static Object[] getPlantableNames()
     {
-        return ConfigDataHelper.getInstance().getPlantNames();
+        return ConfigDataHelper.getInstance().getPlantableNames();
     }
 
     public static Sprite[] getAnimatedSprite(AnimationID id)
@@ -39,9 +39,9 @@ public final class Helper
         return ConfigDataHelper.getInstance().getSprite(id);
     }
     
-    public static int getPlantNumber()
+    public static int getPlantableNumber()
     {
-        return ConfigDataHelper.getInstance().getPlantNumber();
+        return ConfigDataHelper.getInstance().getPlantableNumber();
     }
 
     public static int getSpriteWidth(SpriteID spriteID)

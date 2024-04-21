@@ -5,13 +5,15 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.lang.Runnable;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import javax.swing.JFrame;
 
 import engine.*;
 import game.component.Component;
 import game.component.FarmingSystem;
-import game.data.PlantData;
+import game.component.ShopingSystem;
+import game.data.PlantableData;
 import game.data.Sprites.SpriteID;
 
 public class GameFrame extends JFrame implements Runnable
@@ -78,15 +80,19 @@ public class GameFrame extends JFrame implements Runnable
         
         mouseIndicator = new MouseIndicator(null, X_ZOOM, Y_ZOOM);
 
-        components = new Component[1];
+        components = new Component[2];
         //farming system
-        Rectangle rect = new Rectangle(getWidth() - GameConstant.TILE_WIDTH*X_ZOOM - GameConstant.TILE_WIDTH, 0, 0, 0);
-        Consumer<PlantData> onPickPlant = (p) -> 
+        // Rectangle rect = new Rectangle(getWidth() - GameConstant.TILE_WIDTH*X_ZOOM - GameConstant.TILE_WIDTH, 0, 0, 0);
+
+        Supplier<PlantableData> onPlantSeed = mouseIndicator::getData;
+        Consumer<PlantableData> onBuySeed = (p) -> 
         {
             mouseIndicator.setSprite(SpriteID.valueOf(p.getName()));
             mouseIndicator.setData(p);
         };
-        components[0] = new FarmingSystem(rect, GameConstant.TILE_HEIGHT*Y_ZOOM, onPickPlant);
+
+        components[0] = new FarmingSystem(new Rectangle(), GameConstant.TILE_HEIGHT*Y_ZOOM, onPlantSeed);
+        components[1] = new ShopingSystem(new Rectangle(), GameConstant.TILE_HEIGHT*Y_ZOOM, onBuySeed);
 
         //set up canvas
         canvas.addKeyListener(keyboardListener);

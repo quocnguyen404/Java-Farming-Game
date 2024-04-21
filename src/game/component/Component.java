@@ -10,21 +10,30 @@ import game.ui.ButtonAct;
 
 public abstract class Component implements HandleMouseEvent, GameObject
 {
-    protected GUI gui;
+    protected Rectangle rect;
+    protected int offset;
+    protected GUI[] guis;
     protected ButtonAct turnOnButton;
+
+    public Component(Rectangle rect, int offset)
+    {
+        this.rect = rect;
+        this.offset = offset;
+    }
 
     abstract protected void generateUI();
 
-    protected void setButtonsVisibility()
+    protected void setButtonsVisibility(int index)
     {
-        gui.setVisibility(!gui.getVisibility());
+        guis[index].setVisibility(!guis[index].getVisibility());
     }
 
     @Override
     public void render(RenderHandler renderer, int xZoom, int yZoom) 
     {
-        if (gui != null)
-            gui.render(renderer, xZoom, yZoom);    
+        if (guis != null)
+            for (GUI gui : guis)
+                if (gui != null ) gui.render(renderer, xZoom, yZoom);    
     }
 
     @Override
@@ -35,9 +44,12 @@ public abstract class Component implements HandleMouseEvent, GameObject
         if (turnOnButton != null)
             clicked =  turnOnButton.leftMouseClick(mouseRectangle, camera, xZoom, yZoom);
 
-        if (gui != null && gui.getVisibility() && !clicked)
-            clicked = gui.leftMouseClick(mouseRectangle, camera, xZoom, yZoom);
-
+        if (guis != null && !clicked)
+        {
+            for (GUI gui : guis) 
+                if (gui.getVisibility()) clicked = gui.leftMouseClick(mouseRectangle, camera, xZoom, yZoom);
+        }
+            
         return clicked;
     }
 

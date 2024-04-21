@@ -3,7 +3,8 @@ package game;
 import engine.GameObject;
 import engine.Rectangle;
 import engine.RenderHandler;
-import game.data.PlantData;
+import game.data.ConfigDataHelper;
+import game.data.PlantableData;
 import game.data.Sprites.SpriteID;
 
 public class MouseIndicator implements GameObject
@@ -11,7 +12,7 @@ public class MouseIndicator implements GameObject
     private boolean isVisible;
     private Rectangle mouseRect;
     private SpriteID spriteID;
-    private PlantData data;
+    private PlantableData data;
 
     public MouseIndicator(SpriteID spriteID, int xZoom, int yZoom)
     {
@@ -21,12 +22,12 @@ public class MouseIndicator implements GameObject
         isVisible = false;
     }
 
-    public void setData(PlantData data)
+    public void setData(PlantableData data)
     {
         this.data = data;
     }
 
-    public PlantData getData()
+    public PlantableData getData()
     {
         return data;
     }
@@ -38,7 +39,7 @@ public class MouseIndicator implements GameObject
 
     public void setPosition(int x, int y)
     {
-        System.out.println("Drag mouse pos x:" + x + " y:" + y);
+        // System.out.println("Drag mouse pos x:" + x + " y:" + y);
         isVisible = true;
         mouseRect.setPosition(x-(GameFrame.X_ZOOM*GameConstant.TILE_WIDTH/2), y-(GameFrame.Y_ZOOM*GameConstant.TILE_HEIGHT/2));
     }
@@ -47,6 +48,9 @@ public class MouseIndicator implements GameObject
     {
         spriteID = null;
         isVisible = false;
+        if (data != null)
+            ConfigDataHelper.getInstance().cancelBuy(data);
+        data = null;
     }
 
     @Override

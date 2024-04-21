@@ -1,31 +1,15 @@
 package game.data;
 
-import engine.AnimatedSprite;
-
-public class PlantData 
+public class PlantData extends PlantableData
 {
-    private String name;
     private int growTime;
     private int sellPrice;
-    private int buyPrice;
-    // private AnimatedSprite anim;
-
-    public PlantData()
-    {
-        this("", 0, 0, 0);
-    }
 
     public PlantData(String name, int growTime, int sellPrice, int buyPrice)
     {
-        this.name = name;
+        super(name, buyPrice);
         this.growTime = growTime;
         this.sellPrice = sellPrice;
-        this.buyPrice = buyPrice;
-    }
-
-    public String getName() 
-    {
-        return name;
     }
 
     public int getGrowTime() 
@@ -38,14 +22,9 @@ public class PlantData
         return sellPrice;
     }
 
-    public int getBuyPrice()
-    {
-        return buyPrice;
-    }
-
     @Override
     public String toString() 
     {
-        return String.format("Plant[name=%s]", name);
+        return String.format("Plant[%s]", super.toString());
     }
 }

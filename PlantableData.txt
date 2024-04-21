@@ -1,0 +1,5 @@
+//plantname-growtime-sellprice-buyPrice
+//plantabename-buyPrice
+ONION-30-2-1
+POTATO-60-4-2
+PLANT_HOLE-1

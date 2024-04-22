@@ -9,7 +9,7 @@ import game.GameConstant;
 import game.GameFrame;
 import game.Helper;
 import game.data.ConfigDataHelper;
-import game.data.PlantData;
+import game.data.CropData;
 import game.data.PlantableData;
 import game.data.Sprites.SpriteID;
 import game.ui.Button;
@@ -32,7 +32,7 @@ public class ShopingSystem extends Component
             onBuySeed.accept(plantData);
     }
 
-    public void sellPlant(PlantData plantData)
+    public void sellPlant(CropData plantData)
     {
 
     }

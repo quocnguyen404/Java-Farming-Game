@@ -1,15 +1,17 @@
 package game.data;
 
-public class PlantData extends PlantableData
+public class CropData extends PlantableData
 {
+    private int waterDrop;
     private int growTime;
     private int sellPrice;
 
-    public PlantData(String name, int growTime, int sellPrice, int buyPrice)
+    public CropData(String name, int growTime, int sellPrice, int buyPrice, int waterDrop)
     {
         super(name, buyPrice);
         this.growTime = growTime;
         this.sellPrice = sellPrice;
+        this.waterDrop = waterDrop;
     }
 
     public int getGrowTime() 
@@ -22,9 +24,14 @@ public class PlantData extends PlantableData
         return sellPrice;
     }
 
+    public int getWaterDrop()
+    {
+        return waterDrop;
+    }
+
     @Override
     public String toString() 
     {
-        return String.format("Plant[%s]", super.toString());
+        return String.format("Crop[%s]", super.toString());
     }
 }

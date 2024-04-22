@@ -3,25 +3,14 @@ package game.plant;
 import engine.GameObject;
 import engine.HandleMouseEvent;
 import engine.Rectangle;
-import engine.RenderHandler;
-import game.GameFrame;
+import game.data.PlantableData;
 
 public abstract class Plantable implements HandleMouseEvent, GameObject
 {
+    protected PlantableData plantableData;
+    
     public abstract boolean planted();
     public abstract boolean remove();
-
-    @Override
-    public void update(GameFrame game) 
-    {
-        
-    }
-
-    @Override
-    public void render(RenderHandler renderer, int xZoom, int yZoom) 
-    {
-        
-    }
 
     @Override
     public boolean leftMouseClick(Rectangle mouseRectangle, Rectangle camera, int xZoom, int yZoom) 

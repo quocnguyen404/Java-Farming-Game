@@ -2,8 +2,8 @@ package game;
 
 public final class GameConstant 
 {
-    public static int X_ZOOM = 2;
-    public static int Y_ZOOM = 2;
+    // public static int X_ZOOM = 2;
+    // public static int Y_ZOOM = 2;
     public static final String TITLE = "Best game ever";
     public static final int ALPHA = 0xFFFF00DC;
     public static final String GAME_SHEET_PATH = "spritesheet.png";

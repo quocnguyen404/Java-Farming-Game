@@ -57,7 +57,7 @@ public final class ConfigDataHelper
                     PlantableData plant;
                     if (split.length > 2)
                     {
-                        plant = new PlantData(split[0],
+                        plant = new CropData(split[0],
                                               Integer.parseInt(split[1]), 
                                               Integer.parseInt(split[2]), 
                                               Integer.parseInt(split[3]));

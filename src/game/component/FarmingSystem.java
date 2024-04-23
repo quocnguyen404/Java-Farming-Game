@@ -9,9 +9,11 @@ import game.GameFrame;
 import game.data.CropData;
 import game.data.PlantableData;
 import game.plantable.Crop;
+import game.plantable.Dirt;
 import game.plantable.FoodCrop;
 import game.plantable.FruitCrop;
 import game.plantable.OilCrop;
+import game.plantable.Plantable;
 
 public class FarmingSystem extends Component
 {
@@ -25,30 +27,32 @@ public class FarmingSystem extends Component
         generateUI();
         
         this.onPlantedSeed = onPlantedSeed;
-        Region.onGetCrop = this::onCreateCrop;
+        Region.onGetPlantable = this::onGetPlantable;
         // Sprite turnOnSprite = ConfigDataHelper.getInstance().getSprite(null);
         // turnOnButton = new ButtonAct(, null, null, false);
     }
 
-    private Crop onCreateCrop()
+    private Plantable onGetPlantable()
     {
-        CropData data = (CropData)onPlantedSeed.get();
-        if (data == null)
-            return null;
+        PlantableData data = onPlantedSeed.get();
+        if (data == null) return null;
+        if (data.getName().equals("PLANT_HOLE")) return new Dirt(data);
+
         Crop crop;
-        switch (data.getModify())
+        CropData cropData = (CropData) data;
+        switch (cropData.getModify())
         {
             case 0: //Food crop
-                crop = new FoodCrop(data);
+                crop = new FoodCrop(cropData);
                 break;
             case 1: //Fruit crop
-                crop = new FruitCrop(data);
+                crop = new FruitCrop(cropData);
                 break;
             case 2: //Oil crop
-                crop = new OilCrop(data);
+                crop = new OilCrop(cropData);
                 break;
             default:
-                crop = new FoodCrop(data);
+                crop = new FoodCrop(cropData);
         }
         return crop;
     }

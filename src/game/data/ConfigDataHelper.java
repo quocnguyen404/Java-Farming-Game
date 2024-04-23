@@ -126,6 +126,7 @@ public final class ConfigDataHelper
 
     public void cancelBuy(PlantableData plantableData)
     {
+        System.out.println("Cancel buy " + plantableData.getName() + ": " + plantableData.getBuyPrice());
         playerData.gold += plantableData.getBuyPrice();
     }
 

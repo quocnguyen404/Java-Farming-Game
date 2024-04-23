@@ -5,7 +5,6 @@ import engine.GameObject;
 import engine.HandleMouseEvent;
 import engine.Rectangle;
 import engine.RenderHandler;
-import game.GameFrame;
 import game.ui.ButtonAct;
 
 public abstract class Component implements HandleMouseEvent, GameObject
@@ -71,12 +70,5 @@ public abstract class Component implements HandleMouseEvent, GameObject
     public boolean mouseDraggedExit(Rectangle mousRectangle, Rectangle camRectangle, int xZoom, int yZoom) 
     {
         return false;
-    }
-
-
-    @Override
-    public void update(GameFrame game) 
-    {
-        
     }
 }

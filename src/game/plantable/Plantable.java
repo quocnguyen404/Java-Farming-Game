@@ -1,4 +1,4 @@
-package game.plant;
+package game.plantable;
 
 import engine.GameObject;
 import engine.HandleMouseEvent;
@@ -7,8 +7,18 @@ import game.data.PlantableData;
 
 public abstract class Plantable implements HandleMouseEvent, GameObject
 {
-    protected PlantableData plantableData;
+    private PlantableData plantableData;
     
+    public Plantable(PlantableData data)
+    {
+        this.plantableData = data;
+    }
+
+    public PlantableData getPlantableData()
+    {
+        return this.plantableData;
+    }
+
     public abstract boolean planted();
     public abstract boolean remove();
 

@@ -1,17 +1,18 @@
-package game.plant;
+package game.plantable;
 
 import game.data.CropData;
 
-public class OilCrop extends Crop
+public class FoodCrop extends Crop
 {
-
-    public OilCrop(CropData plant) {
+    public FoodCrop(CropData plant)
+    {
         super(plant);
         //TODO Auto-generated constructor stub
     }
 
     @Override
-    protected void specialAbility() {
+    protected void specialAbility() 
+    {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'specialAbility'");
     }

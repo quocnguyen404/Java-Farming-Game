@@ -60,7 +60,9 @@ public final class ConfigDataHelper
                         plant = new CropData(split[0],
                                               Integer.parseInt(split[1]), 
                                               Integer.parseInt(split[2]), 
-                                              Integer.parseInt(split[3]));
+                                              Integer.parseInt(split[3]),
+                                              Integer.parseInt(split[4]),
+                                              Integer.parseInt(split[5]));
                     }
                     else
                         plant = new PlantableData(split[0], Integer.parseInt(split[1]));

@@ -2,16 +2,18 @@ package game.data;
 
 public class CropData extends PlantableData
 {
-    private int waterDrop;
     private int growTime;
     private int sellPrice;
-
-    public CropData(String name, int growTime, int sellPrice, int buyPrice, int waterDrop)
+    private int waterDrop;
+    private int modify;
+    
+    public CropData(String name, int growTime, int sellPrice, int buyPrice, int waterDrop, int modify)
     {
         super(name, buyPrice);
         this.growTime = growTime;
         this.sellPrice = sellPrice;
         this.waterDrop = waterDrop;
+        this.modify = modify;
     }
 
     public int getGrowTime() 
@@ -27,6 +29,11 @@ public class CropData extends PlantableData
     public int getWaterDrop()
     {
         return waterDrop;
+    }
+
+    public int getModify()
+    {
+        return modify;
     }
 
     @Override

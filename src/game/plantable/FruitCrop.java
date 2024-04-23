@@ -1,10 +1,11 @@
-package game.plant;
+package game.plantable;
 
 import game.data.CropData;
 
-public class FoodCrop extends Crop
+public class FruitCrop extends Crop
 {
-    public FoodCrop(CropData plant) 
+
+    public FruitCrop(CropData plant) 
     {
         super(plant);
         //TODO Auto-generated constructor stub

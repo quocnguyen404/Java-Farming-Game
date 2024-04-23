@@ -86,7 +86,7 @@ public class GameFrame extends JFrame implements Runnable
 
         Supplier<PlantableData> onPlantSeed = mouseIndicator::getData;
         Consumer<PlantableData> onBuySeed = (p) -> 
-        {
+        { 
             mouseIndicator.setSprite(SpriteID.valueOf(p.getName()));
             mouseIndicator.setData(p);
         };
@@ -182,11 +182,16 @@ public class GameFrame extends JFrame implements Runnable
     public void mouseDragged(int x, int y)
     {
         // mouseIndicator.setPosition(x, y);
+        mouseRect.setPosition(x, y);
         mouseIndicator.setPosition(x, y);
     }
 
     public void mouseDraggedExit(int x, int y)
     {
+        System.out.println("Mouse drag exit pos x:" + x + " y:" + y);
+        mouseRect.setPosition(x, y);
+        for (Component component : components) 
+            component.mouseDraggedExit(mouseRect, renderer.getCamera(), X_ZOOM, Y_ZOOM);
         mouseIndicator.releaseMouse();
     }
 

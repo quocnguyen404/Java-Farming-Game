@@ -63,5 +63,11 @@ public class ShopingSystem extends Component
         }
         guis[1].setButtons(btns);
     }
+
+    @Override
+    public void update(GameFrame game) 
+    {
+        // TODO Auto-generated method stub
+    }
     
 }

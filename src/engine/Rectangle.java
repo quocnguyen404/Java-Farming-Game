@@ -72,6 +72,11 @@ public class Rectangle
                 pixels[x + y * w] = color;
     }
 
+    public boolean isGen()
+    {
+        return pixels != null;
+    }
+
     public int[] getPixels()
     {
         if (pixels != null) return pixels;

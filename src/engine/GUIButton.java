@@ -4,21 +4,26 @@ import game.data.Sprites.SpriteID;
 
 public abstract class GUIButton implements HandleMouseEvent
 {   
-    // protected Sprite sprite;
     protected SpriteID spriteID;
     protected Rectangle rect;
     protected boolean fixed;
-    // protected boolean isDrag = false;
+    protected boolean genRect = false;
 
-    public GUIButton(SpriteID spriteID, Rectangle rect, boolean fixed)
+
+    public GUIButton(SpriteID spriteID, Rectangle rect, boolean fixed, boolean genRect)
     {
         this.spriteID = spriteID;
         this.rect = rect;
         this.fixed = fixed;
+        this.genRect = genRect;
+        if (genRect)
+            rect.generateGraphics(2, 0x00000);
     }
 
     public void render(RenderHandler renderer, int xZoom, int yZoom)
     {
+        if (genRect)
+            renderer.renderRectangle(rect, 1, 1, fixed);
         renderer.renderSprite(spriteID, rect.x, rect.y, xZoom, yZoom, fixed);
     }
 
@@ -38,6 +43,23 @@ public abstract class GUIButton implements HandleMouseEvent
     {
         return false;
     }
+
+
+    //handle mouse hover
+    private boolean isHover = false;
+    @Override
+    public boolean mouseMoved(Rectangle mouseRectangle, Rectangle camRectangle, int xZoom, int yZoom) 
+    {
+        if (rect.intersects(mouseRectangle))
+        {
+            if (!isHover)
+                hover();
+            isHover = true;
+            return true;
+        }
+        else isHover = false;
+        return false;
+    }
     
     @Override
     public boolean mouseDragged(Rectangle mouseRectangle, Rectangle camRectangle, int xZoom, int yZoom) 
@@ -54,10 +76,9 @@ public abstract class GUIButton implements HandleMouseEvent
     @Override
     public boolean mouseDraggedExit(Rectangle mousRectangle, Rectangle camRectangle, int xZoom, int yZoom) 
     {
-        // isDrag = false;
         return false;
     }
-
+    
     abstract public void activate();
-    // abstract public void dragActivate();
+    abstract public void hover();
 }

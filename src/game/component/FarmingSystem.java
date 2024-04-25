@@ -71,7 +71,7 @@ public class FarmingSystem extends Component
     public boolean mouseDraggedExit(Rectangle mousRectangle, Rectangle camRectangle, int xZoom, int yZoom) 
     {
         for (Region region : regions) 
-            if(region != null) region.mouseDraggedExit(mousRectangle, camRectangle, xZoom, yZoom);  
+            if(region != null) return region.mouseDraggedExit(mousRectangle, camRectangle, xZoom, yZoom);  
         return super.mouseDraggedExit(mousRectangle, camRectangle, xZoom, yZoom);
     }
 
@@ -88,5 +88,11 @@ public class FarmingSystem extends Component
     {
         for (Region region : regions) 
             region.update(game);    
+    }
+
+    @Override
+    public boolean mouseMoved(Rectangle mouseRectangle, Rectangle camRectangle, int xZoom, int yZoom) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'mouseMoved'");
     }
 }

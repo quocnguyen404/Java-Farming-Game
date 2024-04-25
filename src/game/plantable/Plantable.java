@@ -28,6 +28,21 @@ public abstract class Plantable implements HandleMouseEvent, GameObject
         // TODO Auto-generated method stub
         return false;
     }
+
+    @Override
+    public boolean rightMouseClick(Rectangle mouseRectangle, Rectangle camera, int xZoom, int yZoom) 
+    {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(Rectangle mouseRectangle, Rectangle camRectangle, int xZoom, int yZoom) 
+    {
+        
+        return false;
+    }
+
     @Override
     public boolean mouseDragged(Rectangle mouseRectangle, Rectangle camRectangle, int xZoom, int yZoom) 
     {
@@ -40,10 +55,5 @@ public abstract class Plantable implements HandleMouseEvent, GameObject
         // TODO Auto-generated method stub
         return false;
     }
-    @Override
-    public boolean rightMouseClick(Rectangle mouseRectangle, Rectangle camera, int xZoom, int yZoom) 
-    {
-        // TODO Auto-generated method stub
-        return false;
-    }
+
 }

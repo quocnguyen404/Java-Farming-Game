@@ -29,8 +29,8 @@ public class Sprites
 
     public enum AnimationID
     {
-        ONION,
         POTATO,
+        ONION,
     }
 
     private SpriteSheet gameSheet;
@@ -84,11 +84,11 @@ public class Sprites
 
         //load onion animated
         int x = 1, y = 8;
-        for (AnimationID id : AnimationID.values()) 
+        for (AnimationID id : AnimationID.values())
         {
             Sprite[] animated = loadCustomSprites(x*GameConstant.TILE_WIDTH,
                                                   y*GameConstant.TILE_HEIGHT,
-                                             3,
+                                                  3,
                                                   GameConstant.TILE_WIDTH, 
                                                   GameConstant.TILE_HEIGHT);
             animatedSpriteMap.put(id, animated);

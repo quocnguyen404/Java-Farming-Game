@@ -21,7 +21,6 @@ public class ShopingSystem extends Component
     public ShopingSystem(Rectangle rect, int offset, Consumer<PlantableData> onBuySeed)
     {
         super(rect, offset);
-        guis = new GUI[2];
         this.onBuySeed = onBuySeed;
         generateUI();
     }
@@ -40,6 +39,8 @@ public class ShopingSystem extends Component
     @Override
     protected void generateUI() 
     {
+        guis = new GUI[2];
+
         //selling part
         guis[0] = new GUI(null, 0, 0, true, true);
 
@@ -54,11 +55,14 @@ public class ShopingSystem extends Component
         for (var obj : Helper.getPlantableNames()) 
         {
             String plantName = (String) obj;
-            btns[count] = new Button<PlantableData>(SpriteID.valueOf(plantName),
-            new Rectangle(0, rect.y+count*offset, btnW, btnH),
-            Helper.getPlantableData(plantName),
-            this::buyPlant,
-            false);
+
+            Button<PlantableData> btn = new Button<PlantableData>(SpriteID.valueOf(plantName),
+                                                                 new Rectangle(0, rect.y+count*offset, btnW, btnH),
+                                                                 Helper.getPlantableData(plantName),
+                                                                 true);
+            btn.addClickListener(this::buyPlant);
+            // btn.ad
+            btns[count] = btn;
             count++;
         }
         guis[1].setButtons(btns);
@@ -68,6 +72,12 @@ public class ShopingSystem extends Component
     public void update(GameFrame game) 
     {
         // TODO Auto-generated method stub
+    }
+
+    @Override
+    public boolean mouseMoved(Rectangle mouseRectangle, Rectangle camRectangle, int xZoom, int yZoom) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'mouseMoved'");
     }
     
 }

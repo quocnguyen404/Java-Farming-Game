@@ -129,5 +129,11 @@ public class GUI implements HandleMouseEvent, GameObject
         return false;
     }
 
+    @Override
+    public boolean mouseMoved(Rectangle mouseRectangle, Rectangle camRectangle, int xZoom, int yZoom) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'mouseMoved'");
+    }
+
 
 }

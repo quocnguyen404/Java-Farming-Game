@@ -1,14 +1,15 @@
 package game.ui;
 
+import engine.GUIButton;
 import engine.Rectangle;
 import game.data.Sprites.SpriteID;
 
-public class ButtonAct extends SDKButton
+public class ButtonAct extends GUIButton
 {
     private Runnable onActivate;
     public ButtonAct(SpriteID spriteID, Rectangle rect, Runnable onActivate, boolean genRect)
     {
-        super(spriteID, rect, genRect);
+        super(spriteID, rect, true, genRect);
         this.onActivate = onActivate;
     }
 
@@ -18,9 +19,10 @@ public class ButtonAct extends SDKButton
         onActivate.run();
     }
 
-    // @Override
-    // public void dragActivate()
-    // {
-    //     onActivate.run();
-    // }
+    @Override
+    public void hover() 
+    {
+        //TODO
+        throw new UnsupportedOperationException("Unimplemented method 'hover'");
+    }
 }

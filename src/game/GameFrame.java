@@ -30,6 +30,7 @@ public class GameFrame extends JFrame implements Runnable
     //Component array
     private Component[] components;
     private MouseIndicator mouseIndicator;
+    private TagIndicator tagIndicator;
 
     //animated test
     // private AnimatedSprite testAnim;
@@ -78,7 +79,10 @@ public class GameFrame extends JFrame implements Runnable
         // testAnim = new AnimatedSprite(onion, 60);
         // testAnim1 = new AnimatedSprite(potato, 60);
         
-        mouseIndicator = new MouseIndicator(null, X_ZOOM, Y_ZOOM);
+        mouseIndicator = new MouseIndicator(null);
+        tagIndicator = new TagIndicator(SpriteID.WHITE_SQUARE);
+        tagIndicator.setMessage("Hello");
+        tagIndicator.setVisible(true);
 
         components = new Component[2];
         //farming system
@@ -92,7 +96,7 @@ public class GameFrame extends JFrame implements Runnable
         };
 
         components[0] = new FarmingSystem(new Rectangle(), GameConstant.TILE_HEIGHT*Y_ZOOM, onPlantSeed);
-        components[1] = new ShopingSystem(new Rectangle(), GameConstant.TILE_HEIGHT*Y_ZOOM, onBuySeed);
+        components[1] = new ShopingSystem(new Rectangle(), GameConstant.TILE_HEIGHT*Y_ZOOM+1, onBuySeed);
 
         //set up canvas
         canvas.addKeyListener(keyboardListener);
@@ -106,7 +110,7 @@ public class GameFrame extends JFrame implements Runnable
     {
         // for (GameObject obj : gameObjects)
         //     obj.update(this);    
-        mouseIndicator.update(this);
+        // mouseIndicator.update(this);
 
         // testAnim.update(this);
         // testAnim1.update(this);
@@ -136,6 +140,8 @@ public class GameFrame extends JFrame implements Runnable
         // }
 
         mouseIndicator.render(renderer, X_ZOOM, Y_ZOOM);
+        tagIndicator.render(renderer, X_ZOOM, Y_ZOOM);
+
         renderer.render(graphics);
 
         graphics.dispose();
@@ -190,9 +196,13 @@ public class GameFrame extends JFrame implements Runnable
     {
         System.out.println("Mouse drag exit pos x:" + x + " y:" + y);
         mouseRect.setPosition(x, y);
-        for (Component component : components) 
-            component.mouseDraggedExit(mouseRect, renderer.getCamera(), X_ZOOM, Y_ZOOM);
-        mouseIndicator.releaseMouse();
+        boolean successBuy = false;
+        for (Component component : components)
+        {
+            successBuy = component.mouseDraggedExit(mouseRect, renderer.getCamera(), X_ZOOM, Y_ZOOM);
+            if(successBuy) break;
+        }
+        mouseIndicator.releaseMouse(successBuy);
     }
 
 

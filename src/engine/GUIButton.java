@@ -48,17 +48,18 @@ public abstract class GUIButton implements HandleMouseEvent
     //handle mouse hover
     private boolean isHover = false;
     @Override
-    public boolean mouseMoved(Rectangle mouseRectangle, Rectangle camRectangle, int xZoom, int yZoom) 
+    public void mouseHover(Rectangle mouseRectangle, Rectangle camRectangle, int xZoom, int yZoom) 
     {
+        if (rect == null) return;
         if (rect.intersects(mouseRectangle))
         {
             if (!isHover)
+            {
                 hover();
-            isHover = true;
-            return true;
+                isHover = true;
+            }
         }
         else isHover = false;
-        return false;
     }
     
     @Override

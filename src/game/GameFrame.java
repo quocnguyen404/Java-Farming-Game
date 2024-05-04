@@ -78,25 +78,29 @@ public class GameFrame extends JFrame implements Runnable
         // Sprite[] potato = ConfigDataHelper.getInstance().getAnimtedSprite(AnimationID.POTATO);
         // testAnim = new AnimatedSprite(onion, 60);
         // testAnim1 = new AnimatedSprite(potato, 60);
+
         
+        //indicator                
         mouseIndicator = new MouseIndicator(null);
-        tagIndicator = new TagIndicator(SpriteID.WHITE_SQUARE);
-        tagIndicator.setMessage("Hello");
-        tagIndicator.setVisible(true);
+        tagIndicator = new TagIndicator(new Rectangle(0, 0, GameConstant.WIN_WIDTH - GameConstant.TILE_WIDTH, GameConstant.TILE_HEIGHT*Y_ZOOM));
+        // tagIndicator.setMessage("Hello");
 
-        components = new Component[2];
-        //farming system
-        // Rectangle rect = new Rectangle(getWidth() - GameConstant.TILE_WIDTH*X_ZOOM - GameConstant.TILE_WIDTH, 0, 0, 0);
-
+        
         Supplier<PlantableData> onPlantSeed = mouseIndicator::getData;
-        Consumer<PlantableData> onBuySeed = (p) -> 
+
+        ShopingSystem.onBuySeed = (p) -> 
         { 
             mouseIndicator.setSprite(SpriteID.valueOf(p.getName()));
             mouseIndicator.setData(p);
         };
 
+        ShopingSystem.onHoverSeed = (p) -> { tagIndicator.setMessage(p.getName()); };
+        
+        components = new Component[2];
         components[0] = new FarmingSystem(new Rectangle(), GameConstant.TILE_HEIGHT*Y_ZOOM, onPlantSeed);
-        components[1] = new ShopingSystem(new Rectangle(), GameConstant.TILE_HEIGHT*Y_ZOOM+1, onBuySeed);
+        components[1] = new ShopingSystem(new Rectangle(0, GameConstant.TILE_HEIGHT*Y_ZOOM+1, 0, 0), GameConstant.TILE_HEIGHT*Y_ZOOM+1);
+
+        mouseRect.generateGraphics(1, 0xFFFFFF);
 
         //set up canvas
         canvas.addKeyListener(keyboardListener);
@@ -120,7 +124,6 @@ public class GameFrame extends JFrame implements Runnable
     {
         BufferStrategy bufferStrategy = canvas.getBufferStrategy();
         Graphics graphics = bufferStrategy.getDrawGraphics();
-        super.paint(graphics);
 
         renderer.renderRectangle(background, 1, 1, true);
 
@@ -139,9 +142,10 @@ public class GameFrame extends JFrame implements Runnable
         //     count++;
         // }
 
-        mouseIndicator.render(renderer, X_ZOOM, Y_ZOOM);
         tagIndicator.render(renderer, X_ZOOM, Y_ZOOM);
-
+        mouseIndicator.render(renderer, X_ZOOM, Y_ZOOM);
+        renderer.renderRectangle(mouseRect, X_ZOOM, Y_ZOOM, false);
+        super.paint(graphics);
         renderer.render(graphics);
 
         graphics.dispose();
@@ -182,7 +186,8 @@ public class GameFrame extends JFrame implements Runnable
 
     public void mouseMoved(int x, int y)
     {
-
+        mouseRect.setPosition(x, y);
+        for (Component component : components) component.mouseHover(mouseRect, renderer.getCamera(), X_ZOOM, Y_ZOOM);
     }
 
     public void mouseDragged(int x, int y)

@@ -16,12 +16,12 @@ import game.ui.Button;
 
 public class ShopingSystem extends Component
 {
-    private Consumer<PlantableData> onBuySeed;
+    public static Consumer<PlantableData> onBuySeed;
+    public static Consumer<PlantableData> onHoverSeed;
 
-    public ShopingSystem(Rectangle rect, int offset, Consumer<PlantableData> onBuySeed)
+    public ShopingSystem(Rectangle rect, int offset)
     {
         super(rect, offset);
-        this.onBuySeed = onBuySeed;
         generateUI();
     }
 
@@ -61,6 +61,7 @@ public class ShopingSystem extends Component
                                                                  Helper.getPlantableData(plantName),
                                                                  true);
             btn.addClickListener(this::buyPlant);
+            btn.addHoverListener(onHoverSeed);
             // btn.ad
             btns[count] = btn;
             count++;
@@ -71,13 +72,12 @@ public class ShopingSystem extends Component
     @Override
     public void update(GameFrame game) 
     {
-        // TODO Auto-generated method stub
     }
 
     @Override
-    public boolean mouseMoved(Rectangle mouseRectangle, Rectangle camRectangle, int xZoom, int yZoom) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mouseMoved'");
+    public void mouseHover(Rectangle mouseRectangle, Rectangle camRectangle, int xZoom, int yZoom) 
+    {
+        for (GUI gui : guis) gui.mouseHover(mouseRectangle, camRectangle, xZoom, yZoom);
     }
     
 }

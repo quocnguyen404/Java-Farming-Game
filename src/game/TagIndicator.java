@@ -1,72 +1,62 @@
 package game;
 
+import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics2D;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
 
 import engine.GameObject;
 import engine.Rectangle;
 import engine.RenderHandler;
-import game.data.Sprites.SpriteID;
 
 public class TagIndicator implements GameObject
 {
-    private boolean isVisible;
-    private SpriteID spriteID;
     private Rectangle rect;
+    private String message = "";
     private BufferedImage img;
-    private String message;
+    private int[] pixels;
     private Font font;
 
     //idea
     //render sprite bg first then text
-    public TagIndicator (SpriteID spriteID)
+    public TagIndicator (Rectangle rect)
     {
-        this.spriteID = spriteID;
-        this.rect = new Rectangle(10, 10, GameConstant.TILE_WIDTH*3, GameConstant.TILE_HEIGHT);
-        if (spriteID == null) this.rect.generateGraphics(1, 0x00000);
-        message = "";
+        this.rect = rect;
         img = new BufferedImage(rect.w, rect.h, BufferedImage.TYPE_INT_RGB);
-        isVisible = false;
-        font = new Font("Arial", Font.CENTER_BASELINE, 10);
+        pixels = ((DataBufferInt)img.getRaster().getDataBuffer()).getData();
+        font = new Font("Arial", Font.BOLD, 30);
+        resetBG();
     }
 
-    public boolean isVisible() 
+    private void resetBG()
     {
-        return isVisible;
-    }
-
-    public void setVisible(boolean isVisible) 
-    {
-        this.isVisible = isVisible;
-    }
-
-    public void setPosition(int x, int y)
-    {
-        rect.setPosition(x, y);
+        for(int i = 0; i < pixels.length; i++) pixels[i] = 0xFFFFFF;
     }
 
     public void setMessage(String message)
     {
-        if (this.message.equals(message) || message.isEmpty()) return;
-     
+        if (this.message.equals(message)) return;
         this.message = message;
-        Graphics2D g = img.createGraphics();
-        g.setFont(font);
-        g.drawString(message, 0, rect.h/2);
-        // g.dispose();
+        resetBG();
+
+        Graphics graphic = img.createGraphics();
+        graphic.setFont(font);
+        graphic.setColor(new Color(1));
+        FontMetrics fm = graphic.getFontMetrics();
+        int x = (img.getWidth()-fm.stringWidth(message)/2);
+        int y = (img.getHeight()-fm.getHeight()/2 + fm.getAscent());
+        graphic.drawString(message, x/font.getSize(), rect.h/2+y/6);
+        graphic.dispose();
     }
 
     @Override
     public void render(RenderHandler renderer, int xZoom, int yZoom)
     {
-        if (!isVisible) return;
-        if (spriteID == null) renderer.renderRectangle(rect, xZoom, yZoom, false);
-        else 
-        {
-            renderer.renderSprite(spriteID, rect.x, rect.y, (rect.w/GameConstant.TILE_WIDTH), (rect.h/GameConstant.TILE_HEIGHT), false);
-            renderer.renderImage(img, rect.x, rect.y, xZoom, yZoom, false);
-        }
+        // renderer.renderImage(img, rect.x, rect.y, 1, 1, false);
+        renderer.renderImage(img, rect.x, rect.y, 1, 1, false);
+        // renderer.renderSprite(spriteID, rect.x, rect.y, (rect.w/GameConstant.TILE_WIDTH), (rect.h/GameConstant.TILE_HEIGHT), false);
     }
 
     @Override

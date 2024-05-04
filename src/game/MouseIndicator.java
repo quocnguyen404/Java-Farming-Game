@@ -18,7 +18,7 @@ public class MouseIndicator implements GameObject
     {
         this.spriteID = spriteID;
         mouseRect = new Rectangle(0, 0, GameConstant.TILE_WIDTH, GameConstant.TILE_HEIGHT);
-        mouseRect.generateGraphics(2, 0xFFFFFF);
+        // mouseRect.generateGraphics(2, 0xFFFFFF);
         isVisible = false;
     }
 
@@ -58,7 +58,7 @@ public class MouseIndicator implements GameObject
     {
         if (!isVisible) return;
         if (spriteID != null) renderer.renderSprite(spriteID, mouseRect.x, mouseRect.y, xZoom, yZoom, false);
-        else renderer.renderRectangle(mouseRect, xZoom, yZoom, false);
+        else if (mouseRect.isGen()) renderer.renderRectangle(mouseRect, xZoom, yZoom, false);
     }
 
     @Override

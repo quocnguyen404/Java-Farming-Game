@@ -59,6 +59,11 @@ public abstract class Component implements HandleMouseEvent, GameObject
     }
 
     @Override
+    public void mouseHover(Rectangle mouseRectangle, Rectangle camRectangle, int xZoom, int yZoom) 
+    {
+    }
+
+    @Override
     public boolean mouseDragged(Rectangle mouseRectangle, Rectangle camRectangle, int xZoom, int yZoom) 
     {
         // if (gui != null && gui.getVisibility())

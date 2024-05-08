@@ -6,23 +6,36 @@ import game.data.Sprites.SpriteID;
 
 public class ButtonAct extends GUIButton
 {
-    private Runnable onActivate;
-    public ButtonAct(SpriteID spriteID, Rectangle rect, Runnable onActivate, boolean genRect)
+    private Runnable onClick;
+    private Runnable onHover;
+    public ButtonAct(SpriteID spriteID, Rectangle rect, boolean genRect)
     {
         super(spriteID, rect, true, genRect);
-        this.onActivate = onActivate;
+    }
+
+    public void addClickListener(Runnable onClick)
+    {
+        this.onClick = onClick; 
+    }
+
+    public void addHoverListener(Runnable onHover)
+    {
+        this.onHover = onHover;
     }
 
     @Override
     public void activate() 
     {
-        onActivate.run();
+        if (onClick == null) return;
+        onClick.run();
+        System.out.println("On click button");
     }
 
     @Override
     public void hover() 
     {
-        //TODO
-        throw new UnsupportedOperationException("Unimplemented method 'hover'");
+        if (onHover == null) return;
+        onHover.run();
+        System.out.println("On hover button");
     }
 }

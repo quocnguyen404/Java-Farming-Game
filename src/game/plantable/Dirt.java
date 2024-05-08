@@ -1,20 +1,22 @@
 package game.plantable;
 
+import engine.AnimatedSprite;
 import engine.Rectangle;
 import engine.RenderHandler;
 import game.GameFrame;
+import game.Helper;
 import game.data.PlantableData;
-import game.data.Sprites.SpriteID;
+import game.data.Sprites.AnimationID;
 
 public class Dirt extends Plantable
 {
-    private SpriteID spriteID;
+    private AnimatedSprite animatedSprite;
     private Rectangle rect;
 
-    public Dirt(PlantableData data) 
+    public Dirt(PlantableData data)
     {
         super(data);
-        spriteID = SpriteID.PLANT_HOLE;
+        animatedSprite = new AnimatedSprite(Helper.getAnimatedSprite(AnimationID.DIRT), 60);
     }
 
     public void setRectangle(Rectangle rect)
@@ -25,12 +27,13 @@ public class Dirt extends Plantable
     @Override
     public void render(RenderHandler renderer, int xZoom, int yZoom)
     {
-        renderer.renderSprite(spriteID, rect.x, rect.y, xZoom, yZoom, false);
+        animatedSprite.render(renderer, rect.x, rect.y, xZoom, yZoom, false);
     }
 
     @Override
     public void update(GameFrame game) 
     {
+        animatedSprite.update(game);
     }
 
     @Override
@@ -46,9 +49,9 @@ public class Dirt extends Plantable
     }
 
     @Override
-    public void mouseHover(Rectangle mouseRectangle, Rectangle camRectangle, int xZoom, int yZoom) {
+    public void mouseHover(Rectangle mouseRectangle, Rectangle camRectangle, int xZoom, int yZoom) 
+    {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mouseMoved'");
     }
     
 }

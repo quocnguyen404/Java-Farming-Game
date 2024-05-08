@@ -22,8 +22,8 @@ public class FarmingSystem extends Component
 
     public FarmingSystem(Rectangle rect, int offset, Supplier<PlantableData> onPlantedSeed)
     {
-        //create or load region
         super(rect, offset);
+        //create or load region
         generateUI();
         
         this.onPlantedSeed = onPlantedSeed;
@@ -86,6 +86,7 @@ public class FarmingSystem extends Component
     @Override
     public void update(GameFrame game) 
     {
+        super.update(game);
         for (Region region : regions) 
             region.update(game);    
     }

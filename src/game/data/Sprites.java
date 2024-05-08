@@ -31,6 +31,7 @@ public class Sprites
     {
         POTATO,
         ONION,
+        DIRT,
     }
 
     private SpriteSheet gameSheet;
@@ -82,7 +83,7 @@ public class Sprites
 
         spriteMap.put(SpriteID.REGION, sprite);
 
-        //load onion animated
+        //load animated
         int x = 1, y = 8;
         for (AnimationID id : AnimationID.values())
         {

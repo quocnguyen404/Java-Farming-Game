@@ -4,7 +4,6 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.lang.Runnable;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import javax.swing.JFrame;
@@ -88,13 +87,17 @@ public class GameFrame extends JFrame implements Runnable
         
         Supplier<PlantableData> onPlantSeed = mouseIndicator::getData;
 
-        ShopingSystem.onBuySeed = (p) -> 
-        { 
+        ShopingSystem.onBuySeed = (p) ->
+        {
             mouseIndicator.setSprite(SpriteID.valueOf(p.getName()));
             mouseIndicator.setData(p);
         };
 
-        ShopingSystem.onHoverSeed = (p) -> { tagIndicator.setMessage(p.getName()); };
+        ShopingSystem.onHoverSeed = (p) -> 
+        { 
+            String message = p.getName().toLowerCase().replaceAll("_", " ");
+            setMessage(message);
+        };
         
         components = new Component[2];
         components[0] = new FarmingSystem(new Rectangle(), GameConstant.TILE_HEIGHT*Y_ZOOM, onPlantSeed);
@@ -113,8 +116,12 @@ public class GameFrame extends JFrame implements Runnable
     public void update()
     {
         // for (GameObject obj : gameObjects)
-        //     obj.update(this);    
+        //     obj.update(this);
         // mouseIndicator.update(this);
+
+        for (Component component : components)
+            component.update(this);
+        
 
         // testAnim.update(this);
         // testAnim1.update(this);
@@ -158,6 +165,12 @@ public class GameFrame extends JFrame implements Runnable
         if (keys[KeyEvent.VK_S])
         {
         }
+    }
+
+    private void setMessage(String message)
+    {
+        if (tagIndicator == null) System.out.println("Tag indicator hasn't initialize");
+        tagIndicator.setMessage(message);
     }
 
     private Rectangle mouseRect = new Rectangle(0, 0, 1, 1);

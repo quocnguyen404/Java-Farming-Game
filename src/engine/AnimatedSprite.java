@@ -7,7 +7,7 @@ public class AnimatedSprite
     private Sprite[] sprites;
     private int currentSprite = 0;
     private int speed;
-    private int counter;
+    private int counter = 0;
 
     private int startSprite = 0;
     private int endSprite;
@@ -56,23 +56,4 @@ public class AnimatedSprite
         if (currentSprite >= endSprite)
             currentSprite = startSprite;
     }
-
-    // @Override
-    // public int getWidth() 
-    // {
-    //     return sprites[currentSprite].getWidth();
-    // }
-
-    // @Override
-    // public int getHeight()
-    // {
-    //     return sprites[currentSprite].getHeight();
-    // }
-
-    // //this override the get pixels of Sprite class so it renderer.renderSprite can work
-    // @Override
-    // public int[] getPixels() 
-    // { 
-    //     return sprites[currentSprite].getPixels();
-    // }
 }

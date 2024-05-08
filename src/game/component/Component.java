@@ -5,6 +5,7 @@ import engine.GameObject;
 import engine.HandleMouseEvent;
 import engine.Rectangle;
 import engine.RenderHandler;
+import game.GameFrame;
 import game.ui.ButtonAct;
 
 public abstract class Component implements HandleMouseEvent, GameObject
@@ -25,6 +26,12 @@ public abstract class Component implements HandleMouseEvent, GameObject
     protected void setButtonsVisibility(int index)
     {
         guis[index].setVisibility(!guis[index].getVisibility());
+    }
+
+    @Override
+    public void update(GameFrame game) 
+    {
+        
     }
 
     @Override

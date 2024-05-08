@@ -14,7 +14,6 @@ public class FoodCrop extends Crop
     protected void specialAbility() 
     {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'specialAbility'");
     }
     
 }

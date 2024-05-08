@@ -151,7 +151,8 @@ public class Region implements HandleMouseEvent
 
         public void update(GameFrame game)
         {
-            crop.update(game);
+            if (crop != null) crop.update(game);
+            if (dirt != null) dirt.update(game);
         }
 
         public void render(RenderHandler renderer, int xZoom, int yZoom)

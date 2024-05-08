@@ -12,8 +12,8 @@ import game.data.Sprites.AnimationID;
 public abstract class Crop extends Plantable
 {
     private Rectangle rect;
-    private int counter = 0;
     private AnimatedSprite anim;
+    private int counter = 0;
     private int waterLeft;
 
     public Crop(CropData plant)
@@ -54,7 +54,6 @@ public abstract class Crop extends Plantable
     @Override
     public void update(GameFrame game)
     {
-        // if (counter > )
         anim.update(game);
     }
 

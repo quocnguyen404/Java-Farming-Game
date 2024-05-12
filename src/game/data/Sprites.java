@@ -15,18 +15,21 @@ public class Sprites
 {
     public enum SpriteID
     {
-        GREEN1_SQUARE, //0
-        GREEN2_SQUARE, //1
-        WHITE_SQUARE,  //2
-        PLANT_HOLE,    //3
-        GREEN1_CIRCLE, //4
-        GREEN2_CIRCLE, //5
-        GREEN3_CIRCLE, //6
-        GOLD,          //7
-        WATER_DROP,    //8
-        POTATO,        //9
-        ONION,         //10
-        REGION,        //
+        GREEN1_SQUARE,
+        GREEN2_SQUARE,
+        WHITE_SQUARE, 
+        PLANT_HOLE,   
+        GREEN1_CIRCLE,
+        GREEN2_CIRCLE,
+        GREEN3_CIRCLE,
+        GOLD,         
+        WATER_DROP,    
+        GOLD_BUFF,
+        WATER_BUFF,
+        TIME_BUFF,
+        POTATO,        
+        ONION,         
+        REGION,        
     }
 
     public enum AnimationID
@@ -63,7 +66,7 @@ public class Sprites
                     // String spriteName = splitString[0];
                     int spriteX = Integer.parseInt(splitString[1]);
                     int spriteY = Integer.parseInt(splitString[2]);
-                    SpriteID id = SpriteID.values()[Integer.parseInt(splitString[3])];
+                    SpriteID id = SpriteID.valueOf(splitString[0]);
                     Sprite sprite = new Sprite(gameSheet, spriteX*GameConstant.TILE_WIDTH, spriteY*GameConstant.TILE_HEIGHT, GameConstant.TILE_WIDTH, GameConstant.TILE_HEIGHT);
                     spriteMap.put(id, sprite);
                 }

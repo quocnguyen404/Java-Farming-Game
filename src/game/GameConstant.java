@@ -9,7 +9,7 @@ public final class GameConstant
     public static final String GAME_SHEET_PATH = "spritesheet.png";
     public static final String MAP_PATH = "Map.txt";
     public static final String SPRITES_PATH = "Sprites.txt";
-    public static final String PLANTDATA_PATH = "PlantableData.txt";
+    public static final String PLANTABLE_DATA_PATH = "PlantableData.txt";
     public static final int WIN_WIDTH = 576;
     public static final int WIN_HEIGHT = 528;
     public static final int TILE_WIDTH = 16;

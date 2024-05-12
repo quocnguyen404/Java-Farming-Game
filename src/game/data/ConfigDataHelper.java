@@ -45,7 +45,7 @@ public final class ConfigDataHelper
         
         try 
         {
-            File data = new File(GameConstant.PLANTDATA_PATH);
+            File data = new File(GameConstant.PLANTABLE_DATA_PATH);
             Scanner scanner = new Scanner(data);
             
             while(scanner.hasNextLine())
@@ -56,16 +56,23 @@ public final class ConfigDataHelper
                 {
                     String[] split = line.split("-");
                     PlantableData plant;
-                    if (split.length > 2)
+                    if (split.length == 6) //crop
                     {
                         plant = new CropData(split[0],
                                               Integer.parseInt(split[1]), 
-                                              Integer.parseInt(split[2]), 
+                                              Integer.parseInt(split[2]),
                                               Integer.parseInt(split[3]),
                                               Integer.parseInt(split[4]),
                                               Integer.parseInt(split[5]));
                     }
-                    else
+                    else if (split.length == 4) //item
+                    {
+                        plant = new ItemData(split[0],
+                                            Integer.parseInt(split[1]),
+                                            Integer.parseInt(split[2]),
+                                            Integer.parseInt(split[3]));
+                    }
+                    else //plantable
                         plant = new PlantableData(split[0], Integer.parseInt(split[1]));
 
                     plantData.put(split[0], plant);

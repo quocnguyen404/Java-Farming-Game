@@ -8,12 +8,12 @@ import game.GameConstant;
 import game.GameFrame;
 import game.data.CropData;
 import game.data.PlantableData;
-import game.plantable.Crop;
 import game.plantable.Dirt;
-import game.plantable.FoodCrop;
-import game.plantable.FruitCrop;
-import game.plantable.OilCrop;
 import game.plantable.Plantable;
+import game.plantable.crop.Crop;
+import game.plantable.crop.FoodCrop;
+import game.plantable.crop.FruitCrop;
+import game.plantable.crop.OilCrop;
 
 public class FarmingSystem extends Component
 {

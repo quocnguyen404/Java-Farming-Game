@@ -1,4 +1,4 @@
-package game.plantable;
+package game.plantable.crop;
 
 import game.data.CropData;
 

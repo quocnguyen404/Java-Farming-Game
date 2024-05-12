@@ -10,9 +10,9 @@ import game.GameConstant;
 import game.GameFrame;
 import game.Helper;
 import game.data.Sprites.SpriteID;
-import game.plantable.Crop;
 import game.plantable.Dirt;
 import game.plantable.Plantable;
+import game.plantable.crop.Crop;
 
 public class Region implements HandleMouseEvent
 {

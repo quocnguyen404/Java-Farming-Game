@@ -1,4 +1,4 @@
-package game.plantable;
+package game.plantable.crop;
 
 import engine.AnimatedSprite;
 import engine.Rectangle;
@@ -8,6 +8,7 @@ import game.GameFrame;
 import game.Helper;
 import game.data.CropData;
 import game.data.Sprites.AnimationID;
+import game.plantable.Plantable;
 
 public abstract class Crop extends Plantable
 {

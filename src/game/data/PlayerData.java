@@ -9,6 +9,6 @@ public class PlayerData
     public PlayerData()
     {
         gold = 0;
-        unlockPlantable = new ArrayList<String>();
+        unlockPlantable = new ArrayList<>();
     }
 }

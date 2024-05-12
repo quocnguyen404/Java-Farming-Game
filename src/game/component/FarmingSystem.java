@@ -17,16 +17,15 @@ import game.plantable.Plantable;
 
 public class FarmingSystem extends Component
 {
+    public static Supplier<PlantableData> onPlantedSeed;
     private Region[] regions;
-    private Supplier<PlantableData> onPlantedSeed;
 
-    public FarmingSystem(Rectangle rect, int offset, Supplier<PlantableData> onPlantedSeed)
+    public FarmingSystem(Rectangle rect, int offset)
     {
         super(rect, offset);
         //create or load region
         generateUI();
         
-        this.onPlantedSeed = onPlantedSeed;
         Region.onGetPlantable = this::onGetPlantable;
         // Sprite turnOnSprite = ConfigDataHelper.getInstance().getSprite(null);
         // turnOnButton = new ButtonAct(, null, null, false);

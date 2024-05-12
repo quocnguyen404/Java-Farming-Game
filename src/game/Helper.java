@@ -1,12 +1,13 @@
 package game;
 
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
 
 import engine.Sprite;
+import engine.SpriteSheet;
 import game.data.ConfigDataHelper;
 import game.data.PlantableData;
 import game.data.Sprites.AnimationID;
@@ -37,6 +38,11 @@ public final class Helper
     public static Sprite getSprite(SpriteID id)
     {
         return ConfigDataHelper.getInstance().getSprite(id);
+    }
+
+    public static SpriteSheet getGameSpriteSheet()
+    {
+        return ConfigDataHelper.getInstance().getGameSpriteSheet();
     }
     
     public static int getPlantableNumber()
@@ -69,6 +75,14 @@ public final class Helper
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static Image convertSpriteToImage(SpriteID spriteID)
+    {
+        Sprite sprite = getSprite(spriteID);
+        BufferedImage img = new BufferedImage(sprite.getWidth(), sprite.getHeight(), BufferedImage.TYPE_INT_RGB);
+        img.setRGB(0, 0, sprite.getWidth(), sprite.getHeight(), sprite.getPixels(), 0, sprite.getWidth());
+        return img;
     }
 
     private Helper()

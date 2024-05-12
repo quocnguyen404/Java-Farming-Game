@@ -4,7 +4,6 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.lang.Runnable;
-import java.util.function.Supplier;
 
 import javax.swing.JFrame;
 
@@ -12,7 +11,7 @@ import engine.*;
 import game.component.Component;
 import game.component.FarmingSystem;
 import game.component.ShopingSystem;
-import game.data.PlantableData;
+import game.data.ConfigDataHelper;
 import game.data.Sprites.SpriteID;
 
 public class GameFrame extends JFrame implements Runnable
@@ -83,10 +82,10 @@ public class GameFrame extends JFrame implements Runnable
         mouseIndicator = new MouseIndicator(null);
         tagIndicator = new TagIndicator(new Rectangle(0, 0, GameConstant.WIN_WIDTH - GameConstant.TILE_WIDTH, GameConstant.TILE_HEIGHT*Y_ZOOM));
         // tagIndicator.setMessage("Hello");
-
+        tagIndicator.setGold(ConfigDataHelper.getInstance().getPlayerGold());
         
-        Supplier<PlantableData> onPlantSeed = mouseIndicator::getData;
-
+        FarmingSystem.onPlantedSeed = mouseIndicator::getData;
+        ShopingSystem.onSellCrop = mouseIndicator::getData;
         ShopingSystem.onBuySeed = (p) ->
         {
             mouseIndicator.setSprite(SpriteID.valueOf(p.getName()));
@@ -96,11 +95,12 @@ public class GameFrame extends JFrame implements Runnable
         ShopingSystem.onHoverSeed = (p) -> 
         { 
             String message = p.getName().toLowerCase().replaceAll("_", " ");
-            setMessage(message);
+            tagIndicator.setMessage(message);
+            tagIndicator.setGold(p.getBuyPrice());
         };
         
         components = new Component[2];
-        components[0] = new FarmingSystem(new Rectangle(), GameConstant.TILE_HEIGHT*Y_ZOOM, onPlantSeed);
+        components[0] = new FarmingSystem(new Rectangle(), GameConstant.TILE_HEIGHT*Y_ZOOM);
         components[1] = new ShopingSystem(new Rectangle(0, GameConstant.TILE_HEIGHT*Y_ZOOM+1, 0, 0), GameConstant.TILE_HEIGHT*Y_ZOOM+1);
 
         mouseRect.generateGraphics(1, 0xFFFFFF);
@@ -165,12 +165,6 @@ public class GameFrame extends JFrame implements Runnable
         if (keys[KeyEvent.VK_S])
         {
         }
-    }
-
-    private void setMessage(String message)
-    {
-        if (tagIndicator == null) System.out.println("Tag indicator hasn't initialize");
-        tagIndicator.setMessage(message);
     }
 
     private Rectangle mouseRect = new Rectangle(0, 0, 1, 1);

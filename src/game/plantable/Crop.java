@@ -20,7 +20,7 @@ public abstract class Crop extends Plantable
     {
         super(plant);
         Sprite[] sprites = Helper.getAnimatedSprite(AnimationID.valueOf(plant.getName()));
-        anim = new AnimatedSprite(sprites, plant.getGrowTime()/sprites.length);
+        anim = new AnimatedSprite(sprites, plant.getGrowTime());
     }
 
     public void setPosition(Rectangle rect)

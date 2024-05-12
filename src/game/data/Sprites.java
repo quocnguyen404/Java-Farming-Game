@@ -22,9 +22,11 @@ public class Sprites
         GREEN1_CIRCLE, //4
         GREEN2_CIRCLE, //5
         GREEN3_CIRCLE, //6
-        POTATO,        //7
-        ONION,         //8
-        REGION,        //9
+        GOLD,          //7
+        WATER_DROP,    //8
+        POTATO,        //9
+        ONION,         //10
+        REGION,        //
     }
 
     public enum AnimationID

@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 import engine.Sprite;
+import engine.SpriteSheet;
 import game.GameConstant;
 import game.data.Sprites.AnimationID;
 import game.data.Sprites.SpriteID;
@@ -130,6 +131,11 @@ public final class ConfigDataHelper
         playerData.gold += plantableData.getBuyPrice();
     }
 
+    public int getPlayerGold()
+    {
+        return playerData.gold;
+    }
+
     public int getPlantableNumber()
     {
         return plantData.size();
@@ -153,5 +159,10 @@ public final class ConfigDataHelper
     public Sprite getSprite(SpriteID id)
     {
         return sprites.getSprite(id);
+    }
+
+    public SpriteSheet getGameSpriteSheet()
+    {
+        return sprites.getGameSpriteSheet();
     }
 }

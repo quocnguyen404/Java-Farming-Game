@@ -45,6 +45,11 @@ public abstract class Crop extends Plantable
     {
     }
 
+    public void getBuff()
+    {
+        
+    }
+
     private void grow()
     {
 

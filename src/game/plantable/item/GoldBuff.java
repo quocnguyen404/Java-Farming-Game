@@ -1,7 +1,7 @@
 package game.plantable.item;
 
 import game.data.ItemData;
-import game.plantable.Farm;
+import game.plantable.crop.Crop;
 
 public class GoldBuff extends Item
 {
@@ -14,10 +14,11 @@ public class GoldBuff extends Item
     }
 
     @Override
-    public void activate() 
+    public void activate(Crop crop)
     {
         // Khi GoldBuff được kích hoạt, tăng hiệu suất sản xuất của cây
-        Farm.setProductivityMultiplier(Farm.getProductivityMultiplier() * productivityMultiplier);
+        //
+        crop.getBuff();
         System.out.println("GoldBuff activated! Productivity increased by " + (productivityMultiplier * 100) + "%.");
     }
 

@@ -1,11 +1,10 @@
 package game.plantable.item;
 
 import game.data.ItemData;
-import game.plantable.Farm;
+import game.plantable.crop.Crop;
 
 public class TimeBuff extends Item
 {
-
     private double growthSpeedMultiplier;
 
     public TimeBuff(ItemData data, double growthSpeedMultiplier) 
@@ -15,10 +14,11 @@ public class TimeBuff extends Item
     }
 
     @Override
-    public void activate() 
+    public void activate(Crop crop) 
     {
         // Khi TimeBuff được kích hoạt, giảm thời gian trồng cây
-        Farm.setGrowthSpeedMultiplier(Farm.getGrowthSpeedMultiplier() * growthSpeedMultiplier);
+        //
+        crop.getBuff();
         System.out.println("TimeBuff activated! Growth speed increased by " + (growthSpeedMultiplier * 100) + "%.");
     }
     

@@ -5,17 +5,18 @@ import game.data.ItemData;
 public class TimeBuff extends Item
 {
 
-    public TimeBuff(ItemData data) 
-    {
+    private double growthSpeedMultiplier;
+
+    public TimeBuff(ItemData data, double growthSpeedMultiplier) {
         super(data);
-        //TODO Auto-generated constructor stub
+        this.growthSpeedMultiplier = growthSpeedMultiplier;
     }
 
     @Override
-    public void activate() 
-    {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'activate'");
+    public void activate() {
+        // Khi TimeBuff được kích hoạt, giảm thời gian trồng cây
+        Farm.setGrowthSpeedMultiplier(Farm.getGrowthSpeedMultiplier() * growthSpeedMultiplier);
+        System.out.println("TimeBuff activated! Growth speed increased by " + (growthSpeedMultiplier * 100) + "%.");
     }
     
 }

@@ -1,4 +1,4 @@
-package game.plantable;
+package game.plantable.crop;
 
 import engine.AnimatedSprite;
 import engine.Rectangle;
@@ -8,19 +8,20 @@ import game.GameFrame;
 import game.Helper;
 import game.data.CropData;
 import game.data.Sprites.AnimationID;
+import game.plantable.Plantable;
 
 public abstract class Crop extends Plantable
 {
     private Rectangle rect;
-    private int counter = 0;
     private AnimatedSprite anim;
+    private int counter = 0;
     private int waterLeft;
 
     public Crop(CropData plant)
     {
         super(plant);
         Sprite[] sprites = Helper.getAnimatedSprite(AnimationID.valueOf(plant.getName()));
-        anim = new AnimatedSprite(sprites, plant.getGrowTime()/sprites.length);
+        anim = new AnimatedSprite(sprites, plant.getGrowTime());
     }
 
     public void setPosition(Rectangle rect)
@@ -44,6 +45,11 @@ public abstract class Crop extends Plantable
     {
     }
 
+    public void getBuff()
+    {
+        
+    }
+
     private void grow()
     {
 
@@ -54,7 +60,6 @@ public abstract class Crop extends Plantable
     @Override
     public void update(GameFrame game)
     {
-        // if (counter > )
         anim.update(game);
     }
 

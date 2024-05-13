@@ -129,5 +129,12 @@ public class GUI implements HandleMouseEvent, GameObject
         return false;
     }
 
+    @Override
+    public void mouseHover(Rectangle mouseRectangle, Rectangle camRectangle, int xZoom, int yZoom)
+    {
+        if (buttons == null) return;
+        for (GUIButton guiButton : buttons) guiButton.mouseHover(mouseRectangle, camRectangle, xZoom, yZoom);
+    }
+
 
 }

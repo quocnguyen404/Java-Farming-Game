@@ -1,8 +1,10 @@
-package game.plantable;
+package game.plantable.item;
 
 import engine.RenderHandler;
 import game.GameFrame;
 import game.data.ItemData;
+import game.plantable.Plantable;
+import game.plantable.crop.Crop;
 
 public abstract class Item extends Plantable
 {
@@ -11,7 +13,7 @@ public abstract class Item extends Plantable
         super(data);
     }
 
-    public abstract void activate();
+    public abstract void activate(Crop crop);
 
     @Override
     public boolean planted() 

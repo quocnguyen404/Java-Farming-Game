@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 import engine.Sprite;
+import engine.SpriteSheet;
 import game.GameConstant;
 import game.data.Sprites.AnimationID;
 import game.data.Sprites.SpriteID;
@@ -44,7 +45,7 @@ public final class ConfigDataHelper
         
         try 
         {
-            File data = new File(GameConstant.PLANTDATA_PATH);
+            File data = new File(GameConstant.PLANTABLE_DATA_PATH);
             Scanner scanner = new Scanner(data);
             
             while(scanner.hasNextLine())
@@ -55,16 +56,23 @@ public final class ConfigDataHelper
                 {
                     String[] split = line.split("-");
                     PlantableData plant;
-                    if (split.length > 2)
+                    if (split.length == 6) //crop
                     {
                         plant = new CropData(split[0],
                                               Integer.parseInt(split[1]), 
-                                              Integer.parseInt(split[2]), 
+                                              Integer.parseInt(split[2]),
                                               Integer.parseInt(split[3]),
                                               Integer.parseInt(split[4]),
                                               Integer.parseInt(split[5]));
                     }
-                    else
+                    else if (split.length == 4) //item
+                    {
+                        plant = new ItemData(split[0],
+                                            Integer.parseInt(split[1]),
+                                            Integer.parseInt(split[2]),
+                                            Integer.parseInt(split[3]));
+                    }
+                    else //plantable
                         plant = new PlantableData(split[0], Integer.parseInt(split[1]));
 
                     plantData.put(split[0], plant);
@@ -92,7 +100,7 @@ public final class ConfigDataHelper
             System.out.println("Doesn't exist player data");
             System.out.println("Load default player data");
             playerData = new PlayerData();
-            playerData.gold = 1;
+            playerData.gold = 5;
             playerData.unlockPlantable.add("ONION");
             playerData.unlockPlantable.add("POTATO");
         }
@@ -130,6 +138,11 @@ public final class ConfigDataHelper
         playerData.gold += plantableData.getBuyPrice();
     }
 
+    public int getPlayerGold()
+    {
+        return playerData.gold;
+    }
+
     public int getPlantableNumber()
     {
         return plantData.size();
@@ -153,5 +166,10 @@ public final class ConfigDataHelper
     public Sprite getSprite(SpriteID id)
     {
         return sprites.getSprite(id);
+    }
+
+    public SpriteSheet getGameSpriteSheet()
+    {
+        return sprites.getGameSpriteSheet();
     }
 }

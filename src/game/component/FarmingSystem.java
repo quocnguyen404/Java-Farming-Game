@@ -8,25 +8,24 @@ import game.GameConstant;
 import game.GameFrame;
 import game.data.CropData;
 import game.data.PlantableData;
-import game.plantable.Crop;
 import game.plantable.Dirt;
-import game.plantable.FoodCrop;
-import game.plantable.FruitCrop;
-import game.plantable.OilCrop;
 import game.plantable.Plantable;
+import game.plantable.crop.Crop;
+import game.plantable.crop.FoodCrop;
+import game.plantable.crop.FruitCrop;
+import game.plantable.crop.OilCrop;
 
 public class FarmingSystem extends Component
 {
+    public static Supplier<PlantableData> onPlantedSeed;
     private Region[] regions;
-    private Supplier<PlantableData> onPlantedSeed;
 
-    public FarmingSystem(Rectangle rect, int offset, Supplier<PlantableData> onPlantedSeed)
+    public FarmingSystem(Rectangle rect, int offset)
     {
-        //create or load region
         super(rect, offset);
+        //create or load region
         generateUI();
         
-        this.onPlantedSeed = onPlantedSeed;
         Region.onGetPlantable = this::onGetPlantable;
         // Sprite turnOnSprite = ConfigDataHelper.getInstance().getSprite(null);
         // turnOnButton = new ButtonAct(, null, null, false);
@@ -71,7 +70,7 @@ public class FarmingSystem extends Component
     public boolean mouseDraggedExit(Rectangle mousRectangle, Rectangle camRectangle, int xZoom, int yZoom) 
     {
         for (Region region : regions) 
-            if(region != null) region.mouseDraggedExit(mousRectangle, camRectangle, xZoom, yZoom);  
+            if(region != null) return region.mouseDraggedExit(mousRectangle, camRectangle, xZoom, yZoom);  
         return super.mouseDraggedExit(mousRectangle, camRectangle, xZoom, yZoom);
     }
 
@@ -86,7 +85,13 @@ public class FarmingSystem extends Component
     @Override
     public void update(GameFrame game) 
     {
+        super.update(game);
         for (Region region : regions) 
             region.update(game);    
+    }
+
+    @Override
+    public void mouseHover(Rectangle mouseRectangle, Rectangle camRectangle, int xZoom, int yZoom) 
+    {
     }
 }

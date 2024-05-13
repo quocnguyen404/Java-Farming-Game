@@ -11,7 +11,6 @@ public class Sprite
     {
         this.width = width;
         this.height = height;
-
         pixels = new int[width*height];
         pixels = sheet.getImage().getRGB(startX, startY, width, height, pixels, 0, width);
     }

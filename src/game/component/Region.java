@@ -10,9 +10,9 @@ import game.GameConstant;
 import game.GameFrame;
 import game.Helper;
 import game.data.Sprites.SpriteID;
-import game.plantable.Crop;
 import game.plantable.Dirt;
 import game.plantable.Plantable;
+import game.plantable.crop.Crop;
 
 public class Region implements HandleMouseEvent
 {
@@ -151,7 +151,8 @@ public class Region implements HandleMouseEvent
 
         public void update(GameFrame game)
         {
-            crop.update(game);
+            if (crop != null) crop.update(game);
+            if (dirt != null) dirt.update(game);
         }
 
         public void render(RenderHandler renderer, int xZoom, int yZoom)
@@ -161,5 +162,11 @@ public class Region implements HandleMouseEvent
             else return;
             if (crop != null) crop.render(renderer, xZoom, yZoom);
         }
+    }
+
+    @Override
+    public void mouseHover(Rectangle mouseRectangle, Rectangle camRectangle, int xZoom, int yZoom) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'mouseMoved'");
     }
 }

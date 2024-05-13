@@ -1,11 +1,10 @@
-package game.plantable;
+package game.plantable.crop;
 
 import game.data.CropData;
 
-public class FruitCrop extends Crop
+public class FoodCrop extends Crop
 {
-
-    public FruitCrop(CropData plant) 
+    public FoodCrop(CropData plant)
     {
         super(plant);
         //TODO Auto-generated constructor stub
@@ -15,7 +14,6 @@ public class FruitCrop extends Crop
     protected void specialAbility() 
     {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'specialAbility'");
     }
     
 }

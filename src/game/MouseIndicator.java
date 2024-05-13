@@ -14,11 +14,11 @@ public class MouseIndicator implements GameObject
     private SpriteID spriteID;
     private PlantableData data;
 
-    public MouseIndicator(SpriteID spriteID, int xZoom, int yZoom)
+    public MouseIndicator(SpriteID spriteID)
     {
         this.spriteID = spriteID;
         mouseRect = new Rectangle(0, 0, GameConstant.TILE_WIDTH, GameConstant.TILE_HEIGHT);
-        mouseRect.generateGraphics(2, 0xFFFFFF);
+        // mouseRect.generateGraphics(2, 0xFFFFFF);
         isVisible = false;
     }
 
@@ -44,11 +44,11 @@ public class MouseIndicator implements GameObject
         mouseRect.setPosition(x-(GameFrame.X_ZOOM*GameConstant.TILE_WIDTH/2), y-(GameFrame.Y_ZOOM*GameConstant.TILE_HEIGHT/2));
     }
 
-    public void releaseMouse()
+    public void releaseMouse(boolean successBuy)
     {
         spriteID = null;
         isVisible = false;
-        if (data != null)
+        if (!successBuy && data != null)
             ConfigDataHelper.getInstance().cancelBuy(data);
         data = null;
     }
@@ -58,7 +58,7 @@ public class MouseIndicator implements GameObject
     {
         if (!isVisible) return;
         if (spriteID != null) renderer.renderSprite(spriteID, mouseRect.x, mouseRect.y, xZoom, yZoom, false);
-        else renderer.renderRectangle(mouseRect, xZoom, yZoom, false);
+        else if (mouseRect.isGen()) renderer.renderRectangle(mouseRect, xZoom, yZoom, false);
     }
 
     @Override

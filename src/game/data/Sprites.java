@@ -15,22 +15,28 @@ public class Sprites
 {
     public enum SpriteID
     {
-        GREEN1_SQUARE, //0
-        GREEN2_SQUARE, //1
-        WHITE_SQUARE,  //2
-        PLANT_HOLE,    //3
-        GREEN1_CIRCLE, //4
-        GREEN2_CIRCLE, //5
-        GREEN3_CIRCLE, //6
-        POTATO,        //7
-        ONION,         //8
-        REGION,        //9
+        GREEN1_SQUARE,
+        GREEN2_SQUARE,
+        WHITE_SQUARE, 
+        PLANT_HOLE,   
+        GREEN1_CIRCLE,
+        GREEN2_CIRCLE,
+        GREEN3_CIRCLE,
+        GOLD,         
+        WATER_DROP,    
+        GOLD_BUFF,
+        WATER_BUFF,
+        TIME_BUFF,
+        POTATO,        
+        ONION,         
+        REGION,        
     }
 
     public enum AnimationID
     {
-        ONION,
         POTATO,
+        ONION,
+        DIRT,
     }
 
     private SpriteSheet gameSheet;
@@ -60,7 +66,7 @@ public class Sprites
                     // String spriteName = splitString[0];
                     int spriteX = Integer.parseInt(splitString[1]);
                     int spriteY = Integer.parseInt(splitString[2]);
-                    SpriteID id = SpriteID.values()[Integer.parseInt(splitString[3])];
+                    SpriteID id = SpriteID.valueOf(splitString[0]);
                     Sprite sprite = new Sprite(gameSheet, spriteX*GameConstant.TILE_WIDTH, spriteY*GameConstant.TILE_HEIGHT, GameConstant.TILE_WIDTH, GameConstant.TILE_HEIGHT);
                     spriteMap.put(id, sprite);
                 }
@@ -82,13 +88,13 @@ public class Sprites
 
         spriteMap.put(SpriteID.REGION, sprite);
 
-        //load onion animated
+        //load animated
         int x = 1, y = 8;
-        for (AnimationID id : AnimationID.values()) 
+        for (AnimationID id : AnimationID.values())
         {
             Sprite[] animated = loadCustomSprites(x*GameConstant.TILE_WIDTH,
                                                   y*GameConstant.TILE_HEIGHT,
-                                             3,
+                                                  3,
                                                   GameConstant.TILE_WIDTH, 
                                                   GameConstant.TILE_HEIGHT);
             animatedSpriteMap.put(id, animated);

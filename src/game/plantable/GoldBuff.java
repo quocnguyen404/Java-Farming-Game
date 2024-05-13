@@ -4,18 +4,18 @@ import game.data.ItemData;
 
 public class GoldBuff extends Item
 {
-    private double productivityMultiplier;
+    private double productivity;
 
-    public GoldBuff(ItemData data, double productivityMultiplier) {
+    public GoldBuff(ItemData data, double productivity) {
         super(data);
-        this.productivityMultiplier = productivityMultiplier;
+        this.productivity = productivity;
     }
 
     @Override
     public void activate() {
         // Khi GoldBuff được kích hoạt, tăng hiệu suất sản xuất của cây
-        Farm.setProductivityMultiplier(Farm.getProductivityMultiplier() * productivityMultiplier);
-        System.out.println("GoldBuff activated! Productivity increased by " + (productivityMultiplier * 100) + "%.");
+        Farm.setProductivity(Farm.getProductivity() * productivity);
+        System.out.println("GoldBuff activated! Productivity increased by " + (productivity * 100) + "%.");
     }
 
 }

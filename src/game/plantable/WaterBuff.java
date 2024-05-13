@@ -5,18 +5,18 @@ import game.data.ItemData;
 public class WaterBuff extends Item
 {
 
-    private double waterRequirementMultiplier;
+    private double waterRequire;
 
-    public WaterBuff(ItemData data, double waterRequirementMultiplier) {
+    public WaterBuff(ItemData data, double waterRequire) {
         super(data);
-        this.waterRequirementMultiplier = waterRequirementMultiplier;
+        this.waterRequire = waterRequire;
     }
 
     @Override
     public void activate() {
         // Khi WaterBuff được kích hoạt, giảm nhu cầu nước của cây
-        Farm.setWaterRequirementMultiplier(Farm.getWaterRequirementMultiplier() * waterRequirementMultiplier);
-        System.out.println("WaterBuff activated! Water requirement decreased by " + (waterRequirementMultiplier * 100) + "%.");
+        Farm.setWaterRequirement(Farm.getWaterRequirement() * waterRequire);
+        System.out.println("WaterBuff activated! Water requirement decreased by " + (waterRequire * 100) + "%.");
     }
     
 }

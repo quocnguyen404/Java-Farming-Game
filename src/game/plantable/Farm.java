@@ -1,32 +1,32 @@
 package game.plantable;
 
 public class Farm {
-    private static double productivityMultiplier = 1.0; 
-    private static double waterRequirementMultiplier = 1.0; 
-    private static double growthSpeedMultiplier = 1.0; 
+    private static double productivity = 1.0; 
+    private static double waterRequire = 1.0; 
+    private static double growthSpeed = 1.0; 
 
-    public static double getProductivityMultiplier() {
-        return productivityMultiplier;
+    public static double getProductivity() {
+        return productivity;
     }
 
-    public static void setProductivityMultiplier(double multiplier) {
-        productivityMultiplier = multiplier;
+    public static void setProductivity(double multiplier) {
+        productivity = multiplier;
     }
 
-    public static double getWaterRequirementMultiplier() {
-        return waterRequirementMultiplier;
+    public static double getWaterRequirement() {
+        return waterRequire;
     }
 
-    public static void setWaterRequirementMultiplier(double multiplier) {
-        waterRequirementMultiplier = multiplier;
+    public static void setWaterRequirement(double multiplier) {
+        waterRequire = multiplier;
     }
 
-    public static double getGrowthSpeedMultiplier() {
-        return growthSpeedMultiplier;
+    public static double getGrowthSpeed() {
+        return growthSpeed;
     }
 
-    public static void setGrowthSpeedMultiplier(double multiplier) {
-        growthSpeedMultiplier = multiplier;
+    public static void setGrowthSpeed(double multiplier) {
+        growthSpeed = multiplier;
     }
 }
 

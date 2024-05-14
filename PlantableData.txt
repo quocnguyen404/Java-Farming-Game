@@ -1,7 +1,7 @@
 //cropname-growtime-sellprice-buyPrice-waterdrop-modify (0 Food, 1Fruit, 2Oil)
 //item-buyPrice-modify-buffAmount
 //plantabename-buyPrice
-ONION-30-2-1-1-0
+ONION-10-2-1-1-0
 POTATO-60-4-2-2-0
 PLANT_HOLE-1
 GOLD_BUFF-2-0-4

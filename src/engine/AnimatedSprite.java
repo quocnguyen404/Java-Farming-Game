@@ -11,6 +11,7 @@ public class AnimatedSprite
 
     private int startSprite = 0;
     private int endSprite;
+    private boolean isFinalSprite = false;
 
     // public AnimatedSprite(SpriteID)
     public AnimatedSprite(Sprite[] sprites, int speed)
@@ -18,6 +19,7 @@ public class AnimatedSprite
         this.sprites = sprites;
         this.speed = speed;
         setAnimationRange(0, sprites.length);
+        
     }
 
     public void reset()
@@ -48,12 +50,15 @@ public class AnimatedSprite
         }
     }
 
+    public boolean isLastSprite() {
+        return isFinalSprite;
+    }
+
     public void incrementSprite()
     {
         if (currentSprite < startSprite)
             currentSprite = startSprite;
-        currentSprite++;
-        if (currentSprite >= endSprite)
-            currentSprite = startSprite;
+       if(currentSprite == endSprite) isFinalSprite = true;
+       else if(currentSprite < endSprite) currentSprite++;
     }
 }

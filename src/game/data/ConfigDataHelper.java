@@ -100,7 +100,7 @@ public final class ConfigDataHelper
             System.out.println("Doesn't exist player data");
             System.out.println("Load default player data");
             playerData = new PlayerData();
-            playerData.gold = 5;
+            playerData.gold = 10;   
             playerData.unlockPlantable.add("ONION");
             playerData.unlockPlantable.add("POTATO");
         }

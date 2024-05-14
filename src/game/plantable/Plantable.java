@@ -19,7 +19,7 @@ public abstract class Plantable implements HandleMouseEvent, GameObject
         return this.plantableData;
     }
 
-    public abstract boolean planted();
+    public abstract boolean planted(Rectangle rectangle);
     public abstract boolean remove();
 
     @Override

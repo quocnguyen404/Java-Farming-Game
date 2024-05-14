@@ -30,21 +30,17 @@ public abstract class Crop extends Plantable
     }
 
     @Override
-    public boolean planted()
+    public boolean planted(Rectangle rectangle) 
     {
-        if(rect != null) {
-            return true;
-        }
-        return false;
+        setPosition(rectangle);
+        return true;
     }
 
     @Override
-    public  boolean remove()
+    public boolean remove()
     {
-        if(rect != null) {
-            return true;
-        }
-        return false;
+        rect = null;
+        return true;
     }
 
     public void watering(int waterAmount)
@@ -62,6 +58,17 @@ public abstract class Crop extends Plantable
     private void grow()
     {
         
+        if(anim.isLastSprite()) {
+            System.out.println("This is the last sprite!");
+            return;
+        }
+
+        counter++;
+        if(counter >= ((CropData) getPlantableData()).getGrowTime() * 60) {
+            anim.incrementSprite();
+            counter = 0;
+        }
+
     }
 
     abstract protected void specialAbility();
@@ -69,10 +76,7 @@ public abstract class Crop extends Plantable
     @Override
     public void update(GameFrame game)
     {
-        if(waterLeft <= 0) {
-            grow();
-        }
-        
+        grow();
     }
 
     @Override

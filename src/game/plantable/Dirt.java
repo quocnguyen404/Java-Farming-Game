@@ -37,7 +37,7 @@ public class Dirt extends Plantable
     }
 
     @Override
-    public boolean planted() 
+    public boolean planted(Rectangle rectangle) 
     {
         return false;
     }

@@ -1,5 +1,6 @@
 package game.plantable.item;
 
+import engine.Rectangle;
 import engine.RenderHandler;
 import game.GameFrame;
 import game.data.ItemData;
@@ -16,7 +17,7 @@ public abstract class Item extends Plantable
     public abstract void activate(Crop crop);
 
     @Override
-    public boolean planted() 
+    public boolean planted(Rectangle rectangle) 
     {
         return false;
     }

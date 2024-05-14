@@ -5,13 +5,9 @@ import game.plantable.crop.Crop;
 
 public class WaterBuff extends Item
 {
-
-    private double waterRequirementMultiplier;
-
-    public WaterBuff(ItemData data, double waterRequirementMultiplier) 
+    public WaterBuff(ItemData data) 
     {
         super(data);
-        this.waterRequirementMultiplier = waterRequirementMultiplier;
     }
 
     @Override
@@ -20,7 +16,6 @@ public class WaterBuff extends Item
         // Khi WaterBuff được kích hoạt, giảm nhu cầu nước của cây
         //
         crop.getBuff();
-        System.out.println("WaterBuff activated! Water requirement decreased by " + (waterRequirementMultiplier * 100) + "%.");
     }
     
 }

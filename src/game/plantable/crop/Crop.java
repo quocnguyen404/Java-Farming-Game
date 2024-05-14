@@ -30,19 +30,28 @@ public abstract class Crop extends Plantable
     }
 
     @Override
-    public  boolean planted()
+    public boolean planted()
     {
+        if(rect != null) {
+            return true;
+        }
         return false;
     }
 
     @Override
     public  boolean remove()
     {
+        if(rect != null) {
+            return true;
+        }
         return false;
     }
 
-    public void watering()
+    public void watering(int waterAmount)
     {
+        if(waterLeft > 0) {
+            waterLeft -= waterAmount;
+        }
     }
 
     public void getBuff()
@@ -52,7 +61,7 @@ public abstract class Crop extends Plantable
 
     private void grow()
     {
-
+        
     }
 
     abstract protected void specialAbility();
@@ -60,7 +69,10 @@ public abstract class Crop extends Plantable
     @Override
     public void update(GameFrame game)
     {
-        anim.update(game);
+        if(waterLeft <= 0) {
+            grow();
+        }
+        
     }
 
     @Override

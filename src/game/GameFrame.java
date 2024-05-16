@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.lang.Runnable;
+import java.util.LinkedList;
 
 import javax.swing.JFrame;
 
@@ -13,6 +14,7 @@ import game.component.FarmingSystem;
 import game.component.ShopingSystem;
 import game.data.ConfigDataHelper;
 import game.data.Sprites.SpriteID;
+import game.plantable.Plantable;
 
 public class GameFrame extends JFrame implements Runnable
 {
@@ -217,10 +219,6 @@ public class GameFrame extends JFrame implements Runnable
         mouseIndicator.releaseMouse(successBuy);
     }
 
-
-    //render everything
-   
-
     public KeyboardListener getKeyboardListener()
     {
         return keyboardListener;
@@ -261,6 +259,4 @@ public class GameFrame extends JFrame implements Runnable
             lastTime = currentTime;
         }
     }
-
-
 }

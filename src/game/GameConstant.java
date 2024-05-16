@@ -19,6 +19,7 @@ public final class GameConstant
     public static final int BACKGROUND_COLOR = 0xCCE2D2;
     public static final int PLANT_NUMBER = 2;
     public static final int REGION_OFFSET = 6;
+    public static final int OBJECT_EXIST_TIME = 10;
 
     private GameConstant()
     {

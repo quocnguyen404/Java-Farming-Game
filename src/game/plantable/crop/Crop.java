@@ -45,9 +45,8 @@ public abstract class Crop extends Plantable
 
     public void watering(int waterAmount)
     {
-        if(waterLeft > 0) {
+        if(waterLeft > 0)
             waterLeft -= waterAmount;
-        }
     }
 
     public void getBuff()
@@ -57,14 +56,15 @@ public abstract class Crop extends Plantable
 
     private void grow()
     {
-        
         if(anim.isLastSprite()) {
             System.out.println("This is the last sprite!");
+
             return;
         }
 
         counter++;
-        if(counter >= ((CropData) getPlantableData()).getGrowTime() * 60) {
+        if(counter >= ((CropData) getPlantableData()).getGrowTime() * 60) 
+        {
             anim.incrementSprite();
             counter = 0;
         }
@@ -72,11 +72,11 @@ public abstract class Crop extends Plantable
     }
 
     abstract protected void specialAbility();
-
     @Override
     public void update(GameFrame game)
     {
-        grow();
+        if (waterLeft <= 0)
+            grow();
     }
 
     @Override

@@ -19,6 +19,7 @@ public class AnimatedSprite
         this.sprites = sprites;
         this.speed = speed;
         setAnimationRange(0, sprites.length);
+        currentSprite = startSprite;
         
     }
 
@@ -50,15 +51,26 @@ public class AnimatedSprite
         }
     }
 
-    public boolean isLastSprite() {
+    public boolean isLastSprite() 
+    {
         return isFinalSprite;
     }
 
     public void incrementSprite()
     {
+        if (isFinalSprite) return;
         if (currentSprite < startSprite)
             currentSprite = startSprite;
-       if(currentSprite == endSprite) isFinalSprite = true;
-       else if(currentSprite < endSprite) currentSprite++;
+       if(currentSprite == endSprite-1)
+       {
+            isFinalSprite = true;
+            // currentSprite = endSprite-1;
+            System.out.println("Current sprite: " + currentSprite);
+       }
+       else if(currentSprite < endSprite)
+       {
+            currentSprite++;
+            System.out.println("Is on sprite: " + currentSprite);
+       }
     }
 }

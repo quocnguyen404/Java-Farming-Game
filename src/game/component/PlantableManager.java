@@ -20,15 +20,27 @@ public class PlantableManager extends Component
         enities = new LinkedList<PlantableEnity>();
     }
 
-    public void addPlantableEnity(Plantable plantable, int xPos, int yPos)
+    public void addPlantable(Plantable plantable)
     {
-        PlantableEnity enity = new PlantableEnity(plantable, xPos, yPos);
+        PlantableEnity enity = new PlantableEnity(plantable);
         enities.add(enity);
     }
 
-    public void removePlantalbeEntity(PlantableEnity plantable)
+    public void removePlantable(PlantableEnity plantable)
     {
         enities.remove(plantable);
+    }
+
+    @Override
+    public boolean mouseDragged(Rectangle mouseRectangle, Rectangle camRectangle, int xZoom, int yZoom) 
+    {
+        boolean isDragged = false;
+        for (PlantableEnity enity : enities) 
+        {
+            isDragged = enity.mouseDragged(mouseRectangle, camRectangle, xZoom, yZoom);
+            if(isDragged) return true;
+        }
+        return false;
     }
 
     @Override
@@ -40,6 +52,7 @@ public class PlantableManager extends Component
     public void render(RenderHandler renderer, int xZoom, int yZoom) 
     {
         super.render(renderer, xZoom, yZoom);
+        for (PlantableEnity enity : enities) enity.render(renderer, xZoom, yZoom);                
     }
 
     @Override
@@ -55,20 +68,18 @@ public class PlantableManager extends Component
     {
         private int counter;
         private Plantable plantable;
-        private int x, y;
 
-        public PlantableEnity(Plantable plantable, int x, int y)
+        public PlantableEnity(Plantable plantable)
         {
             this.plantable = plantable;
             counter = GameConstant.OBJECT_EXIST_TIME*60;
-            this.x = x;
-            this.y = y;
         }
 
         @Override
         public void render(RenderHandler renderer, int xZoom, int yZoom) 
         {
             // TODO rendering on screen
+            plantable.render(renderer, xZoom, yZoom);
         }
 
         @Override
@@ -78,20 +89,8 @@ public class PlantableManager extends Component
             counter--;
             if(counter == 0)
             {
-                removePlantalbeEntity(this);
+                removePlantable(this);
             }
-        }
-
-        @Override
-        public boolean leftMouseClick(Rectangle mouseRectangle, Rectangle camera, int xZoom, int yZoom)
-        {
-            return false;
-        }
-
-        @Override
-        public boolean rightMouseClick(Rectangle mouseRectangle, Rectangle camera, int xZoom, int yZoom) 
-        {
-            return false;
         }
 
         @Override
@@ -104,6 +103,18 @@ public class PlantableManager extends Component
         public boolean mouseDragged(Rectangle mouseRectangle, Rectangle camRectangle, int xZoom, int yZoom) 
         {
             // TODO mouse drag this entity
+            return plantable.mouseDragged(mouseRectangle, camRectangle, xZoom, yZoom);
+        }
+
+        @Override
+        public boolean leftMouseClick(Rectangle mouseRectangle, Rectangle camera, int xZoom, int yZoom)
+        {
+            return false;
+        }
+
+        @Override
+        public boolean rightMouseClick(Rectangle mouseRectangle, Rectangle camera, int xZoom, int yZoom) 
+        {
             return false;
         }
 

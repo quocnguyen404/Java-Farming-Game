@@ -4,13 +4,15 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.lang.Runnable;
-import java.util.LinkedList;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import javax.swing.JFrame;
 
 import engine.*;
 import game.component.Component;
 import game.component.FarmingSystem;
+import game.component.PlantableManager;
 import game.component.ShopingSystem;
 import game.data.ConfigDataHelper;
 import game.data.Sprites.SpriteID;
@@ -18,24 +20,16 @@ import game.plantable.Plantable;
 
 public class GameFrame extends JFrame implements Runnable
 {
-    //game zoom
+    //game zoom/scale
     public static int X_ZOOM = 3;
     public static int Y_ZOOM = 3;
 
     private Canvas canvas;
     private RenderHandler renderer;
-
-    //GameObject array
-    // private GameObject[] gameObjects;
     //Component array
     private Component[] components;
     private MouseIndicator mouseIndicator;
     private TagIndicator tagIndicator;
-
-    //animated test
-    // private AnimatedSprite testAnim;
-    // private AnimatedSprite testAnim1;
-
     //KeyboardListener
     private KeyboardListener keyboardListener = new KeyboardListener(this);
     //MouseEventListener
@@ -43,6 +37,7 @@ public class GameFrame extends JFrame implements Runnable
     //Background color
     private Rectangle background;
 
+    public static Consumer<Plantable> onGetGrowPlant;
     //constructor
     public GameFrame()
     { 
@@ -68,24 +63,13 @@ public class GameFrame extends JFrame implements Runnable
         background = new Rectangle(0, 0, getWidth(), getHeight());
         background.generateGraphics(GameConstant.BACKGROUND_COLOR);
         
-        // //load game object for update and render
-        // gameObjects = new GameObject[1];
-        // player = new Player();
-        // gameObjects[0] = player;
-
-        //animated test
-        // Sprite[] onion = ConfigDataHelper.getInstance().getAnimtedSprite(AnimationID.ONION);
-        // Sprite[] potato = ConfigDataHelper.getInstance().getAnimtedSprite(AnimationID.POTATO);
-        // testAnim = new AnimatedSprite(onion, 60);
-        // testAnim1 = new AnimatedSprite(potato, 60);
-
-        
         //indicator                
         mouseIndicator = new MouseIndicator(null);
         tagIndicator = new TagIndicator(new Rectangle(0, 0, GameConstant.WIN_WIDTH - GameConstant.TILE_WIDTH, GameConstant.TILE_HEIGHT*Y_ZOOM));
         // tagIndicator.setMessage("Hello");
         tagIndicator.setGold(ConfigDataHelper.getInstance().getPlayerGold());
         
+        //initialize component
         FarmingSystem.onPlantedSeed = mouseIndicator::getData;
         ShopingSystem.onSellCrop = mouseIndicator::getData;
         ShopingSystem.onBuySeed = (p) ->
@@ -100,11 +84,14 @@ public class GameFrame extends JFrame implements Runnable
             tagIndicator.setMessage(message);
             tagIndicator.setGold(p.getBuyPrice());
         };
-        
-        components = new Component[2];
+
+        PlantableManager plantableManager = new PlantableManager(null, 0);
+        onGetGrowPlant = plantableManager::addPlantable;
+
+        components = new Component[3];
         components[0] = new FarmingSystem(new Rectangle(), GameConstant.TILE_HEIGHT*Y_ZOOM);
         components[1] = new ShopingSystem(new Rectangle(0, GameConstant.TILE_HEIGHT*Y_ZOOM+1, 0, 0), GameConstant.TILE_HEIGHT*Y_ZOOM+1);
-
+        components[2] = plantableManager;
         mouseRect.generateGraphics(1, 0xFFFFFF);
 
         //set up canvas
@@ -117,16 +104,8 @@ public class GameFrame extends JFrame implements Runnable
     //update function run 60 time per second
     public void update()
     {
-        // for (GameObject obj : gameObjects)
-        //     obj.update(this);
-        // mouseIndicator.update(this);
-
         for (Component component : components)
             component.update(this);
-        
-
-        // testAnim.update(this);
-        // testAnim1.update(this);
     }
 
     public void render()
@@ -136,20 +115,8 @@ public class GameFrame extends JFrame implements Runnable
 
         renderer.renderRectangle(background, 1, 1, true);
 
-        // for (GameObject obj : gameObjects)
-        //     obj.render(renderer, X_ZOOM, Y_ZOOM);
-
         for (Component component : components) 
             component.render(renderer, X_ZOOM, Y_ZOOM);
-        
-        //test sprite
-        // int count = 0;
-        // for (SpriteID spriteID : SpriteID.values()) 
-        // {
-        //     if (spriteID != SpriteID.REGION)
-        //         renderer.renderSprite(spriteID, GameConstant.TILE_WIDTH*count*X_ZOOM, GameConstant.TILE_HEIGHT, X_ZOOM, Y_ZOOM, false);
-        //     count++;
-        // }
 
         tagIndicator.render(renderer, X_ZOOM, Y_ZOOM);
         mouseIndicator.render(renderer, X_ZOOM, Y_ZOOM);
@@ -201,9 +168,15 @@ public class GameFrame extends JFrame implements Runnable
 
     public void mouseDragged(int x, int y)
     {
-        // mouseIndicator.setPosition(x, y);
         mouseRect.setPosition(x, y);
         mouseIndicator.setPosition(x, y);
+
+        boolean isDragged = false;
+        for (Component component : components) 
+        {
+            isDragged = component.mouseDragged(mouseRect, background, x, y);
+            // if(isDragged) break;
+        }
     }
 
     public void mouseDraggedExit(int x, int y)

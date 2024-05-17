@@ -54,11 +54,7 @@ public class MouseEventListener implements MouseListener, MouseMotionListener
     @Override
     public void mouseReleased(MouseEvent e) 
     {
-
-        if (mouseDragged == true)
-        {
-            game.mouseDraggedExit(e.getX(), e.getY());
-        }
+        if (mouseDragged == true) game.mouseDraggedExit(e.getX(), e.getY());
 
         mouseDragged = false;
     }

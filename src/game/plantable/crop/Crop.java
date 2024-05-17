@@ -1,5 +1,7 @@
 package game.plantable.crop;
 
+import java.util.function.Consumer;
+
 import engine.AnimatedSprite;
 import engine.Rectangle;
 import engine.RenderHandler;
@@ -8,20 +10,27 @@ import game.GameFrame;
 import game.Helper;
 import game.data.CropData;
 import game.data.Sprites.AnimationID;
+import game.data.Sprites.SpriteID;
 import game.plantable.Plantable;
 
 public abstract class Crop extends Plantable
 {
+    public Consumer<Crop> onCropGrow;
     private Rectangle rect;
     private AnimatedSprite anim;
+    private SpriteID icon;
     private int counter = 0;
     private int waterLeft;
+    private boolean isRipe;
 
     public Crop(CropData plant)
     {
         super(plant);
+        //TODO 
+        // waterLeft = plant.getWaterDrop();
         Sprite[] sprites = Helper.getAnimatedSprite(AnimationID.valueOf(plant.getName()));
         anim = new AnimatedSprite(sprites, plant.getGrowTime());
+        icon = SpriteID.valueOf(plant.getName());
     }
 
     public void setPosition(Rectangle rect)
@@ -54,11 +63,26 @@ public abstract class Crop extends Plantable
         
     }
 
+    public void cancelSelling()
+    {
+        rect.setPosition(defaultRect.x, defaultRect.y);
+    }
+
+    private Rectangle defaultRect;
+    public void growRipe(Rectangle newRect)
+    {
+        setPosition(newRect);
+        defaultRect = new Rectangle(newRect.x, newRect.y, 0, 0);
+        isRipe = true;
+        anim = null;
+    }
+
     private void grow()
     {
-        if(anim.isLastSprite()) {
-            System.out.println("This is the last sprite!");
-
+        if(anim.isLastSprite()) 
+        {
+            onCropGrow.accept(this);
+            System.out.println(getPlantableData().getName() + " grow");
             return;
         }
 
@@ -68,21 +92,38 @@ public abstract class Crop extends Plantable
             anim.incrementSprite();
             counter = 0;
         }
-
     }
 
     abstract protected void specialAbility();
+
+    @Override
+    public boolean mouseDragged(Rectangle mouseRectangle, Rectangle camRectangle, int xZoom, int yZoom) 
+    {
+        if (!isRipe) return false;
+
+        if(rect.intersects(mouseRectangle))
+        {
+            rect.setPosition(mouseRectangle.x, mouseRectangle.y);
+            return true;
+        }
+
+        return false;
+    }
+
     @Override
     public void update(GameFrame game)
     {
-        if (waterLeft <= 0)
+        if (waterLeft <= 0 && !isRipe)
             grow();
     }
 
     @Override
-    public void render(RenderHandler renderer, int xZoom, int yZoom) 
+    public void render(RenderHandler renderer, int xZoom, int yZoom)
     {
         if (rect != null)
-            anim.render(renderer, rect.x, rect.y, xZoom, yZoom, false);
+        {
+            if (anim != null) anim.render(renderer, rect.x, rect.y, xZoom, yZoom, false);
+            else renderer.renderSprite(icon, rect.x, rect.y, xZoom, yZoom, false);
+        }
     }
 }

@@ -97,6 +97,7 @@ public class Region implements HandleMouseEvent
                 else if (cell.isDigged() && cell.isEmpty())
                 {
                     Crop crop = (Crop) plantable;
+                    crop.onCropGrow = cell::cropGrow;
                     crop.setPosition(cell.rect);
                     cell.planted(crop);
                     return true;
@@ -137,6 +138,14 @@ public class Region implements HandleMouseEvent
         {
             this.dirt = dirt;
             this.dirt.setRectangle(rect);
+        }
+
+        public void cropGrow(Crop crop)
+        {
+            GameFrame.onGetGrowPlant.accept(crop);
+            crop.growRipe(new Rectangle(rect.x, rect.y, rect.w, rect.h));
+            this.crop = null;
+            this.dirt = null;
         }
 
         public void planted(Crop crop)

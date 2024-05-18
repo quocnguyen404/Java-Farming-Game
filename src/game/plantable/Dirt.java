@@ -19,6 +19,22 @@ public class Dirt extends Plantable
         animatedSprite = new AnimatedSprite(Helper.getAnimatedSprite(AnimationID.DIRT), 60);
     }
 
+    public void watering(int waterLeft)
+    {
+        if(animatedSprite.isLastSprite()) return;
+        animatedSprite.incrementSprite();
+        if(waterLeft <= 0)
+        {
+            while(!animatedSprite.isLastSprite()) animatedSprite.incrementSprite();
+            return;
+        }
+    }
+
+    public void reset()
+    {
+        animatedSprite.reset();
+    }
+
     public void setRectangle(Rectangle rect)
     {
         this.rect = rect;
@@ -33,7 +49,7 @@ public class Dirt extends Plantable
     @Override
     public void update(GameFrame game) 
     {
-        animatedSprite.update(game);
+        // animatedSprite.update(game);
     }
 
     @Override

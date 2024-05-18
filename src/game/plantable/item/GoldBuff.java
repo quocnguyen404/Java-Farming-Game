@@ -13,9 +13,8 @@ public class GoldBuff extends Item
     @Override
     public void activate(Crop crop)
     {
-        // Khi GoldBuff được kích hoạt, tăng hiệu suất sản xuất của cây
-        //
-        crop.getBuff();
+        // Khi GoldBuff được kích hoạt, tăng sellprice của cây
+        crop.getGoldBuff(getItemData().getBuffAmount());;
     }
 
 }

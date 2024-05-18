@@ -27,6 +27,7 @@ public class AnimatedSprite
     {
         counter = 0;
         currentSprite = startSprite;
+        isFinalSprite = false;
     }
 
     public void setAnimationRange(int startSprite, int endSprite)

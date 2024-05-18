@@ -7,6 +7,7 @@ import engine.RenderHandler;
 import game.GameConstant;
 import game.GameFrame;
 import game.data.CropData;
+import game.data.ItemData;
 import game.data.PlantableData;
 import game.plantable.Dirt;
 import game.plantable.Plantable;
@@ -14,6 +15,10 @@ import game.plantable.crop.Crop;
 import game.plantable.crop.FoodCrop;
 import game.plantable.crop.FruitCrop;
 import game.plantable.crop.OilCrop;
+import game.plantable.item.GoldBuff;
+import game.plantable.item.Item;
+import game.plantable.item.TimeBuff;
+import game.plantable.item.WaterBuff;
 
 public class FarmingSystem extends Component
 {
@@ -36,6 +41,27 @@ public class FarmingSystem extends Component
         PlantableData data = onPlantedSeed.get();
         if (data == null) return null;
         if (data.getName().equals("PLANT_HOLE")) return new Dirt(data);
+
+        if (data instanceof ItemData)
+        {
+            Item item;
+            ItemData itemData = (ItemData) data;
+            switch (itemData.getModify()) {
+                case 0: //Gold buff
+                    item = new GoldBuff(itemData);
+                    break;
+                case 1: //Water buff
+                    item = new WaterBuff(itemData);
+                    break;
+                case 2: //Time buff
+                    item = new TimeBuff(itemData);
+                    break;
+                default:
+                    item = new WaterBuff(itemData);
+            }
+            return item;
+        }
+        
 
         Crop crop;
         CropData cropData = (CropData) data;

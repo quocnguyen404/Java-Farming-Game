@@ -13,6 +13,7 @@ import game.data.Sprites.SpriteID;
 import game.plantable.Dirt;
 import game.plantable.Plantable;
 import game.plantable.crop.Crop;
+import game.plantable.item.Item;
 
 public class Region implements HandleMouseEvent
 {
@@ -94,15 +95,25 @@ public class Region implements HandleMouseEvent
                     cell.dig((Dirt) plantable);
                     return true;
                 }
-                else if (cell.isDigged() && cell.isEmpty())
+                else if (plantable instanceof Crop)
                 {
+                    if (!cell.isDigged() || !cell.isEmpty()) return false;
                     Crop crop = (Crop) plantable;
                     crop.onCropGrow = cell::cropGrow;
                     crop.setPosition(cell.rect);
                     cell.planted(crop);
+                    crop.onWatering = cell.dirt::watering;
                     return true;
                 }
- 
+                if (plantable instanceof Item)
+                {
+                    if (!cell.isEmpty())
+                    {
+                        Item item = (Item)plantable;
+                        item.activate(cell.crop);
+                        return true;
+                    }
+                }
             }
         }
         return false;
@@ -116,6 +127,7 @@ public class Region implements HandleMouseEvent
         private Rectangle rect;
         private Crop crop;
         private Dirt dirt;
+        private int counter = 0;
 
         public RegionCell(Rectangle rect)
         {
@@ -145,7 +157,7 @@ public class Region implements HandleMouseEvent
             GameFrame.onGetGrowPlant.accept(crop);
             crop.growRipe(new Rectangle(rect.x, rect.y, rect.w, rect.h));
             this.crop = null;
-            this.dirt = null;
+            this.dirt.reset();
         }
 
         public void planted(Crop crop)
@@ -161,7 +173,16 @@ public class Region implements HandleMouseEvent
         public void update(GameFrame game)
         {
             if (crop != null) crop.update(game);
-            if (dirt != null) dirt.update(game);
+            if (dirt != null) 
+            {
+                dirt.update(game);
+                if(isEmpty()) counter++;
+                if(isEmpty() && counter >= 60*60)
+                {
+                    dirt = null;
+                    counter = 0;
+                }
+            }
         }
 
         public void render(RenderHandler renderer, int xZoom, int yZoom)

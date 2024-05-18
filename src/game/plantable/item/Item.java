@@ -15,6 +15,10 @@ public abstract class Item extends Plantable
     }
 
     public abstract void activate(Crop crop);
+    public ItemData getItemData()
+    {
+        return (ItemData) getPlantableData();
+    }
 
     @Override
     public boolean planted(Rectangle rectangle) 
@@ -38,5 +42,12 @@ public abstract class Item extends Plantable
     public void render(RenderHandler renderer, int xZoom, int yZoom) 
     {
         
+    }
+
+    @Override
+    public boolean mouseDraggedExit(Rectangle mousRectangle, Rectangle camRectangle, int xZoom, int yZoom) 
+    {
+        // TODO Auto-generated method stub
+        return super.mouseDraggedExit(mousRectangle, camRectangle, xZoom, yZoom);
     }
 }

@@ -8,6 +8,7 @@ import engine.RenderHandler;
 import engine.Sprite;
 import game.GameFrame;
 import game.Helper;
+import game.component.SellingCell;
 import game.data.CropData;
 import game.data.Sprites.AnimationID;
 import game.data.Sprites.SpriteID;
@@ -16,6 +17,7 @@ import game.plantable.Plantable;
 public abstract class Crop extends Plantable
 {
     public Consumer<Crop> onCropGrow;
+    public Consumer<Integer> onWatering;
     private Rectangle rect;
     private AnimatedSprite anim;
     private SpriteID icon;
@@ -23,16 +25,18 @@ public abstract class Crop extends Plantable
     private int waterLeft;
     private boolean isRipe;
     private int buffGold;
+    private int buffTime;
 
     public Crop(CropData plant)
     {
         super(plant);
         //TODO 
-        // waterLeft = plant.getWaterDrop();
+        waterLeft = plant.getWaterDrop();
         Sprite[] sprites = Helper.getAnimatedSprite(AnimationID.valueOf(plant.getName()));
         anim = new AnimatedSprite(sprites, plant.getGrowTime());
         icon = SpriteID.valueOf(plant.getName());
         buffGold = 0;
+        buffTime = 0;
     }
 
     public void setPosition(Rectangle rect)
@@ -57,13 +61,27 @@ public abstract class Crop extends Plantable
     public void watering(int waterAmount)
     {
         if(waterLeft > 0)
+        {
             waterLeft -= waterAmount;
+            onWatering.accept(waterLeft);
+        }
     }
 
-    public void getBuff()
+    public void getGoldBuff(int buffGold)
     {
-        
+        this.buffGold+=buffGold;
     }
+
+    public void getWaterBuff(int waterBuff)
+    {
+        watering(waterBuff);
+    }
+
+    public void getTimeBuff(int timeBuff)
+    {
+        buffTime += timeBuff;
+    }
+
 
     public int getSellingPrice()
     {
@@ -87,7 +105,7 @@ public abstract class Crop extends Plantable
         }
 
         counter++;
-        if(counter >= ((CropData) getPlantableData()).getGrowTime() * 60) 
+        if(counter >= (((CropData) (getPlantableData())).getGrowTime()-buffTime) * 60)
         {
             anim.incrementSprite();
             counter = 0;
@@ -101,6 +119,7 @@ public abstract class Crop extends Plantable
     public boolean mouseDragged(Rectangle mouseRectangle, Rectangle camRectangle, int xZoom, int yZoom) 
     {
         if (!isRipe) return false;
+        if(!SellingCell.onGetSellingModify.get()) return false;
         
         if(rect.intersects(mouseRectangle))
         {

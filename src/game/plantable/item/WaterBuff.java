@@ -14,8 +14,7 @@ public class WaterBuff extends Item
     public void activate(Crop crop) 
     {
         // Khi WaterBuff được kích hoạt, giảm nhu cầu nước của cây
-        //
-        crop.getBuff();
+        crop.getWaterBuff(getItemData().getBuffAmount());
     }
     
 }

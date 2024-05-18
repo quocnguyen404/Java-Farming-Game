@@ -40,7 +40,6 @@ public class MouseIndicator implements GameObject
 
     public void sellingCrop(Crop crop)
     {
-        isSelling = true;
         sellingCrop = crop;
         setSprite(SpriteID.valueOf(crop.getPlantableData().getName()));
         // ConfigDataHelper.getInstance().
@@ -74,6 +73,7 @@ public class MouseIndicator implements GameObject
         isVisible = false;
         if (!success && !isSelling && data != null)
             ConfigDataHelper.getInstance().cancelBuy(data);
+        isSelling = true;
         data = null;
     }
 

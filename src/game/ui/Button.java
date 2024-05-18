@@ -10,6 +10,7 @@ public class Button<T> extends GUIButton
 {
     private Consumer<T> onClick = null;
     private Consumer<T> onHover = null;
+    private Runnable onExitHover = null;
     private T data;
 
     public Button(SpriteID spriteID, Rectangle rect, T data, boolean genRect) 
@@ -28,6 +29,11 @@ public class Button<T> extends GUIButton
         this.onHover = onHover;
     }
 
+    public void addExitHover(Runnable onExitHover)
+    {
+        this.onExitHover = onExitHover;
+    }
+
 
     @Override
     public void activate() 
@@ -43,5 +49,13 @@ public class Button<T> extends GUIButton
         if (onHover == null) return;
         onHover.accept(data);
         System.out.println("On hover: " + data);
+    }
+
+    @Override
+    public void existHover()
+    {
+        if(onExitHover == null) return;
+        onExitHover.run();
+        System.out.println("On exit hover: " + data);
     }
 }

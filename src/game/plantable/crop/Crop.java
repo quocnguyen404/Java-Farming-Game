@@ -22,6 +22,7 @@ public abstract class Crop extends Plantable
     private int counter = 0;
     private int waterLeft;
     private boolean isRipe;
+    private int buffGold;
 
     public Crop(CropData plant)
     {
@@ -31,6 +32,7 @@ public abstract class Crop extends Plantable
         Sprite[] sprites = Helper.getAnimatedSprite(AnimationID.valueOf(plant.getName()));
         anim = new AnimatedSprite(sprites, plant.getGrowTime());
         icon = SpriteID.valueOf(plant.getName());
+        buffGold = 0;
     }
 
     public void setPosition(Rectangle rect)
@@ -63,16 +65,14 @@ public abstract class Crop extends Plantable
         
     }
 
-    public void cancelSelling()
+    public int getSellingPrice()
     {
-        rect.setPosition(defaultRect.x, defaultRect.y);
+        return buffGold + ((CropData)getPlantableData()).getSellPrice();
     }
 
-    private Rectangle defaultRect;
     public void growRipe(Rectangle newRect)
     {
         setPosition(newRect);
-        defaultRect = new Rectangle(newRect.x, newRect.y, 0, 0);
         isRipe = true;
         anim = null;
     }
@@ -96,17 +96,36 @@ public abstract class Crop extends Plantable
 
     abstract protected void specialAbility();
 
+    private boolean onDrag = false;
     @Override
     public boolean mouseDragged(Rectangle mouseRectangle, Rectangle camRectangle, int xZoom, int yZoom) 
     {
         if (!isRipe) return false;
-
+        
         if(rect.intersects(mouseRectangle))
         {
-            rect.setPosition(mouseRectangle.x, mouseRectangle.y);
+            GameFrame.onSellingCrop.accept(this);
+            onDrag = true;
+        }
+
+        if(onDrag)
+        {
+            GameFrame.onSetMessage.accept("selling " + getPlantableData().getName().toLowerCase());
+            rect.setPosition(mouseRectangle.x-rect.w/2, mouseRectangle.y-rect.h/2);
             return true;
         }
 
+        return false;
+    }
+
+    @Override
+    public boolean mouseDraggedExit(Rectangle mousRectangle, Rectangle camRectangle, int xZoom, int yZoom) 
+    {
+        if(onDrag)
+        {
+            onDrag = false;
+            GameFrame.defaultMessage.run();
+        }
         return false;
     }
 

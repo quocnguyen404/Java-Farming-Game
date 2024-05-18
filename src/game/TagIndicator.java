@@ -90,7 +90,7 @@ public class TagIndicator implements GameObject
     {
         renderer.renderImage(messageViewport, rect.x, rect.y, 1, 1, false);
         renderer.renderImage(goldViewport, rect.x+rect.w/2, rect.y, 1, 1, false);
-        renderer.renderSprite(SpriteID.GOLD, rect.x+rect.w-GameConstant.TILE_WIDTH*xZoom*2, rect.y, xZoom, yZoom, false);
+        renderer.renderSprite(SpriteID.GOLD, rect.x+rect.w-GameConstant.TILE_WIDTH*xZoom*GameFrame.X_ZOOM, rect.y, xZoom, yZoom, false);
     }
 
     @Override

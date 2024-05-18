@@ -8,7 +8,7 @@ import engine.Rectangle;
 import engine.RenderHandler;
 import game.GameConstant;
 import game.GameFrame;
-import game.plantable.Plantable;
+import game.plantable.crop.Crop;
 
 public class PlantableManager extends Component
 {
@@ -20,15 +20,26 @@ public class PlantableManager extends Component
         enities = new LinkedList<PlantableEnity>();
     }
 
-    public void addPlantable(Plantable plantable)
+    public void addPlantable(Crop crop)
     {
-        PlantableEnity enity = new PlantableEnity(plantable);
+        PlantableEnity enity = new PlantableEnity(crop);
         enities.add(enity);
     }
 
-    public void removePlantable(PlantableEnity plantable)
+    public void removePlantable(PlantableEnity enity)
     {
-        enities.remove(plantable);
+        enities.remove(enity);
+    }
+
+    public void removeCrop(Crop crop)
+    {
+        for (PlantableEnity enity : enities) {
+            if(crop.equals(enity.getCrop()))
+            {
+                removePlantable(enity);
+                break;
+            } 
+        }
     }
 
     @Override
@@ -40,6 +51,19 @@ public class PlantableManager extends Component
             isDragged = enity.mouseDragged(mouseRectangle, camRectangle, xZoom, yZoom);
             if(isDragged) return true;
         }
+        return false;
+    }
+
+    @Override
+    public boolean mouseDraggedExit(Rectangle mousRectangle, Rectangle camRectangle, int xZoom, int yZoom) 
+    {
+        boolean onDrag = false;
+        for (PlantableEnity enity : enities)
+        {
+            onDrag = enity.mouseDraggedExit(mousRectangle, camRectangle, xZoom, yZoom);
+            if(onDrag) return true;
+        }
+
         return false;
     }
 
@@ -67,19 +91,24 @@ public class PlantableManager extends Component
     public class PlantableEnity implements GameObject, HandleMouseEvent
     {
         private int counter;
-        private Plantable plantable;
+        private Crop crop;
 
-        public PlantableEnity(Plantable plantable)
+        public PlantableEnity(Crop crop)
         {
-            this.plantable = plantable;
+            this.crop = crop;
             counter = GameConstant.OBJECT_EXIST_TIME*60;
+        }
+
+        public Crop getCrop() 
+        {
+            return crop;
         }
 
         @Override
         public void render(RenderHandler renderer, int xZoom, int yZoom) 
         {
             // TODO rendering on screen
-            plantable.render(renderer, xZoom, yZoom);
+            crop.render(renderer, xZoom, yZoom);
         }
 
         @Override
@@ -94,16 +123,17 @@ public class PlantableManager extends Component
         }
 
         @Override
-        public void mouseHover(Rectangle mouseRectangle, Rectangle camRectangle, int xZoom, int yZoom) 
+        public boolean mouseHover(Rectangle mouseRectangle, Rectangle camRectangle, int xZoom, int yZoom) 
         {
             //TODO display name and sell price
+            return false;
         }
 
         @Override
         public boolean mouseDragged(Rectangle mouseRectangle, Rectangle camRectangle, int xZoom, int yZoom) 
         {
             // TODO mouse drag this entity
-            return plantable.mouseDragged(mouseRectangle, camRectangle, xZoom, yZoom);
+            return crop.mouseDragged(mouseRectangle, camRectangle, xZoom, yZoom);
         }
 
         @Override
@@ -122,7 +152,7 @@ public class PlantableManager extends Component
         public boolean mouseDraggedExit(Rectangle mousRectangle, Rectangle camRectangle, int xZoom, int yZoom) 
         {
             // TODO drop on the selling cell in shopping system
-            return false;
+            return crop.mouseDraggedExit(mousRectangle, camRectangle, xZoom, yZoom);
         }
     }
 }

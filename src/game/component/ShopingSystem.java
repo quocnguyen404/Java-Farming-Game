@@ -56,7 +56,7 @@ public class ShopingSystem extends Component
         ButtonAct sellBtn = new ButtonAct(SpriteID.GREEN1_SQUARE, new Rectangle(0, rect.y, btnW, btnH), false);
         //init selling cell
 
-        sellingCell = new SellingCell(new Rectangle(0, rect.y + offset, GameConstant.TILE_WIDTH, GameConstant.TILE_HEIGHT), onSellCrop);
+        sellingCell = new SellingCell(new Rectangle(0, rect.y + offset, GameConstant.TILE_WIDTH*GameFrame.X_ZOOM, GameConstant.TILE_HEIGHT*GameFrame.Y_ZOOM));
 
         //TODO add sell action
         sellBtn.addClickListener(null);
@@ -77,6 +77,7 @@ public class ShopingSystem extends Component
                                                                  true);
             btn.addClickListener(this::buyPlant);
             btn.addHoverListener(onHoverSeed);
+            btn.addExitHover(GameFrame.defaultMessage);
             // btn.ad
             btns[count] = btn;
             count++;
@@ -93,7 +94,7 @@ public class ShopingSystem extends Component
     public void render(RenderHandler renderer, int xZoom, int yZoom) 
     {
         super.render(renderer, xZoom, yZoom);
-        sellingCell.render(renderer, xZoom, yZoom);
+        sellingCell.render(renderer, 1, 1);
     }
 
     @Override
@@ -103,8 +104,14 @@ public class ShopingSystem extends Component
     }
 
     @Override
-    public void mouseHover(Rectangle mouseRectangle, Rectangle camRectangle, int xZoom, int yZoom) 
+    public boolean mouseHover(Rectangle mouseRectangle, Rectangle camRectangle, int xZoom, int yZoom) 
     {
-        for (GUI gui : guis) gui.mouseHover(mouseRectangle, camRectangle, xZoom, yZoom);
+        boolean isHover = false;
+        for (GUI gui : guis)
+        {
+            isHover = gui.mouseHover(mouseRectangle, camRectangle, xZoom, yZoom);
+            if(isHover) break;
+        } 
+        return isHover;
     }
 }

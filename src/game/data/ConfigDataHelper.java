@@ -12,8 +12,10 @@ import java.util.Scanner;
 import engine.Sprite;
 import engine.SpriteSheet;
 import game.GameConstant;
+import game.GameFrame;
 import game.data.Sprites.AnimationID;
 import game.data.Sprites.SpriteID;
+import game.plantable.crop.Crop;
 
 //singleton
 public final class ConfigDataHelper
@@ -125,11 +127,20 @@ public final class ConfigDataHelper
         if (plantable.getBuyPrice() <= playerData.gold)
         {
             playerData.gold -= plantable.getBuyPrice();
-            System.out.println("Buying " + plantable.getName() + ": " + plantable.getBuyPrice() + " gold");
+            String name = plantable.getName().toLowerCase().replaceAll("_", " ");
+            GameFrame.onSetMessage.accept("buying " + name);
             return true;
         }
-        System.out.println("Not enough money");
+        GameFrame.onSetMessage.accept("not enough money");
         return false;
+    }
+
+    public boolean sellingCrop(Crop crop)
+    {
+        if (crop == null) return false;
+        playerData.gold += crop.getSellingPrice();
+        GameFrame.defaultMessage.run();
+        return true;
     }
 
     public void cancelBuy(PlantableData plantableData)

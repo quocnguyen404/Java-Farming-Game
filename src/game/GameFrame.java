@@ -5,7 +5,6 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.lang.Runnable;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 import javax.swing.JFrame;
 
@@ -13,10 +12,10 @@ import engine.*;
 import game.component.Component;
 import game.component.FarmingSystem;
 import game.component.PlantableManager;
+import game.component.SellingCell;
 import game.component.ShopingSystem;
 import game.data.ConfigDataHelper;
-import game.data.Sprites.SpriteID;
-import game.plantable.Plantable;
+import game.plantable.crop.Crop;
 
 public class GameFrame extends JFrame implements Runnable
 {
@@ -37,7 +36,10 @@ public class GameFrame extends JFrame implements Runnable
     //Background color
     private Rectangle background;
 
-    public static Consumer<Plantable> onGetGrowPlant;
+    public static Consumer<Crop> onGetGrowPlant;
+    public static Consumer<Crop> onSellingCrop;
+    public static Consumer<String> onSetMessage;
+    public static Runnable defaultMessage;
     //constructor
     public GameFrame()
     { 
@@ -65,17 +67,21 @@ public class GameFrame extends JFrame implements Runnable
         
         //indicator                
         mouseIndicator = new MouseIndicator(null);
+        onSellingCrop = mouseIndicator::sellingCrop;
         tagIndicator = new TagIndicator(new Rectangle(0, 0, GameConstant.WIN_WIDTH - GameConstant.TILE_WIDTH, GameConstant.TILE_HEIGHT*Y_ZOOM));
         // tagIndicator.setMessage("Hello");
-        tagIndicator.setGold(ConfigDataHelper.getInstance().getPlayerGold());
+        defaultMessage = () ->
+        {
+            tagIndicator.setGold(ConfigDataHelper.getInstance().getPlayerGold());
+            tagIndicator.setMessage("");
+        };
+        onSetMessage = tagIndicator::setMessage;
         
         //initialize component
         FarmingSystem.onPlantedSeed = mouseIndicator::getData;
-        ShopingSystem.onSellCrop = mouseIndicator::getData;
         ShopingSystem.onBuySeed = (p) ->
         {
-            mouseIndicator.setSprite(SpriteID.valueOf(p.getName()));
-            mouseIndicator.setData(p);
+            mouseIndicator.buyingCrop(p);
         };
 
         ShopingSystem.onHoverSeed = (p) -> 
@@ -88,11 +94,22 @@ public class GameFrame extends JFrame implements Runnable
         PlantableManager plantableManager = new PlantableManager(null, 0);
         onGetGrowPlant = plantableManager::addPlantable;
 
+        SellingCell.onGetSellingModify = mouseIndicator::isSelling;
+        SellingCell.onSellingCrop = () -> 
+        {
+            Crop crop = mouseIndicator.sellCrop();
+            plantableManager.removeCrop(crop);
+            ConfigDataHelper.getInstance().sellingCrop(crop);
+        };
+
         components = new Component[3];
         components[0] = new FarmingSystem(new Rectangle(), GameConstant.TILE_HEIGHT*Y_ZOOM);
         components[1] = new ShopingSystem(new Rectangle(0, GameConstant.TILE_HEIGHT*Y_ZOOM+1, 0, 0), GameConstant.TILE_HEIGHT*Y_ZOOM+1);
         components[2] = plantableManager;
         mouseRect.generateGraphics(1, 0xFFFFFF);
+
+        //run default setting
+        defaultMessage.run();
 
         //set up canvas
         canvas.addKeyListener(keyboardListener);
@@ -162,8 +179,13 @@ public class GameFrame extends JFrame implements Runnable
 
     public void mouseMoved(int x, int y)
     {
+        boolean isHover = false;
         mouseRect.setPosition(x, y);
-        for (Component component : components) component.mouseHover(mouseRect, renderer.getCamera(), X_ZOOM, Y_ZOOM);
+        for (Component component : components) 
+        {
+            isHover = component.mouseHover(mouseRect, renderer.getCamera(), X_ZOOM, Y_ZOOM);
+            if(isHover) break;
+        }
     }
 
     public void mouseDragged(int x, int y)
@@ -171,12 +193,9 @@ public class GameFrame extends JFrame implements Runnable
         mouseRect.setPosition(x, y);
         mouseIndicator.setPosition(x, y);
 
-        boolean isDragged = false;
         for (Component component : components) 
-        {
-            isDragged = component.mouseDragged(mouseRect, background, x, y);
+            component.mouseDragged(mouseRect, background, x, y);
             // if(isDragged) break;
-        }
     }
 
     public void mouseDraggedExit(int x, int y)

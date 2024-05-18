@@ -49,9 +49,9 @@ public class Dirt extends Plantable
     }
 
     @Override
-    public void mouseHover(Rectangle mouseRectangle, Rectangle camRectangle, int xZoom, int yZoom) 
+    public boolean mouseHover(Rectangle mouseRectangle, Rectangle camRectangle, int xZoom, int yZoom) 
     {
-        // TODO Auto-generated method stub
+        return false;
     }
     
 }

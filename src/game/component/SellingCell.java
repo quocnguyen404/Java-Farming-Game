@@ -1,33 +1,23 @@
 package game.component;
 
-import java.util.ArrayList;
 import java.util.function.Supplier;
 
 import engine.GameObject;
 import engine.HandleMouseEvent;
 import engine.Rectangle;
 import engine.RenderHandler;
-import game.GameConstant;
 import game.GameFrame;
-import game.data.PlantableData;
 
 public class SellingCell implements GameObject, HandleMouseEvent
 {
-    private ArrayList<PlantableData> sellingCrops;
+    public static Supplier<Boolean> onGetSellingModify;
+    public static Runnable onSellingCrop;
     private Rectangle rect;
-    private Supplier<PlantableData> onGetCrop;
 
-    public SellingCell(Rectangle rect, Supplier<PlantableData> onGetCrop)
+    public SellingCell(Rectangle rect)
     {
         this.rect = rect;
         this.rect.generateGraphics(0xFFFFFF);
-        this.onGetCrop = onGetCrop;
-        sellingCrops = new ArrayList<>();
-    }
-
-    private void reSize()
-    {
-        if (sellingCrops.size() > 1) rect.h = GameConstant.TILE_HEIGHT*sellingCrops.size();
     }
 
     @Override
@@ -43,15 +33,15 @@ public class SellingCell implements GameObject, HandleMouseEvent
     public boolean mouseDraggedExit(Rectangle mousRectangle, Rectangle camRectangle, int xZoom, int yZoom) 
     {
         //TODO implement selling cell mouse dragged exit
-        if (!this.rect.intersects(mousRectangle)) return false;
-        PlantableData crop = onGetCrop.get();
-        if (crop != null)
+        boolean isSelling = onGetSellingModify.get();
+        boolean isIntersect = rect.intersects(mousRectangle);
+        if(isIntersect && isSelling) 
         {
-            sellingCrops.add(crop);
-            reSize();
+            onSellingCrop.run();
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     @Override
@@ -61,7 +51,10 @@ public class SellingCell implements GameObject, HandleMouseEvent
     public boolean rightMouseClick(Rectangle mouseRectangle, Rectangle camera, int xZoom, int yZoom) { return false; }
 
     @Override
-    public void mouseHover(Rectangle mouseRectangle, Rectangle camRectangle, int xZoom, int yZoom) {}
+    public boolean mouseHover(Rectangle mouseRectangle, Rectangle camRectangle, int xZoom, int yZoom) 
+    {
+        return false;
+    }
 
     @Override
     public boolean mouseDragged(Rectangle mouseRectangle, Rectangle camRectangle, int xZoom, int yZoom) { return false; }

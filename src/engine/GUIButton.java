@@ -48,9 +48,9 @@ public abstract class GUIButton implements HandleMouseEvent
     //handle mouse hover
     private boolean isHover = false;
     @Override
-    public void mouseHover(Rectangle mouseRectangle, Rectangle camRectangle, int xZoom, int yZoom) 
+    public boolean mouseHover(Rectangle mouseRectangle, Rectangle camRectangle, int xZoom, int yZoom) 
     {
-        if (rect == null) return;
+        if (rect == null) return false;
         if (rect.intersects(mouseRectangle))
         {
             if (!isHover)
@@ -59,7 +59,13 @@ public abstract class GUIButton implements HandleMouseEvent
                 isHover = true;
             }
         }
-        else isHover = false;
+        else if(isHover)
+        {
+            existHover();
+            isHover = false;
+        }
+
+        return isHover;
     }
     
     @Override
@@ -82,4 +88,5 @@ public abstract class GUIButton implements HandleMouseEvent
     
     abstract public void activate();
     abstract public void hover();
+    abstract public void existHover();
 }

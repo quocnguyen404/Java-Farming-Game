@@ -37,8 +37,9 @@ public abstract class Plantable implements HandleMouseEvent, GameObject
     }
 
     @Override
-    public void mouseHover(Rectangle mouseRectangle, Rectangle camRectangle, int xZoom, int yZoom) 
+    public boolean mouseHover(Rectangle mouseRectangle, Rectangle camRectangle, int xZoom, int yZoom) 
     {
+        return false;
     }
 
     @Override

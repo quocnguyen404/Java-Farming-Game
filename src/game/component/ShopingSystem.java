@@ -11,11 +11,9 @@ import game.GameConstant;
 import game.GameFrame;
 import game.Helper;
 import game.data.ConfigDataHelper;
-import game.data.CropData;
 import game.data.PlantableData;
 import game.data.Sprites.SpriteID;
 import game.ui.Button;
-import game.ui.ButtonAct;
 
 public class ShopingSystem extends Component
 {
@@ -37,35 +35,35 @@ public class ShopingSystem extends Component
             onBuySeed.accept(plantData);
     }
 
-    public void sellPlant(CropData plantData)
-    {
+    // public void sellPlant(CropData plantData)
+    // {
         
-    }
+    // }
     
     @Override
     protected void generateUI()
     {
         //init part
-        guis = new GUI[2];
+        guis = new GUI[1];
         int btnW = GameConstant.TILE_WIDTH*GameFrame.X_ZOOM;
         int btnH = GameConstant.TILE_HEIGHT*GameFrame.Y_ZOOM;
 
         //selling part
-        guis[0] = new GUI(null, 0, 0, true, true);
-        GUIButton[] sellBtns = new GUIButton[1];
-        ButtonAct sellBtn = new ButtonAct(SpriteID.GREEN1_SQUARE, new Rectangle(0, rect.y, btnW, btnH), false);
+        // guis[0] = new GUI(null, 0, 0, true, true);
+        // GUIButton[] sellBtns = new GUIButton[1];
+        // ButtonAct sellBtn = new ButtonAct(SpriteID.GREEN1_SQUARE, new Rectangle(0, rect.y, btnW, btnH), false);
         //init selling cell
 
         sellingCell = new SellingCell(new Rectangle(0, rect.y + offset, GameConstant.TILE_WIDTH*GameFrame.X_ZOOM, GameConstant.TILE_HEIGHT*GameFrame.Y_ZOOM));
 
         //TODO add sell action
-        sellBtn.addClickListener(null);
-        sellBtns[0] = sellBtn;
-        guis[0].setButtons(sellBtns);
+        // sellBtn.addClickListener(null);
+        // sellBtns[0] = sellBtn;
+        // guis[0].setButtons(sellBtns);
 
         //buying part
         int xPos = GameConstant.WIN_WIDTH - GameConstant.TILE_WIDTH*GameFrame.X_ZOOM - GameConstant.TILE_WIDTH;
-        guis[1] = new GUI(null, xPos, 0, true, true);
+        guis[0] = new GUI(null, xPos, 0, true, true);
         GUIButton[] btns = new GUIButton[Helper.getPlantableNumber()];
         int count = 0;
         for (var obj : Helper.getPlantableNames()) 
@@ -82,7 +80,7 @@ public class ShopingSystem extends Component
             btns[count] = btn;
             count++;
         }
-        guis[1].setButtons(btns);
+        guis[0].setButtons(btns);
     }
 
     // @Override
@@ -94,7 +92,7 @@ public class ShopingSystem extends Component
     public void render(RenderHandler renderer, int xZoom, int yZoom) 
     {
         super.render(renderer, xZoom, yZoom);
-        sellingCell.render(renderer, 1, 1);
+        sellingCell.render(renderer, xZoom, yZoom);
     }
 
     @Override

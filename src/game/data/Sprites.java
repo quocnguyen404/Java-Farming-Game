@@ -27,6 +27,7 @@ public class Sprites
         GOLD_BUFF,
         WATER_BUFF,
         TIME_BUFF,
+        SHOPPING_CART,
         POTATO,        
         ONION,         
         REGION,        

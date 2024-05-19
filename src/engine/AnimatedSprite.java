@@ -1,9 +1,12 @@
 package engine;
 
+import java.io.Serializable;
+
 import game.GameFrame;
 
-public class AnimatedSprite
+public class AnimatedSprite implements Serializable
 {
+    private static final long serialVersionUID = 2L;
     private Sprite[] sprites;
     private int currentSprite = 0;
     private int speed;

@@ -4,6 +4,7 @@ import game.data.CropData;
 
 public class FruitCrop extends Crop
 {
+    private static final long serialVersionUID = 10L;
 
     public FruitCrop(CropData plant) 
     {

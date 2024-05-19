@@ -4,6 +4,7 @@ import game.data.CropData;
 
 public class OilCrop extends Crop
 {
+    private static final long serialVersionUID = 11L;
 
     public OilCrop(CropData plant) 
     {

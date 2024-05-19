@@ -16,11 +16,13 @@ import game.plantable.Plantable;
 
 public abstract class Crop extends Plantable
 {
-    public Consumer<Crop> onCropGrow;
-    public Consumer<Integer> onWatering;
+    public transient Consumer<Crop> onCropGrow;
+    public transient Consumer<Integer> onWatering;
+    private transient SpriteID icon;
+    
+    private static final long serialVersionUID = 8L;
     private Rectangle rect;
     private AnimatedSprite anim;
-    private SpriteID icon;
     private int counter = 0;
     private int waterLeft;
     private boolean isRipe;
@@ -30,11 +32,10 @@ public abstract class Crop extends Plantable
     public Crop(CropData plant)
     {
         super(plant);
-        //TODO 
         waterLeft = plant.getWaterDrop();
         Sprite[] sprites = Helper.getAnimatedSprite(AnimationID.valueOf(plant.getName()));
         anim = new AnimatedSprite(sprites, plant.getGrowTime());
-        icon = SpriteID.valueOf(plant.getName());
+        icon = null;
         buffGold = 0;
         buffTime = 0;
     }
@@ -82,7 +83,6 @@ public abstract class Crop extends Plantable
         buffTime += timeBuff;
     }
 
-
     public int getSellingPrice()
     {
         return buffGold + ((CropData)getPlantableData()).getSellPrice();
@@ -111,7 +111,7 @@ public abstract class Crop extends Plantable
             counter = 0;
         }
     }
-
+    
     abstract protected void specialAbility();
 
     private boolean onDrag = false;
@@ -155,13 +155,19 @@ public abstract class Crop extends Plantable
             grow();
     }
 
+    private SpriteID getIcon()
+    {
+        if (icon == null) icon = SpriteID.valueOf(getPlantableData().getName());
+        return icon;
+    }
+
     @Override
     public void render(RenderHandler renderer, int xZoom, int yZoom)
     {
         if (rect != null)
         {
             if (anim != null) anim.render(renderer, rect.x, rect.y, xZoom, yZoom, false);
-            else renderer.renderSprite(icon, rect.x, rect.y, xZoom, yZoom, false);
+            else renderer.renderSprite(getIcon(), rect.x, rect.y, xZoom, yZoom, false);
         }
     }
 }

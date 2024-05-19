@@ -1,8 +1,11 @@
 package engine;
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 
-public class Sprite 
+public class Sprite implements Serializable
 {
+    private static final long serialVersionUID = 13L;
+
     private int width, height;
     private int[] pixels;
 

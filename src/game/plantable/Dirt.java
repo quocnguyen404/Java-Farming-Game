@@ -10,13 +10,14 @@ import game.data.Sprites.AnimationID;
 
 public class Dirt extends Plantable
 {
+    private static final long serialVersionUID = 12L;
     private AnimatedSprite animatedSprite;
     private Rectangle rect;
 
     public Dirt(PlantableData data)
     {
         super(data);
-        animatedSprite = new AnimatedSprite(Helper.getAnimatedSprite(AnimationID.DIRT), 60);
+        animatedSprite = getAnim();
     }
 
     public void watering(int waterLeft)
@@ -28,6 +29,12 @@ public class Dirt extends Plantable
             while(!animatedSprite.isLastSprite()) animatedSprite.incrementSprite();
             return;
         }
+    }
+
+    public AnimatedSprite getAnim()
+    {
+        if(animatedSprite == null) animatedSprite = new AnimatedSprite(Helper.getAnimatedSprite(AnimationID.DIRT), 60);
+        return animatedSprite;
     }
 
     public void reset()
@@ -43,7 +50,7 @@ public class Dirt extends Plantable
     @Override
     public void render(RenderHandler renderer, int xZoom, int yZoom)
     {
-        animatedSprite.render(renderer, rect.x, rect.y, xZoom, yZoom, false);
+        getAnim().render(renderer, rect.x, rect.y, xZoom, yZoom, false);
     }
 
     @Override

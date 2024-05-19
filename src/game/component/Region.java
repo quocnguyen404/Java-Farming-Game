@@ -1,6 +1,6 @@
 package game.component;
 
-import java.util.function.Supplier;
+import java.io.Serializable;
 
 import engine.HandleMouseEvent;
 import engine.Rectangle;
@@ -15,12 +15,13 @@ import game.plantable.Plantable;
 import game.plantable.crop.Crop;
 import game.plantable.item.Item;
 
-public class Region implements HandleMouseEvent
+public class Region implements HandleMouseEvent, Serializable
 {
     //5x4s
-    public static Supplier<Plantable> onGetPlantable;
+    private static final long serialVersionUID = 1L;
+    private transient Sprite bgSprite;
+
     private Rectangle rect;
-    private Sprite bgSprite;
     private RegionCell[] cells = null;
 
     public Region(int x, int y)
@@ -51,7 +52,7 @@ public class Region implements HandleMouseEvent
 
     public void render(RenderHandler renderer, int xZoom, int yZoom)
     {
-        renderer.renderSprite(bgSprite, rect.x, rect.y, xZoom, yZoom, false);
+        renderer.renderSprite(getSprite(), rect.x, rect.y, xZoom, yZoom, false);
 
         if (cells == null) return;
 
@@ -59,10 +60,38 @@ public class Region implements HandleMouseEvent
             if (cell != null) cell.render(renderer, xZoom, yZoom);
     }
 
+    private Sprite getSprite()
+    {
+        if (bgSprite == null)
+            bgSprite = Helper.getSprite(SpriteID.REGION);
+        return bgSprite;
+    }
+
+    public Rectangle getRect()
+    {
+        return rect;
+    }
+
+    public RegionCell[] getRegionCells()
+    {
+        return cells;
+    }
+
     public void update(GameFrame game)
     {
         for (RegionCell cell : cells)
             if (cell != null) cell.update(game);
+    }
+
+    public void loadCropEvent()
+    {
+        for (RegionCell regionCell : cells) {
+            if(!regionCell.isEmpty())
+            {
+                regionCell.crop.onCropGrow = regionCell::cropGrow;
+                regionCell.crop.onWatering = regionCell.dirt::watering;
+            }
+        }
     }
 
     @Override
@@ -87,7 +116,7 @@ public class Region implements HandleMouseEvent
         {
             if (cell.onHoverCell(mousRectangle))
             {
-                Plantable plantable = onGetPlantable.get();
+                Plantable plantable = FarmingSystem.onGetPlantable();
                 if (plantable == null) return false;
                 if (plantable instanceof Dirt)
                 {
@@ -118,82 +147,6 @@ public class Region implements HandleMouseEvent
         }
         return false;
     }
-
-    /**
-     * RegionCell
-     */
-    public class RegionCell 
-    {
-        private Rectangle rect;
-        private Crop crop;
-        private Dirt dirt;
-        private int counter = 0;
-
-        public RegionCell(Rectangle rect)
-        {
-            this.rect = rect;
-            crop = null;
-            dirt = null;
-        }
-
-        public boolean isEmpty()
-        {
-            return crop == null;
-        }
-
-        public boolean isDigged()
-        {
-            return dirt != null;
-        }
-
-        public void dig(Dirt dirt)
-        {
-            this.dirt = dirt;
-            this.dirt.setRectangle(rect);
-        }
-
-        public void cropGrow(Crop crop)
-        {
-            GameFrame.onGetGrowPlant.accept(crop);
-            crop.growRipe(new Rectangle(rect.x, rect.y, rect.w, rect.h));
-            this.crop = null;
-            this.dirt.reset();
-        }
-
-        public void planted(Crop crop)
-        {
-            this.crop = crop;
-        }
-
-        public boolean onHoverCell(Rectangle otherRect)
-        {
-            return rect.intersects(otherRect);
-        }
-
-        public void update(GameFrame game)
-        {
-            if (crop != null) crop.update(game);
-            if (dirt != null) 
-            {
-                dirt.update(game);
-                if(isEmpty()) counter++;
-                if(isEmpty() && counter >= 60*60)
-                {
-                    dirt = null;
-                    counter = 0;
-                }
-            }
-        }
-
-        public void render(RenderHandler renderer, int xZoom, int yZoom)
-        {
-            if (rect.isGen()) renderer.renderRectangle(rect, 1, 1, false);
-            if(isDigged()) dirt.render(renderer, xZoom, yZoom);
-            else return;
-            if (crop != null) crop.render(renderer, xZoom, yZoom);
-        }
-    }
-
     @Override
     public boolean mouseHover(Rectangle mouseRectangle, Rectangle camRectangle, int xZoom, int yZoom) 
     {

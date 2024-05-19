@@ -1,7 +1,10 @@
 package game.data;
 
-public class PlantableData 
+import java.io.Serializable;
+
+public class PlantableData implements Serializable
 {
+    private static final long serialVersionUID = 5L;
     private String name;
     private int buyPrice;
 

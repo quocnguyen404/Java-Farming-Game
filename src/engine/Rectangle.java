@@ -1,8 +1,11 @@
 package engine;
+import java.io.Serializable;
+
 import game.GameConstant;
 
-public class Rectangle
+public class Rectangle implements Serializable
 {
+    private static final long serialVersionUID = 3L;
     private int[] pixels;
     public int x, y, w, h;
     

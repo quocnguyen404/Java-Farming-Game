@@ -4,8 +4,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -13,6 +15,7 @@ import engine.Sprite;
 import engine.SpriteSheet;
 import game.GameConstant;
 import game.GameFrame;
+import game.component.Region;
 import game.data.Sprites.AnimationID;
 import game.data.Sprites.SpriteID;
 import game.plantable.crop.Crop;
@@ -25,11 +28,15 @@ public final class ConfigDataHelper
     private PlayerData playerData;
     private HashMap<String, PlantableData> plantData;
     private Sprites sprites;
+    private Region[] regions;
 
     public static ConfigDataHelper getInstance()
     {
         if (instance == null)
+        {
             instance = new ConfigDataHelper();
+            if (instance == null) System.out.println("ConfigDataHelper exception");
+        }
         return instance;
     }
 
@@ -91,18 +98,28 @@ public final class ConfigDataHelper
     private final String PLAYERDATA_PATH = "Player.data";
     private void loadPlayerData()
     {
-        try 
+        try (FileInputStream fin = new FileInputStream(PLAYERDATA_PATH)) 
         {
-            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File(PLAYERDATA_PATH)));
+            ObjectInputStream ois = new ObjectInputStream(fin);
             playerData = (PlayerData) ois.readObject();
             ois.close();
         } 
-        catch (Exception e) 
+        catch (IOException e) 
         {
-            System.out.println("Doesn't exist player data");
+            // e.printStackTrace();
+            System.out.println("Load playerdata exception");
+        }
+        catch (ClassNotFoundException e)
+        {
+            System.out.println("Playerdata class exception");
+        }
+
+        if(playerData == null)
+        {
+            System.out.println("Player data not exist");
             System.out.println("Load default player data");
             playerData = new PlayerData();
-            playerData.gold = 10;   
+            playerData.gold = 10;
             playerData.unlockPlantable.add("ONION");
             playerData.unlockPlantable.add("POTATO");
         }
@@ -110,17 +127,138 @@ public final class ConfigDataHelper
 
     public void savePlayerData()
     {
-        try
+        try (FileOutputStream fos = new FileOutputStream(PLAYERDATA_PATH)) 
         {
-            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File(PLAYERDATA_PATH)));
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(playerData);
             oos.close();
         } 
         catch (Exception e) 
         {
-            System.out.println("Saving exception");
+            System.out.println("Save playerdata exception");
         }
     }
+
+    private final String REGIONDATA_PATH = "Regions.data";
+    private Region[] loadRegions()
+    {
+        ArrayList<Region> regions = new ArrayList<>();
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(REGIONDATA_PATH))) {
+            while (true) {
+                try {
+                    Region region = (Region) ois.readObject();
+                    regions.add(region);
+                } catch (ClassNotFoundException e) {
+                    // Handle class not found exception if necessary
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    // End of file reached
+                    System.out.println("Region file empty");
+                    break;
+                }
+            }
+            ois.close();
+            System.out.println("Regions loaded successfully.");
+        } catch (IOException e) {
+            System.out.println("Region.data file not exist");
+            regions.add(new Region((GameConstant.WIN_HEIGHT/(2*GameConstant.TILE_WIDTH*GameFrame.X_ZOOM)),
+                                   (GameConstant.WIN_HEIGHT/(2*GameConstant.TILE_HEIGHT*GameFrame.Y_ZOOM))));
+        }
+    
+        for (Region region : regions)
+            region.loadCropEvent();
+        
+        return regions.toArray(new Region[0]);
+    }
+    // private Region[] loadRegions() 
+    // {
+    //     ArrayList<Region> regions = new ArrayList<>();
+    //     File file = new File(REGIONDATA_PATH);
+    //     if (!file.exists()) 
+    //     {
+    //         System.out.println("Regions data file does not exist. Initializing default regions.");
+    //         regions.add(new Region((GameConstant.WIN_HEIGHT / (2 * GameConstant.TILE_WIDTH * 3)),
+    //                 (GameConstant.WIN_HEIGHT / (2 * GameConstant.TILE_HEIGHT * 3))));
+    //         return regions.toArray(new Region[0]);
+    //     }
+
+    //     try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) 
+    //     {
+    //         while (true) 
+    //         {
+    //             try 
+    //             {
+    //                 Region region = (Region) ois.readObject();
+    //                 regions.add(region);
+    //             } 
+    //             catch (EOFException e) 
+    //             {
+    //                 break; // End of file reached
+    //             } catch (ClassNotFoundException e) 
+    //             {
+    //                 // Handle class not found exception if necessary
+    //                 e.printStackTrace();
+    //             }
+    //         }
+    //     } 
+    //     catch (IOException e) 
+    //     {
+    //         // Handle IOException
+    //         e.printStackTrace();
+    //     }
+
+    //     return regions.toArray(new Region[0]);
+    // }
+
+    public void saveRegions() 
+    {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(REGIONDATA_PATH))) 
+        {
+            for (Region region : regions) 
+            {
+                oos.writeObject(region);
+            }
+            oos.close();
+            System.out.println("Regions saved successfully.");
+        } 
+        catch (IOException e) 
+        {
+            e.printStackTrace(); // Handle or log the exception appropriately
+        }
+    }
+    // public void saveRegion()
+    // {
+    //     try 
+    //     {
+    //         FileOutputStream fos = new FileOutputStream(REGIONDATA_PATH, true);
+    //         try 
+    //         {
+    //             ObjectOutputStream oos = new ObjectOutputStream(fos);
+    //             for (Region region : regions)
+    //             {
+    //                 try 
+    //                 {
+    //                     oos.writeObject(region);
+    //                     System.out.println("saved");
+    //                 } 
+    //                 catch (NotSerializableException e) 
+    //                 {
+    //                     System.out.println("An object was not serializable, it has not been saved.");
+    //                     e.printStackTrace();
+    //                 }
+    //             }
+    //             oos.close();
+    //         } 
+    //         catch (IOException e) 
+    //         {
+    //             e.printStackTrace();
+    //         }
+    //     } 
+    //     catch (FileNotFoundException e) 
+    //     {
+    //         e.printStackTrace();
+    //     }
+    // }
 
     public boolean buyPlantable(PlantableData plantable)
     {
@@ -147,6 +285,13 @@ public final class ConfigDataHelper
     {
         System.out.println("Cancel buy " + plantableData.getName() + ": " + plantableData.getBuyPrice());
         playerData.gold += plantableData.getBuyPrice();
+    }
+
+    public Region[] getRegion()
+    {
+        if (regions == null)
+            regions = loadRegions();
+        return regions;
     }
 
     public int getPlayerGold()

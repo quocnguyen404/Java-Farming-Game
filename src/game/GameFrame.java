@@ -2,6 +2,8 @@ package game;
 import java.awt.Canvas;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferStrategy;
 import java.lang.Runnable;
 import java.util.function.Consumer;
@@ -47,10 +49,12 @@ public class GameFrame extends JFrame implements Runnable
         canvas = new Canvas();
         //frame set up
         setTitle(GameConstant.TITLE);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setBounds(0, 0, GameConstant.WIN_WIDTH, GameConstant.WIN_HEIGHT);
         //set frame in the middle screen
         setLocationRelativeTo(null);
+        
 
         //add canvas to content(container) page
         add(canvas);
@@ -102,11 +106,26 @@ public class GameFrame extends JFrame implements Runnable
             ConfigDataHelper.getInstance().sellingCrop(crop);
         };
 
+        FarmingSystem farmingSystem = new FarmingSystem(new Rectangle(), GameConstant.TILE_HEIGHT*Y_ZOOM);
+
         components = new Component[3];
-        components[0] = new FarmingSystem(new Rectangle(), GameConstant.TILE_HEIGHT*Y_ZOOM);
+        components[0] = farmingSystem;
         components[1] = new ShopingSystem(new Rectangle(0, GameConstant.TILE_HEIGHT*Y_ZOOM+1, 0, 0), GameConstant.TILE_HEIGHT*Y_ZOOM+1);
         components[2] = plantableManager;
         mouseRect.generateGraphics(1, 0xFFFFFF);
+
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e)
+            {
+                run = false;
+                ConfigDataHelper.getInstance().savePlayerData();
+                ConfigDataHelper.getInstance().saveRegions();;
+
+                dispose();
+                System.exit(0);
+            }
+        });
 
         //run default setting
         defaultMessage.run();
@@ -165,10 +184,9 @@ public class GameFrame extends JFrame implements Runnable
         for (Component component : components) 
             clicked = component.leftMouseClick(mouseRect, renderer.getCamera(), x, y);
 
-            //is clicked on ui
+        //is clicked on ui
         if (clicked)
             return;
-
     }
 
     //right mouse pressed
@@ -227,6 +245,7 @@ public class GameFrame extends JFrame implements Runnable
     }
     
     //run function of Runnable interface
+    private boolean run = true;
     @Override
     public void run() 
     {
@@ -234,7 +253,7 @@ public class GameFrame extends JFrame implements Runnable
         double nanoSecondConversion = 1_000_000_000.0/60;
         double deltaTime = 0;
 
-        while (true)
+        while (run)
         {
             long currentTime = System.nanoTime();
 

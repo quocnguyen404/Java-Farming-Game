@@ -1,12 +1,15 @@
 package game.plantable;
 
+import java.io.Serializable;
+
 import engine.GameObject;
 import engine.HandleMouseEvent;
 import engine.Rectangle;
 import game.data.PlantableData;
 
-public abstract class Plantable implements HandleMouseEvent, GameObject
+public abstract class Plantable implements HandleMouseEvent, GameObject, Serializable
 {
+    private static final long serialVersionUID = 7L;
     private PlantableData plantableData;
     
     public Plantable(PlantableData data)

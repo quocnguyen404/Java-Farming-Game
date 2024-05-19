@@ -4,8 +4,8 @@ import java.util.function.Supplier;
 
 import engine.Rectangle;
 import engine.RenderHandler;
-import game.GameConstant;
 import game.GameFrame;
+import game.data.ConfigDataHelper;
 import game.data.CropData;
 import game.data.ItemData;
 import game.data.PlantableData;
@@ -31,12 +31,12 @@ public class FarmingSystem extends Component
         //create or load region
         generateUI();
         
-        Region.onGetPlantable = this::onGetPlantable;
+        // Region.onGetPlantable = this::onGetPlantable;
         // Sprite turnOnSprite = ConfigDataHelper.getInstance().getSprite(null);
         // turnOnButton = new ButtonAct(, null, null, false);
     }
 
-    private Plantable onGetPlantable()
+    public static Plantable onGetPlantable()
     {
         PlantableData data = onPlantedSeed.get();
         if (data == null) return null;
@@ -61,7 +61,6 @@ public class FarmingSystem extends Component
             }
             return item;
         }
-        
 
         Crop crop;
         CropData cropData = (CropData) data;
@@ -85,11 +84,12 @@ public class FarmingSystem extends Component
     @Override
     protected void generateUI() 
     {
-        regions = new Region[1];
-        //weird
-        int xPos = (GameConstant.WIN_HEIGHT/(2*GameConstant.TILE_WIDTH*GameFrame.X_ZOOM));
-        int yPos = (GameConstant.WIN_HEIGHT/(2*GameConstant.TILE_HEIGHT*GameFrame.Y_ZOOM));
-        regions[0] = new Region(xPos, yPos);
+        regions = ConfigDataHelper.getInstance().getRegion();
+        // regions = new Region[1];
+        // //weird
+        // int xPos = (GameConstant.WIN_HEIGHT/(2*GameConstant.TILE_WIDTH*GameFrame.X_ZOOM));
+        // int yPos = (GameConstant.WIN_HEIGHT/(2*GameConstant.TILE_HEIGHT*GameFrame.Y_ZOOM));
+        // regions[0] = new Region(xPos, yPos);
     }
 
     @Override
